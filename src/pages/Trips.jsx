@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Button from '../components/common/Button';
@@ -6,6 +6,8 @@ import Card from '../components/common/Card';
 import TripFilters from '../components/trips/TripFilters';
 import TripSort from '../components/trips/TripSort';
 import TripSearch from '../components/trips/TripSearch';
+import LoadingSpinner from '../components/common/LoadingSpinner';
+import tripService from '../services/tripService';
 import { FiGrid, FiList } from 'react-icons/fi';
 
 function Trips() {
@@ -13,6 +15,9 @@ function Trips() {
   const [viewMode, setViewMode] = useState('grid');
   const [sortBy, setSortBy] = useState('recommended');
   const [searchTerm, setSearchTerm] = useState('');
+  const [tripsLoading, setTripsLoading] = useState(true);
+  const [tripsError, setTripsError] = useState(null);
+  const [allTrips, setAllTrips] = useState([]);
   const [filters, setFilters] = useState({
     priceRange: [0, 50000],
     difficulty: [],
@@ -23,7 +28,8 @@ function Trips() {
     groupSize: [],
   });
 
-  const allTrips = [
+  // Mock data as fallback
+  const mockTrips = [
     {
       id: 1,
       name: 'Winter Spiti Valley',
@@ -122,6 +128,29 @@ function Trips() {
     },
   ];
 
+  // Fetch trips from backend on mount
+  useEffect(() => {
+    const fetchTrips = async () => {
+      try {
+        setTripsLoading(true);
+        setTripsError(null);
+        
+        // Try to fetch from backend
+        const trips = await tripService.getAllTrips();
+        setAllTrips(trips);
+      } catch (err) {
+        console.warn('Backend unavailable, using mock data:', err);
+        // Use mock data as fallback
+        setAllTrips(mockTrips);
+        setTripsError(null);
+      } finally {
+        setTripsLoading(false);
+      }
+    };
+
+    fetchTrips();
+  }, []);
+
   // Apply search filter
   const searchedTrips = useMemo(() => {
     if (!searchTerm.trim()) return allTrips;
@@ -132,11 +161,11 @@ function Trips() {
         trip.name.toLowerCase().includes(term) ||
         trip.destination.toLowerCase().includes(term) ||
         trip.description.toLowerCase().includes(term) ||
-        trip.tags.some(tag => tag.toLowerCase().includes(term)) ||
+        (trip.tags && trip.tags.some(tag => tag.toLowerCase().includes(term))) ||
         trip.difficulty.toLowerCase().includes(term)
       );
     });
-  }, [searchTerm]);
+  }, [searchTerm, allTrips]);
 
   // Apply filters
   const filteredTrips = useMemo(() => {
@@ -231,6 +260,11 @@ function Trips() {
     setSearchTerm('');
   };
 
+  // Show loading state
+  if (tripsLoading) {
+    return <LoadingSpinner />;
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="max-w-7xl mx-auto px-4">
@@ -240,6 +274,9 @@ function Trips() {
           <p className="text-gray-600">
             Found <span className="font-bold text-orange-500">{sortedTrips.length}</span> amazing trips
           </p>
+          {!tripsError && allTrips.length > 0 && (
+            <p className="text-xs text-green-600 mt-2">✓ Connected to backend</p>
+          )}
         </div>
 
         {/* Search Bar - Full Width */}

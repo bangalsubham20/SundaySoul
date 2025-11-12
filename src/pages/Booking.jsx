@@ -4,24 +4,22 @@ import { useAuth } from '../hooks/useAuth';
 import Button from '../components/common/Button';
 import Card from '../components/common/Card';
 import LoadingSpinner from '../components/common/LoadingSpinner';
-import { FiUser, FiCreditCard, FiCheck, FiX } from 'react-icons/fi';
+import { FiUser, FiCheck, FiX } from 'react-icons/fi';
+import bookingService from '../services/bookingService';
+import tripService from '../services/tripService';
 
 function Booking() {
   const { tripId } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
+
+  // State management
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
-
-  // Mock trip data
-  const [trip] = useState({
-    id: tripId,
-    name: tripId === '1' ? 'Winter Spiti Valley' : 'Leh Ladakh Adventure',
-    destination: tripId === '1' ? 'Spiti Valley' : 'Ladakh',
-    price: tripId === '1' ? 21150 : 34650,
-    duration: tripId === '1' ? 8 : 7,
-    startDate: tripId === '1' ? '2025-01-15' : '2025-02-20',
-  });
+  const [tripLoading, setTripLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [trip, setTrip] = useState(null);
+  const [errors, setErrors] = useState({});
 
   const [formData, setFormData] = useState({
     numTravelers: 1,
@@ -41,25 +39,79 @@ function Booking() {
     termsAccepted: false,
   });
 
-  // Add/Remove traveler
-  const addTraveler = () => {
-    const newTraveler = {
-      id: formData.travelers.length + 1,
-      fullName: '',
-      age: '',
-      gender: 'Male',
-      phone: '',
-      email: '',
-      emergencyContact: '',
-      dietaryRestrictions: 'None'
-    };
-    setFormData(prev => ({
-      ...prev,
-      travelers: [...prev.travelers, newTraveler],
-      numTravelers: prev.numTravelers + 1
-    }));
+  // Mock trip data as fallback
+  const mockTrips = {
+    1: {
+      id: 1,
+      name: 'Winter Spiti Valley',
+      destination: 'Spiti Valley',
+      price: 21150,
+      duration: 8,
+      startDate: '2025-01-15',
+      image: 'https://images.pexels.com/photos/31307356/pexels-photo-31307356/free-photo-of-spectacular-view-of-key-monastery-in-winter.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    },
+    2: {
+      id: 2,
+      name: 'Leh Ladakh Adventure',
+      destination: 'Ladakh',
+      price: 34650,
+      duration: 7,
+      startDate: '2025-02-20',
+      image: 'https://images.pexels.com/photos/34555164/pexels-photo-34555164/free-photo-of-adventurer-resting-with-motorcycle-by-scenic-lake.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    }
   };
 
+  // Fetch trip on mount
+  useEffect(() => {
+    const fetchTrip = async () => {
+      try {
+        setTripLoading(true);
+        setError(null);
+
+        // Try to fetch from backend
+        const tripData = await tripService.getTripById(tripId);
+        setTrip(tripData);
+      } catch (err) {
+        console.warn('Backend unavailable, using mock data:', err);
+        // Use mock data as fallback
+        const mockTrip = mockTrips[tripId];
+        if (mockTrip) {
+          setTrip(mockTrip);
+        } else {
+          setError('Trip not found');
+        }
+      } finally {
+        setTripLoading(false);
+      }
+    };
+
+    if (tripId) {
+      fetchTrip();
+    }
+  }, [tripId]);
+
+  // Add traveler
+  const addTraveler = () => {
+    if (formData.travelers.length < 10) {
+      const newTraveler = {
+        id: formData.travelers.length + 1,
+        fullName: '',
+        age: '',
+        gender: 'Male',
+        phone: '',
+        email: '',
+        emergencyContact: '',
+        dietaryRestrictions: 'None'
+      };
+      setFormData(prev => ({
+        ...prev,
+        travelers: [...prev.travelers, newTraveler],
+        numTravelers: prev.numTravelers + 1
+      }));
+    }
+  };
+
+  // Remove traveler
   const removeTraveler = (id) => {
     if (formData.travelers.length > 1) {
       setFormData(prev => ({
@@ -80,57 +132,92 @@ function Booking() {
     }));
   };
 
+  // Validate step 1
+  const validateStep1 = () => {
+    const newErrors = {};
+    formData.travelers.forEach((traveler, index) => {
+      if (!traveler.fullName.trim()) {
+        newErrors[`traveler${index}Name`] = 'Full name is required';
+      }
+      if (!traveler.age) {
+        newErrors[`traveler${index}Age`] = 'Age is required';
+      }
+      if (!traveler.phone.trim()) {
+        newErrors[`traveler${index}Phone`] = 'Phone number is required';
+      }
+      if (!traveler.email.trim()) {
+        newErrors[`traveler${index}Email`] = 'Email is required';
+      }
+    });
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   // Handle step navigation
   const handleNext = () => {
     if (step === 1) {
-      // Validate step 1
-      const allFilled = formData.travelers.every(t => t.fullName && t.age);
-      if (!allFilled) {
-        alert('Please fill all traveler details');
+      if (!validateStep1()) {
         return;
       }
       setStep(2);
     } else if (step === 2) {
       if (!formData.termsAccepted) {
-        alert('Please accept terms and conditions');
+        setErrors({ terms: 'Please accept terms and conditions' });
         return;
       }
+      setErrors({});
       setStep(3);
     }
   };
 
   const handleBack = () => {
-    if (step > 1) setStep(step - 1);
+    if (step > 1) {
+      setStep(step - 1);
+      setErrors({});
+    }
   };
 
   // Submit booking
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setErrors({});
 
     try {
-      // Simulate API call
-      console.log('Booking Data:', formData);
-      
-      // In real app, make API call here
-      // const response = await createBooking(bookingData);
-      
-      setTimeout(() => {
-        navigate(`/booking-confirmation/${tripId}`);
-      }, 1000);
-    } catch (error) {
-      console.error('Booking error:', error);
-      alert('Booking failed. Please try again.');
+      const bookingData = {
+        tripId: parseInt(tripId),
+        travelers: formData.travelers,
+        numTravelers: formData.numTravelers,
+        totalPrice: calculateTotal(),
+        paymentMethod: formData.paymentMethod,
+        termsAccepted: formData.termsAccepted,
+      };
+
+      // Try to create booking via API
+      const booking = await bookingService.createBooking(bookingData);
+      navigate(`/booking-confirmation/${booking.id}`);
+    } catch (err) {
+      console.error('Booking error:', err);
+      setErrors({ submit: err.message || 'Booking failed. Please try again.' });
       setLoading(false);
     }
   };
 
   // Calculate totals
-  const subtotal = trip.price * formData.numTravelers;
-  const serviceFee = 500;
-  const gst = Math.round(subtotal * 0.05);
-  const total = subtotal + serviceFee + gst;
+  const calculateSubtotal = () => trip ? trip.price * formData.numTravelers : 0;
+  const calculateServiceFee = () => 500;
+  const calculateGST = () => Math.round(calculateSubtotal() * 0.05);
+  const calculateTotal = () => calculateSubtotal() + calculateServiceFee() + calculateGST();
 
+  const subtotal = calculateSubtotal();
+  const serviceFee = calculateServiceFee();
+  const gst = calculateGST();
+  const total = calculateTotal();
+
+  // Loading state
+  if (tripLoading) return <LoadingSpinner />;
+
+  // Not logged in state
   if (!user) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
@@ -143,10 +230,30 @@ function Booking() {
     );
   }
 
+  // Trip not found state
+  if (error || !trip) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+        <Card className="max-w-md w-full p-8">
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">Trip Not Found</h2>
+          <p className="text-gray-600 mb-6">{error || 'The trip you are trying to book does not exist.'}</p>
+          <Button fullWidth onClick={() => navigate('/trips')}>Browse Trips</Button>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="max-w-7xl mx-auto px-4">
         <h1 className="text-3xl font-bold text-gray-800 mb-8">Book Your Trip</h1>
+
+        {/* Error notification */}
+        {errors.submit && (
+          <div className="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+            {errors.submit}
+          </div>
+        )}
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Content */}
@@ -200,16 +307,12 @@ function Booking() {
                       min="1"
                       max="10"
                       value={formData.numTravelers}
-                      onChange={(e) => {
-                        const num = parseInt(e.target.value);
-                        if (num > formData.travelers.length) {
-                          addTraveler();
-                        }
-                      }}
-                      className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-orange-500 w-20"
+                      disabled
+                      className="px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 w-20 cursor-not-allowed"
                     />
                     <span className="text-gray-600">travelers</span>
                   </div>
+                  <p className="text-xs text-gray-500 mt-2">Use Add/Remove buttons below to change count</p>
                 </div>
 
                 <div className="space-y-8 mb-8 pb-8 border-b">
@@ -220,7 +323,7 @@ function Booking() {
                         {formData.travelers.length > 1 && (
                           <button
                             onClick={() => removeTraveler(traveler.id)}
-                            className="text-red-500 hover:text-red-700"
+                            className="text-red-500 hover:text-red-700 transition"
                           >
                             <FiX size={20} />
                           </button>
@@ -236,10 +339,15 @@ function Booking() {
                             type="text"
                             value={traveler.fullName}
                             onChange={(e) => updateTraveler(traveler.id, 'fullName', e.target.value)}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-orange-500"
+                            className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500 ${
+                              errors[`traveler${index}Name`] ? 'border-red-500' : 'border-gray-300'
+                            }`}
                             placeholder="John Doe"
                             required
                           />
+                          {errors[`traveler${index}Name`] && (
+                            <p className="text-red-500 text-xs mt-1">{errors[`traveler${index}Name`]}</p>
+                          )}
                         </div>
 
                         <div>
@@ -252,10 +360,15 @@ function Booking() {
                             max="120"
                             value={traveler.age}
                             onChange={(e) => updateTraveler(traveler.id, 'age', e.target.value)}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-orange-500"
+                            className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500 ${
+                              errors[`traveler${index}Age`] ? 'border-red-500' : 'border-gray-300'
+                            }`}
                             placeholder="25"
                             required
                           />
+                          {errors[`traveler${index}Age`] && (
+                            <p className="text-red-500 text-xs mt-1">{errors[`traveler${index}Age`]}</p>
+                          )}
                         </div>
 
                         <div>
@@ -275,28 +388,40 @@ function Booking() {
 
                         <div>
                           <label className="block text-sm font-semibold text-gray-700 mb-2">
-                            Phone
+                            Phone *
                           </label>
                           <input
                             type="tel"
                             value={traveler.phone}
                             onChange={(e) => updateTraveler(traveler.id, 'phone', e.target.value)}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-orange-500"
+                            className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500 ${
+                              errors[`traveler${index}Phone`] ? 'border-red-500' : 'border-gray-300'
+                            }`}
                             placeholder="+91 98765 43210"
+                            required
                           />
+                          {errors[`traveler${index}Phone`] && (
+                            <p className="text-red-500 text-xs mt-1">{errors[`traveler${index}Phone`]}</p>
+                          )}
                         </div>
 
                         <div className="md:col-span-2">
                           <label className="block text-sm font-semibold text-gray-700 mb-2">
-                            Email
+                            Email *
                           </label>
                           <input
                             type="email"
                             value={traveler.email}
                             onChange={(e) => updateTraveler(traveler.id, 'email', e.target.value)}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-orange-500"
+                            className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500 ${
+                              errors[`traveler${index}Email`] ? 'border-red-500' : 'border-gray-300'
+                            }`}
                             placeholder="john@example.com"
+                            required
                           />
+                          {errors[`traveler${index}Email`] && (
+                            <p className="text-red-500 text-xs mt-1">{errors[`traveler${index}Email`]}</p>
+                          )}
                         </div>
 
                         <div className="md:col-span-2">
@@ -336,7 +461,7 @@ function Booking() {
                 {formData.travelers.length < 10 && (
                   <button
                     onClick={addTraveler}
-                    className="text-orange-500 hover:text-orange-600 font-semibold mb-8"
+                    className="text-orange-500 hover:text-orange-600 font-semibold mb-8 transition"
                   >
                     + Add Another Traveler
                   </button>
@@ -393,18 +518,26 @@ function Booking() {
                 </div>
 
                 <div className="mb-8">
-                  <label className="flex items-start p-4 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-orange-500">
+                  <label className="flex items-start p-4 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-orange-500 transition">
                     <input
                       type="checkbox"
                       checked={formData.termsAccepted}
-                      onChange={(e) => setFormData(prev => ({ ...prev, termsAccepted: e.target.checked }))}
-                      className="mt-1 mr-3"
+                      onChange={(e) => {
+                        setFormData(prev => ({ ...prev, termsAccepted: e.target.checked }));
+                        if (errors.terms) {
+                          setErrors(prev => ({ ...prev, terms: '' }));
+                        }
+                      }}
+                      className="mt-1 mr-3 w-5 h-5 accent-orange-500"
                     />
                     <div>
                       <p className="font-semibold text-gray-800">I agree to Terms & Conditions</p>
                       <p className="text-sm text-gray-600">I understand the cancellation policy, safety guidelines, and have reviewed all trip details.</p>
                     </div>
                   </label>
+                  {errors.terms && (
+                    <p className="text-red-500 text-xs mt-2">{errors.terms}</p>
+                  )}
                 </div>
 
                 <div className="flex gap-4">
@@ -424,14 +557,14 @@ function Booking() {
                 <h2 className="text-2xl font-bold text-gray-800 mb-6">Payment Method</h2>
 
                 <div className="mb-8 space-y-3">
-                  <label className="flex items-center p-4 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-orange-500">
+                  <label className="flex items-center p-4 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-orange-500 transition">
                     <input
                       type="radio"
                       name="payment"
                       value="card"
                       checked={formData.paymentMethod === 'card'}
                       onChange={(e) => setFormData(prev => ({ ...prev, paymentMethod: e.target.value }))}
-                      className="mr-3"
+                      className="mr-3 w-4 h-4 accent-orange-500"
                     />
                     <div>
                       <p className="font-semibold text-gray-800">💳 Credit/Debit Card</p>
@@ -439,14 +572,14 @@ function Booking() {
                     </div>
                   </label>
 
-                  <label className="flex items-center p-4 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-orange-500">
+                  <label className="flex items-center p-4 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-orange-500 transition">
                     <input
                       type="radio"
                       name="payment"
                       value="upi"
                       checked={formData.paymentMethod === 'upi'}
                       onChange={(e) => setFormData(prev => ({ ...prev, paymentMethod: e.target.value }))}
-                      className="mr-3"
+                      className="mr-3 w-4 h-4 accent-orange-500"
                     />
                     <div>
                       <p className="font-semibold text-gray-800">📱 UPI</p>
@@ -454,14 +587,14 @@ function Booking() {
                     </div>
                   </label>
 
-                  <label className="flex items-center p-4 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-orange-500">
+                  <label className="flex items-center p-4 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-orange-500 transition">
                     <input
                       type="radio"
                       name="payment"
                       value="netbanking"
                       checked={formData.paymentMethod === 'netbanking'}
                       onChange={(e) => setFormData(prev => ({ ...prev, paymentMethod: e.target.value }))}
-                      className="mr-3"
+                      className="mr-3 w-4 h-4 accent-orange-500"
                     />
                     <div>
                       <p className="font-semibold text-gray-800">🏦 Net Banking</p>
@@ -478,7 +611,7 @@ function Booking() {
                 </div>
 
                 <div className="flex gap-4 mb-8">
-                  <Button fullWidth variant="secondary" onClick={handleBack}>
+                  <Button fullWidth variant="secondary" onClick={handleBack} disabled={loading}>
                     Back
                   </Button>
                   <Button fullWidth onClick={handleSubmit} disabled={loading}>

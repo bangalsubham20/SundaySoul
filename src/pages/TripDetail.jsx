@@ -5,6 +5,7 @@ import { useAuth } from '../hooks/useAuth';
 import Button from '../components/common/Button';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import Card from '../components/common/Card';
+import tripService from '../services/tripService';
 
 function TripDetail() {
   const { id } = useParams();
@@ -12,133 +13,165 @@ function TripDetail() {
   const { user } = useAuth();
   const [trip, setTrip] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState('overview');
 
-  // Mock trip data - Replace with API call
+  // Mock trip data as fallback
+  const mockTrips = {
+    1: {
+      id: 1,
+      name: 'Winter Spiti Valley',
+      destination: 'Spiti Valley, Himachal Pradesh',
+      price: 21150,
+      duration: 8,
+      nights: 7,
+      groupSize: '12-16 people',
+      difficulty: 'Moderate',
+      rating: 4.8,
+      reviews: 245,
+      bestSeason: 'December - February',
+      altitude: '3000-4500 m',
+      availableSeats: 5,
+      startDate: '2025-01-15',
+      endDate: '2025-01-22',
+      image: 'https://images.pexels.com/photos/31307356/pexels-photo-31307356/free-photo-of-spectacular-view-of-key-monastery-in-winter.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+      description: 'Experience the frozen beauty of Spiti Valley with stunning monasteries, ancient culture, and breathtaking landscapes.',
+      highlights: [
+        'Visit ancient Tabo Monastery (996 AD)',
+        'Trek to Key Monastery',
+        'Stay in local homestays',
+        'Interact with Tibetan culture',
+        'Visit Kinnaur and Rampur',
+        'Photography at stunning locations'
+      ],
+      itinerary: [
+        { day: 1, title: 'Arrival in Shimla', description: 'Arrive at Shimla. Evening walk in the mall. Overnight stay in Shimla.', meals: 'Dinner', activities: ['Welcome briefing', 'Mall exploration', 'Evening at hotel'] },
+        { day: 2, title: 'Shimla to Kaza', description: 'Drive to Kaza (320 km). Stop at Kinnaur and Rampur. Scenic mountain drive.', meals: 'Breakfast, Lunch, Dinner', activities: ['Scenic drive', 'Local market visit', 'Sunset view'] },
+        { day: 3, title: 'Kaza - Tabo Monastery', description: 'Visit ancient Tabo Monastery (996 AD). Explore Dhankar Lake and Dhankhar Fort.', meals: 'Breakfast, Lunch, Dinner', activities: ['Monastery tour', 'Photography', 'Tibetan culture'] },
+        { day: 4, title: 'Key Monastery Trek', description: 'Trek to Key Monastery (3600m). Amazing views of Spiti Valley.', meals: 'Breakfast, Lunch, Dinner', activities: ['Morning trek', 'Monastery visit', 'Photography'] },
+        { day: 5, title: 'Kaza Exploration', description: 'Visit Langza village, Komik village, and Hikkim (world\'s highest post office).', meals: 'Breakfast, Lunch, Dinner', activities: ['Village tour', 'Post office visit', 'Local interaction'] },
+        { day: 6, title: 'Kaza to Shimla', description: 'Drive back to Shimla. Stop at scenic viewpoints.', meals: 'Breakfast, Lunch, Dinner', activities: ['Long drive', 'Photography stops'] },
+        { day: 7, title: 'Shimla Leisure', description: 'Rest day. Optional mall walk, local market shopping.', meals: 'Breakfast, Lunch, Dinner', activities: ['Leisure time', 'Shopping', 'Local exploration'] },
+        { day: 8, title: 'Departure', description: 'Breakfast and departure from Shimla.', meals: 'Breakfast', activities: ['Checkout', 'Departure'] }
+      ],
+      inclusions: [
+        '7 nights accommodation (mix of hotels and homestays)',
+        'All meals (breakfast, lunch, dinner)',
+        'Experienced trip leader and local guide',
+        'Transportation (AC vehicle)',
+        'All entrance fees',
+        'Free travel insurance (up to ₹4.5 lakhs)',
+        'Welcome kit and merchandise'
+      ],
+      exclusions: [
+        'Flights to/from Shimla',
+        'Personal expenses',
+        'Alcoholic beverages',
+        'Tips and gratitude',
+        'Activities not mentioned in itinerary'
+      ],
+      tripReviews: [
+        { id: 1, author: 'Priya Singh', rating: 5, date: '2024-12-20', text: 'Absolutely amazing experience! The trip captain was so friendly and the entire group bonded so well. Would definitely go again!', verified: true },
+        { id: 2, author: 'Rahul Kumar', rating: 5, date: '2024-12-15', text: 'Best trek I\'ve done. The itinerary was perfectly planned. Highly recommend WravelCommunity!', verified: true },
+        { id: 3, author: 'Anjali Sharma', rating: 4, date: '2024-12-10', text: 'Great experience overall. Food was good, accommodations were comfortable. One day the weather was a bit harsh but we managed well.', verified: true }
+      ]
+    },
+    2: {
+      id: 2,
+      name: 'Leh Ladakh Adventure',
+      destination: 'Ladakh, Union Territory',
+      price: 34650,
+      duration: 7,
+      nights: 6,
+      groupSize: '10-14 people',
+      difficulty: 'Moderate-Hard',
+      rating: 4.9,
+      reviews: 312,
+      bestSeason: 'June - September',
+      altitude: '3000-5500 m',
+      availableSeats: 8,
+      startDate: '2025-02-20',
+      endDate: '2025-02-26',
+      image: 'https://images.pexels.com/photos/34555164/pexels-photo-34555164/free-photo-of-adventurer-resting-with-motorcycle-by-scenic-lake.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+      description: 'Experience the raw beauty of Ladakh - high altitude deserts, ancient monasteries, and stunning mountain passes.',
+      highlights: [
+        'Highest motorable road (Khardung La Pass)',
+        'Pangong Lake - turquoise waters',
+        'Nubra Valley - sand dunes and camels',
+        'Magnetic Hill optical illusion',
+        'Ancient Hemis Monastery',
+        'Stargazing in high altitude desert'
+      ],
+      itinerary: [
+        { day: 1, title: 'Arrival in Leh', description: 'Arrive and acclimatize', meals: 'Dinner', activities: ['Arrival', 'Rest', 'Light walk'] },
+        { day: 2, title: 'Leh to Khardung La', description: 'Visit highest motorable road', meals: 'Breakfast, Lunch, Dinner', activities: ['Khardung La trek', 'Photography'] },
+        { day: 3, title: 'Nubra Valley', description: 'Camel safari and sand dunes', meals: 'Breakfast, Lunch, Dinner', activities: ['Camel ride', 'Photography'] },
+        { day: 4, title: 'Pangong Lake', description: 'Long drive to blue lake', meals: 'Breakfast, Lunch, Dinner', activities: ['Lake visit', 'Sunset viewing'] },
+        { day: 5, title: 'Pangong to Leh', description: 'Return journey with stops', meals: 'Breakfast, Lunch, Dinner', activities: ['Magnetic hill', 'Photography'] },
+        { day: 6, title: 'Leh Exploration', description: 'Visit Hemis Monastery', meals: 'Breakfast, Lunch, Dinner', activities: ['Monastery tour'] },
+        { day: 7, title: 'Departure', description: 'Checkout and fly', meals: 'Breakfast', activities: ['Departure'] }
+      ],
+      inclusions: [
+        '6 nights accommodation',
+        'All meals',
+        'Experienced guide',
+        'Vehicle with driver',
+        'All permits and fees',
+        'Travel insurance'
+      ],
+      exclusions: [
+        'Flights',
+        'Personal expenses',
+        'Tips'
+      ],
+      tripReviews: [
+        { id: 1, author: 'Vikram Patel', rating: 5, date: '2024-11-30', text: 'Incredible trip! The views are beyond words. Trip captains were amazing.', verified: true },
+        { id: 2, author: 'Neha Gupta', rating: 5, date: '2024-11-25', text: 'Best adventure of my life! Highly recommended for everyone.', verified: true }
+      ]
+    }
+  };
+
+  // Single useEffect to fetch trip data
   useEffect(() => {
-    const mockTrips = {
-      1: {
-        id: 1,
-        name: 'Winter Spiti Valley',
-        destination: 'Spiti Valley, Himachal Pradesh',
-        price: 21150,
-        duration: 8,
-        nights: 7,
-        groupSize: '12-16 people',
-        difficulty: 'Moderate',
-        rating: 4.8,
-        reviews: 245,
-        bestSeason: 'December - February',
-        altitude: '3000-4500 m',
-        availableSeats: 5,
-        startDate: '2025-01-15',
-        endDate: '2025-01-22',
-        image: 'https://images.pexels.com/photos/31307356/pexels-photo-31307356/free-photo-of-spectacular-view-of-key-monastery-in-winter.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-        description: 'Experience the frozen beauty of Spiti Valley with stunning monasteries, ancient culture, and breathtaking landscapes.',
-        highlights: [
-          'Visit ancient Tabo Monastery (996 AD)',
-          'Trek to Key Monastery',
-          'Stay in local homestays',
-          'Interact with Tibetan culture',
-          'Visit Kinnaur and Rampur',
-          'Photography at stunning locations'
-        ],
-        itinerary: [
-          { day: 1, title: 'Arrival in Shimla', description: 'Arrive at Shimla. Evening walk in the mall. Overnight stay in Shimla.', meals: 'Dinner', activities: ['Welcome briefing', 'Mall exploration', 'Evening at hotel'] },
-          { day: 2, title: 'Shimla to Kaza', description: 'Drive to Kaza (320 km). Stop at Kinnaur and Rampur. Scenic mountain drive.', meals: 'Breakfast, Lunch, Dinner', activities: ['Scenic drive', 'Local market visit', 'Sunset view'] },
-          { day: 3, title: 'Kaza - Tabo Monastery', description: 'Visit ancient Tabo Monastery (996 AD). Explore Dhankar Lake and Dhankhar Fort.', meals: 'Breakfast, Lunch, Dinner', activities: ['Monastery tour', 'Photography', 'Tibetan culture'] },
-          { day: 4, title: 'Key Monastery Trek', description: 'Trek to Key Monastery (3600m). Amazing views of Spiti Valley.', meals: 'Breakfast, Lunch, Dinner', activities: ['Morning trek', 'Monastery visit', 'Photography'] },
-          { day: 5, title: 'Kaza Exploration', description: 'Visit Langza village, Komik village, and Hikkim (world\'s highest post office).', meals: 'Breakfast, Lunch, Dinner', activities: ['Village tour', 'Post office visit', 'Local interaction'] },
-          { day: 6, title: 'Kaza to Shimla', description: 'Drive back to Shimla. Stop at scenic viewpoints.', meals: 'Breakfast, Lunch, Dinner', activities: ['Long drive', 'Photography stops'] },
-          { day: 7, title: 'Shimla Leisure', description: 'Rest day. Optional mall walk, local market shopping.', meals: 'Breakfast, Lunch, Dinner', activities: ['Leisure time', 'Shopping', 'Local exploration'] },
-          { day: 8, title: 'Departure', description: 'Breakfast and departure from Shimla.', meals: 'Breakfast', activities: ['Checkout', 'Departure'] }
-        ],
-        inclusions: [
-          '7 nights accommodation (mix of hotels and homestays)',
-          'All meals (breakfast, lunch, dinner)',
-          'Experienced trip leader and local guide',
-          'Transportation (AC vehicle)',
-          'All entrance fees',
-          'Free travel insurance (up to ₹4.5 lakhs)',
-          'Welcome kit and merchandise'
-        ],
-        exclusions: [
-          'Flights to/from Shimla',
-          'Personal expenses',
-          'Alcoholic beverages',
-          'Tips and gratitude',
-          'Activities not mentioned in itinerary'
-        ],
-        tripReviews: [
-          { id: 1, author: 'Priya Singh', rating: 5, date: '2024-12-20', text: 'Absolutely amazing experience! The trip captain was so friendly and the entire group bonded so well. Would definitely go again!', verified: true },
-          { id: 2, author: 'Rahul Kumar', rating: 5, date: '2024-12-15', text: 'Best trek I\'ve done. The itinerary was perfectly planned. Highly recommend WravelCommunity!', verified: true },
-          { id: 3, author: 'Anjali Sharma', rating: 4, date: '2024-12-10', text: 'Great experience overall. Food was good, accommodations were comfortable. One day the weather was a bit harsh but we managed well.', verified: true }
-        ]
-      },
-      2: {
-        id: 2,
-        name: 'Leh Ladakh Adventure',
-        destination: 'Ladakh, Union Territory',
-        price: 34650,
-        duration: 7,
-        nights: 6,
-        groupSize: '10-14 people',
-        difficulty: 'Moderate-Hard',
-        rating: 4.9,
-        reviews: 312,
-        bestSeason: 'June - September',
-        altitude: '3000-5500 m',
-        availableSeats: 8,
-        startDate: '2025-02-20',
-        endDate: '2025-02-26',
-        image: 'https://images.pexels.com/photos/34555164/pexels-photo-34555164/free-photo-of-adventurer-resting-with-motorcycle-by-scenic-lake.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-        description: 'Experience the raw beauty of Ladakh - high altitude deserts, ancient monasteries, and stunning mountain passes.',
-        highlights: [
-          'Highest motorable road (Khardung La Pass)',
-          'Pangong Lake - turquoise waters',
-          'Nubra Valley - sand dunes and camels',
-          'Magnetic Hill optical illusion',
-          'Ancient Hemis Monastery',
-          'Stargazing in high altitude desert'
-        ],
-        itinerary: [
-          { day: 1, title: 'Arrival in Leh', description: 'Arrive and acclimatize', meals: 'Dinner', activities: ['Arrival', 'Rest', 'Light walk'] },
-          { day: 2, title: 'Leh to Khardung La', description: 'Visit highest motorable road', meals: 'Breakfast, Lunch, Dinner', activities: ['Khardung La trek', 'Photography'] },
-          { day: 3, title: 'Nubra Valley', description: 'Camel safari and sand dunes', meals: 'Breakfast, Lunch, Dinner', activities: ['Camel ride', 'Photography'] },
-          { day: 4, title: 'Pangong Lake', description: 'Long drive to blue lake', meals: 'Breakfast, Lunch, Dinner', activities: ['Lake visit', 'Sunset viewing'] },
-          { day: 5, title: 'Pangong to Leh', description: 'Return journey with stops', meals: 'Breakfast, Lunch, Dinner', activities: ['Magnetic hill', 'Photography'] },
-          { day: 6, title: 'Leh Exploration', description: 'Visit Hemis Monastery', meals: 'Breakfast, Lunch, Dinner', activities: ['Monastery tour'] },
-          { day: 7, title: 'Departure', description: 'Checkout and fly', meals: 'Breakfast', activities: ['Departure'] }
-        ],
-        inclusions: [
-          '6 nights accommodation',
-          'All meals',
-          'Experienced guide',
-          'Vehicle with driver',
-          'All permits and fees',
-          'Travel insurance'
-        ],
-        exclusions: [
-          'Flights',
-          'Personal expenses',
-          'Tips'
-        ],
-        tripReviews: [
-          { id: 1, author: 'Vikram Patel', rating: 5, date: '2024-11-30', text: 'Incredible trip! The views are beyond words. Trip captains were amazing.', verified: true },
-          { id: 2, author: 'Neha Gupta', rating: 5, date: '2024-11-25', text: 'Best adventure of my life! Highly recommended for everyone.', verified: true }
-        ]
+    const fetchTripData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        // Try to fetch from backend
+        const tripData = await tripService.getTripById(id);
+        setTrip(tripData);
+      } catch (err) {
+        console.warn('Backend unavailable, using mock data:', err);
+        // Use mock data as fallback
+        const mockTrip = mockTrips[id];
+        if (mockTrip) {
+          setTrip(mockTrip);
+        } else {
+          setError('Trip not found');
+        }
+      } finally {
+        setLoading(false);
       }
     };
 
-    const tripData = mockTrips[id];
-    if (tripData) {
-      setTrip(tripData);
+    if (id) {
+      fetchTripData();
     }
-    setLoading(false);
   }, [id]);
 
+  // Loading state
   if (loading) return <LoadingSpinner />;
-  if (!trip) return <div className="text-center py-12"><p className="text-xl text-gray-600">Trip not found</p></div>;
+
+  // Error state
+  if (error || !trip) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-xl text-gray-600 mb-4">{error || 'Trip not found'}</p>
+        <Button onClick={() => navigate('/trips')}>Back to Trips</Button>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -193,12 +226,12 @@ function TripDetail() {
             </div>
 
             {/* Tabs */}
-            <div className="flex gap-4 mb-6 border-b">
+            <div className="flex gap-4 mb-6 border-b overflow-x-auto">
               {['overview', 'itinerary', 'includes', 'reviews'].map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`pb-4 font-semibold capitalize ${
+                  className={`pb-4 font-semibold capitalize whitespace-nowrap ${
                     activeTab === tab
                       ? 'border-b-2 border-orange-500 text-orange-500'
                       : 'text-gray-600 hover:text-gray-800'
@@ -215,7 +248,7 @@ function TripDetail() {
                 <Card className="p-6">
                   <h2 className="text-2xl font-bold text-gray-800 mb-4">About This Trip</h2>
                   <p className="text-gray-600 leading-relaxed mb-6">{trip.description}</p>
-                  
+
                   <div className="grid grid-cols-2 gap-6">
                     <div>
                       <h3 className="font-bold text-gray-800 mb-2">Difficulty Level</h3>
@@ -245,7 +278,7 @@ function TripDetail() {
                 <Card className="p-6">
                   <h2 className="text-2xl font-bold text-gray-800 mb-4">Highlights</h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {trip.highlights.map((highlight, index) => (
+                    {trip.highlights && trip.highlights.map((highlight, index) => (
                       <div key={index} className="flex items-start">
                         <FiCheck className="text-green-500 mr-3 flex-shrink-0 mt-1" />
                         <span className="text-gray-700">{highlight}</span>
@@ -259,7 +292,7 @@ function TripDetail() {
             {activeTab === 'itinerary' && (
               <div className="space-y-4">
                 <h2 className="text-2xl font-bold text-gray-800 mb-6">Day-by-Day Itinerary</h2>
-                {trip.itinerary.map((day, index) => (
+                {trip.itinerary && trip.itinerary.map((day, index) => (
                   <Card key={index} className="p-6 border-l-4 border-orange-500">
                     <div className="flex items-start justify-between mb-3">
                       <div>
@@ -270,8 +303,8 @@ function TripDetail() {
                         {day.meals}
                       </span>
                     </div>
-                    <div className="flex gap-4 text-sm text-gray-500 mt-4">
-                      {day.activities.map((activity, idx) => (
+                    <div className="flex gap-4 text-sm text-gray-500 mt-4 flex-wrap">
+                      {day.activities && day.activities.map((activity, idx) => (
                         <span key={idx} className="flex items-center">
                           <span className="w-2 h-2 bg-gray-300 rounded-full mr-2"></span>
                           {activity}
@@ -288,7 +321,7 @@ function TripDetail() {
                 <Card className="p-6">
                   <h2 className="text-2xl font-bold text-gray-800 mb-4">What's Included</h2>
                   <div className="space-y-3">
-                    {trip.inclusions.map((item, index) => (
+                    {trip.inclusions && trip.inclusions.map((item, index) => (
                       <div key={index} className="flex items-start">
                         <FiCheck className="text-green-500 mr-3 flex-shrink-0 mt-1" />
                         <span className="text-gray-700">{item}</span>
@@ -300,7 +333,7 @@ function TripDetail() {
                 <Card className="p-6">
                   <h2 className="text-2xl font-bold text-gray-800 mb-4">What's Not Included</h2>
                   <div className="space-y-3">
-                    {trip.exclusions.map((item, index) => (
+                    {trip.exclusions && trip.exclusions.map((item, index) => (
                       <div key={index} className="flex items-start">
                         <span className="text-red-500 mr-3 flex-shrink-0 mt-1">✕</span>
                         <span className="text-gray-700">{item}</span>
@@ -314,24 +347,30 @@ function TripDetail() {
             {activeTab === 'reviews' && (
               <div className="space-y-4">
                 <h2 className="text-2xl font-bold text-gray-800 mb-6">Reviews ({trip.reviews})</h2>
-                {trip.tripReviews.map((review) => (
-                  <Card key={review.id} className="p-6">
-                    <div className="flex items-start justify-between mb-3">
-                      <div>
-                        <h3 className="font-bold text-gray-800">{review.author}</h3>
-                        <p className="text-sm text-gray-500">{review.date}</p>
+                {trip.tripReviews && trip.tripReviews.length > 0 ? (
+                  trip.tripReviews.map((review) => (
+                    <Card key={review.id} className="p-6">
+                      <div className="flex items-start justify-between mb-3">
+                        <div>
+                          <h3 className="font-bold text-gray-800">{review.author}</h3>
+                          <p className="text-sm text-gray-500">{review.date}</p>
+                        </div>
+                        <div className="text-yellow-500">{'⭐'.repeat(review.rating)}</div>
                       </div>
-                      <div className="text-yellow-500">{'⭐'.repeat(review.rating)}</div>
-                    </div>
-                    <p className="text-gray-700">{review.text}</p>
-                    {review.verified && (
-                      <div className="mt-3 text-sm text-green-600 flex items-center">
-                        <FiCheck size={16} className="mr-1" />
-                        Verified Booking
-                      </div>
-                    )}
+                      <p className="text-gray-700">{review.text}</p>
+                      {review.verified && (
+                        <div className="mt-3 text-sm text-green-600 flex items-center">
+                          <FiCheck size={16} className="mr-1" />
+                          Verified Booking
+                        </div>
+                      )}
+                    </Card>
+                  ))
+                ) : (
+                  <Card className="p-6 text-center">
+                    <p className="text-gray-600">No reviews yet. Be the first to review!</p>
                   </Card>
-                ))}
+                )}
               </div>
             )}
           </div>
@@ -372,7 +411,7 @@ function TripDetail() {
               </div>
 
               {user ? (
-                <Button 
+                <Button
                   fullWidth
                   onClick={() => navigate(`/booking/${trip.id}`)}
                   className="mb-3"
@@ -380,7 +419,7 @@ function TripDetail() {
                   Book Now
                 </Button>
               ) : (
-                <Button 
+                <Button
                   fullWidth
                   onClick={() => navigate('/login')}
                   className="mb-3"
