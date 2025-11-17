@@ -1,45 +1,120 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import React, { Suspense, lazy } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Navbar from './components/common/Navbar';
 import Footer from './components/common/Footer';
-import Home from './pages/Home';
-import Trips from './pages/Trips';
-import TripDetail from './pages/TripDetail';
-import Login from './pages/Login';
-import Community from './pages/Community';
-import NotFound from './pages/NotFound';
-import Booking from './pages/Booking';
-import Profile from './pages/Profile';
-import Register from './pages/Register';
-import BookingConfirmation from './pages/BookingConfirmation';
-import AdminDashboard from './pages/AdminDashboard';
-import AdminRoute from './components/auth/AdminRoute';
+import LoadingSpinner from './components/common/LoadingSpinner';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/auth/ProtectedRoute';
+import AdminRoute from './components/auth/AdminRoute';
 import './App.css';
+
+// Lazy load pages for better performance
+const Home = lazy(() => import('./pages/Home'));
+const Trips = lazy(() => import('./pages/Trips'));
+const TripDetail = lazy(() => import('./pages/TripDetail'));
+const Login = lazy(() => import('./pages/Login'));
+const Register = lazy(() => import('./pages/Register'));
+const Community = lazy(() => import('./pages/Community'));
+const Booking = lazy(() => import('./pages/Booking'));
+const BookingConfirmation = lazy(() => import('./pages/BookingConfirmation'));
+const Profile = lazy(() => import('./pages/Profile'));
+const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
+const AdminLogin = lazy(() => import('./pages/AdminLogin'));
+const NotFound = lazy(() => import('./pages/NotFound'));
+
+// Loading fallback component
+const LoadingFallback = () => (
+  <div className="min-h-screen flex items-center justify-center">
+    <LoadingSpinner />
+  </div>
+);
 
 function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <div className="flex flex-col min-h-screen">
+        <div className="flex flex-col min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800">
+          {/* Navbar - hidden on admin routes */}
           <Navbar />
-          <main className="flex-grow">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/trips/:id" element={<TripDetail />} />
-              <Route path="/community" element={<Community />} />
-              <Route path="/trips" element={<Trips />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="*" element={<NotFound />} />
-              <Route path="/booking/:tripId" element={<ProtectedRoute><Booking /></ProtectedRoute>} />
-              <Route path="/booking-confirmation/:tripId" element={<BookingConfirmation />} />
-              <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
-            </Routes>
 
+          {/* Main Content */}
+          <main className="flex-grow">
+            <Suspense fallback={<LoadingFallback />}>
+              <Routes>
+                {/* ========== PUBLIC ROUTES ========== */}
+                
+                {/* Home */}
+                <Route path="/" element={<Home />} />
+
+                {/* Trips */}
+                <Route path="/trips" element={<Trips />} />
+                <Route path="/trips/:id" element={<TripDetail />} />
+
+                {/* Community */}
+                <Route path="/community" element={<Community />} />
+
+                {/* Authentication Routes */}
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+
+                {/* ========== PROTECTED USER ROUTES ========== */}
+
+                {/* User Profile */}
+                <Route
+                  path="/profile"
+                  element={
+                    <ProtectedRoute>
+                      <Profile />
+                    </ProtectedRoute>
+                  }
+                />
+
+                {/* Booking Flow */}
+                <Route
+                  path="/booking/:tripId"
+                  element={
+                    <ProtectedRoute>
+                      <Booking />
+                    </ProtectedRoute>
+                  }
+                />
+
+                {/* Booking Confirmation */}
+                <Route
+                  path="/booking-confirmation/:tripId"
+                  element={
+                    <ProtectedRoute>
+                      <BookingConfirmation />
+                    </ProtectedRoute>
+                  }
+                />
+
+                {/* ========== ADMIN ROUTES ========== */}
+
+                {/* Admin Login */}
+                <Route path="/admin/login" element={<AdminLogin />} />
+
+                {/* Admin Dashboard */}
+                <Route
+                  path="/admin/dashboard"
+                  element={
+                    <AdminRoute requiredRole="admin">
+                      <AdminDashboard />
+                    </AdminRoute>
+                  }
+                />
+
+                {/* Admin Redirect */}
+                <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
+                <Route path="/admin/*" element={<Navigate to="/admin/dashboard" replace />} />
+
+                {/* ========== 404 FALLBACK ========== */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Suspense>
           </main>
+
+          {/* Footer - hidden on admin routes */}
           <Footer />
         </div>
       </AuthProvider>
