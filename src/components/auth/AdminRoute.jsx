@@ -12,17 +12,17 @@ function AdminRoute({ children, requiredRole = 'admin' }) {
   // Valid admin accounts with roles
   const adminAccounts = [
     {
-      email: 'admin@wravelcommunity.com',
+      email: 'admin@travelcommunity.com',
       role: 'admin',
       permissions: ['manage_trips', 'manage_bookings', 'manage_users', 'view_analytics']
     },
     {
-      email: 'superadmin@wravelcommunity.com',
+      email: 'superadmin@travelcommunity.com',
       role: 'superadmin',
       permissions: ['all']
     },
     {
-      email: 'moderator@wravelcommunity.com',
+      email: 'moderator@travelcommunity.com',
       role: 'moderator',
       permissions: ['manage_bookings', 'view_analytics']
     }
@@ -81,8 +81,8 @@ function AdminRoute({ children, requiredRole = 'admin' }) {
 
   // Check role-based access
   if (requiredRole && requiredRole !== 'any') {
-    const hasRequiredRole = 
-      adminAccount.role === requiredRole || 
+    const hasRequiredRole =
+      adminAccount.role === requiredRole ||
       adminAccount.role === 'superadmin';
 
     if (!hasRequiredRole) {

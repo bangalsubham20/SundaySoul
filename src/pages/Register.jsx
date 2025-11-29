@@ -68,7 +68,7 @@ export default function Register() {
           <FiCheck size={36} className="text-white" />
         </div>
         <h2 className="text-3xl font-bold text-gray-800 mb-2">Account Created!</h2>
-        <p className="text-gray-600 mb-6">Welcome to WravelCommunity.</p>
+        <p className="text-gray-600 mb-6">Welcome to TravelCommunity.</p>
         <p className="text-sm text-gray-400">Redirecting...</p>
       </motion.div>
     </div>

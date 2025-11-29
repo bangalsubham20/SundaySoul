@@ -12,7 +12,7 @@ import reviewService from '../services/reviewService';
 function Profile() {
   const { user, logout, updateProfile } = useAuth();
   const navigate = useNavigate();
-  
+
   const [isEditing, setIsEditing] = useState(false);
   const [activeTab, setActiveTab] = useState('bookings');
   const [loading, setLoading] = useState(true);
@@ -175,8 +175,8 @@ function Profile() {
   const totalBookings = userBookings.length;
   const completedTrips = userBookings.filter(b => b.status === 'completed').length;
   const upcomingTrips = userBookings.filter(b => b.status === 'confirmed' || b.status === 'pending').length;
-  const avgRating = userReviews.length > 0 
-    ? (userReviews.reduce((sum, r) => sum + r.rating, 0) / userReviews.length).toFixed(1) 
+  const avgRating = userReviews.length > 0
+    ? (userReviews.reduce((sum, r) => sum + r.rating, 0) / userReviews.length).toFixed(1)
     : 0;
 
   if (loading) return <LoadingSpinner />;
@@ -310,7 +310,7 @@ function Profile() {
                 <p className="text-sm font-bold text-purple-400 mt-1">
                   {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'Recently'}
                 </p>
-                <p className="text-xs text-slate-500 mt-2">WravelerForLife 🌍</p>
+                <p className="text-xs text-slate-500 mt-2">TravelerForLife 🌍</p>
               </div>
             </div>
           </motion.div>
@@ -418,11 +418,10 @@ function Profile() {
                       key={tab.id}
                       whileHover={{ y: -2 }}
                       onClick={() => setActiveTab(tab.id)}
-                      className={`pb-4 font-semibold capitalize whitespace-nowrap flex items-center gap-2 transition ${
-                        activeTab === tab.id
+                      className={`pb-4 font-semibold capitalize whitespace-nowrap flex items-center gap-2 transition ${activeTab === tab.id
                           ? 'text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 border-b-2 border-purple-500'
                           : 'text-slate-400 hover:text-slate-300'
-                      }`}
+                        }`}
                     >
                       <Icon size={18} /> {tab.label}
                     </motion.button>
@@ -595,7 +594,7 @@ function Profile() {
                           { label: 'Email Notifications', desc: 'Booking updates', defaultChecked: true },
                           { label: 'SMS Notifications', desc: 'Important alerts', defaultChecked: true },
                           { label: 'Marketing Emails', desc: 'Special offers', defaultChecked: false },
-                          { label: 'Community Updates', desc: 'Messages from WravelForLife', defaultChecked: true }
+                          { label: 'Community Updates', desc: 'Messages from TravelForLife', defaultChecked: true }
                         ].map((item, i) => (
                           <motion.div
                             key={i}

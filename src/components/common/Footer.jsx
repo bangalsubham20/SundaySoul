@@ -45,7 +45,7 @@ function Footer() {
 
   const contactInfo = [
     { icon: FiPhone, label: '+91 97 97 97 21 75', href: 'tel:+919797972175' },
-    { icon: FiMail, label: 'support@wravelcommunity.com', href: 'mailto:support@wravelcommunity.com' },
+    { icon: FiMail, label: 'support@travelcommunity.com', href: 'mailto:support@travelcommunity.com' },
     { icon: FiMapPin, label: 'India', href: '#' }
   ];
 
@@ -98,7 +98,7 @@ function Footer() {
               </motion.div>
               <div>
                 <p className="text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">
-                  Wraveler
+                  Traveler
                 </p>
                 <p className="text-xs text-slate-500">Travel Community</p>
               </div>
@@ -294,7 +294,7 @@ function Footer() {
             className="flex items-center gap-2"
             whileHover={{ scale: 1.05 }}
           >
-            © {currentYear} Wraveler. All rights reserved.
+            © {currentYear} Traveler. All rights reserved.
           </motion.p>
 
           <motion.div

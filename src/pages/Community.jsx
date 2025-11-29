@@ -9,7 +9,7 @@ function Community() {
       id: 1,
       author: 'Priya Singh',
       avatar: 'https://i.pravatar.cc/48?img=1',
-      content: '🏔️ Just completed the Spiti Valley trek! Amazing experience with an incredible group. The frozen landscapes and monasteries were absolutely breathtaking. #WravelCommunity #SpitivalleyTrek',
+      content: '🏔️ Just completed the Spiti Valley trek! Amazing experience with an incredible group. The frozen landscapes and monasteries were absolutely breathtaking. #TravelCommunity #SpitivalleyTrek',
       image: 'https://images.pexels.com/photos/31307356/pexels-photo-31307356/free-photo-of-spectacular-view-of-key-monastery-in-winter.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&dpr=2',
       likes: 342,
       liked: false,
@@ -227,11 +227,10 @@ function Community() {
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => handleLike(post.id)}
-                    className={`flex items-center gap-2 transition-all px-4 py-2 rounded-lg ${
-                      post.liked
+                    className={`flex items-center gap-2 transition-all px-4 py-2 rounded-lg ${post.liked
                         ? 'text-red-500 bg-red-500/10'
                         : 'hover:text-red-500 hover:bg-red-500/10'
-                    }`}
+                      }`}
                   >
                     <FiHeart size={20} fill={post.liked ? 'currentColor' : 'none'} />
                     <span className="text-sm font-semibold">Like</span>

@@ -24,9 +24,9 @@ function Navbar() {
   };
 
   // Check if user is admin
-  const isAdmin = user?.email === 'admin@wravelcommunity.com' || 
-                  user?.email === 'superadmin@wravelcommunity.com' ||
-                  user?.email === 'moderator@wravelcommunity.com';
+  const isAdmin = user?.email === 'admin@travelcommunity.com' ||
+    user?.email === 'superadmin@travelcommunity.com' ||
+    user?.email === 'moderator@travelcommunity.com';
 
   const isAdminPage = location.pathname.startsWith('/admin');
 
@@ -68,8 +68,8 @@ function Navbar() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-            <Link 
-              to="/" 
+            <Link
+              to="/"
               className="flex items-center space-x-2 group cursor-pointer"
               onClick={handleNavClick}
             >
@@ -81,7 +81,7 @@ function Navbar() {
                 ✈️
               </motion.div>
               <span className="text-xl font-black bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400 group-hover:from-pink-400 group-hover:to-purple-400 transition-all">
-                Wraveler
+                Traveler
               </span>
             </Link>
           </motion.div>
@@ -100,19 +100,17 @@ function Navbar() {
                 <motion.div key={item.path} variants={itemVariants}>
                   <Link
                     to={item.path}
-                    className={`flex items-center gap-1 font-semibold transition-all relative group ${
-                      isActive
+                    className={`flex items-center gap-1 font-semibold transition-all relative group ${isActive
                         ? 'text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400'
                         : 'text-slate-300 hover:text-white'
-                    }`}
+                      }`}
                   >
                     <Icon size={18} />
                     {item.label}
                     <motion.div
                       layoutId="activeTab"
-                      className={`absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-purple-400 to-pink-400 ${
-                        isActive ? '' : 'hidden'
-                      }`}
+                      className={`absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-purple-400 to-pink-400 ${isActive ? '' : 'hidden'
+                        }`}
                       transition={{ type: 'spring', stiffness: 300, damping: 30 }}
                     />
                   </Link>
@@ -275,11 +273,10 @@ function Navbar() {
                   >
                     <Link
                       to={item.path}
-                      className={`block px-4 py-3 rounded-lg transition-all flex items-center gap-2 ${
-                        isActive
+                      className={`block px-4 py-3 rounded-lg transition-all flex items-center gap-2 ${isActive
                           ? 'bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 border border-purple-500/30'
                           : 'text-slate-300 hover:bg-white/5 hover:text-white border border-white/10'
-                      }`}
+                        }`}
                       onClick={handleNavClick}
                     >
                       <Icon size={18} /> {item.label}

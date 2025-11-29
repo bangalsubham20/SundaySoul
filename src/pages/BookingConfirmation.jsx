@@ -261,7 +261,7 @@ function BookingConfirmation() {
               onClick={() => {
                 const text = `Just booked ${trip.name}! Booking ID: ${bookingId}`;
                 if (navigator.share) {
-                  navigator.share({ title: 'WravelCommunity', text });
+                  navigator.share({ title: 'TravelCommunity', text });
                 } else {
                   window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
                 }
@@ -321,11 +321,11 @@ function BookingConfirmation() {
             <div className="w-0.5 h-6 bg-white/20 hidden md:block" />
             <motion.a
               whileHover={{ scale: 1.05 }}
-              href="mailto:support@wravelcommunity.com"
+              href="mailto:support@travelcommunity.com"
               className="flex items-center gap-2 text-purple-400 hover:text-purple-300 font-bold transition"
             >
               <FiMail size={18} />
-              support@wravelcommunity.com
+              support@travelcommunity.com
             </motion.a>
           </div>
         </motion.div>

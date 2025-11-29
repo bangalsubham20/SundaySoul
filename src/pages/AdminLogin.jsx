@@ -22,21 +22,21 @@ function AdminLogin() {
   // Valid admin accounts with roles and permissions
   const adminAccounts = [
     {
-      email: 'admin@wravelcommunity.com',
+      email: 'admin@travelcommunity.com',
       password: 'Admin@123456',
       role: 'admin',
       name: 'Admin User',
       permissions: ['manage_trips', 'manage_bookings', 'manage_users', 'view_analytics']
     },
     {
-      email: 'superadmin@wravelcommunity.com',
+      email: 'superadmin@travelcommunity.com',
       password: 'SuperAdmin@12345',
       role: 'superadmin',
       name: 'Super Admin',
       permissions: ['all']
     },
     {
-      email: 'moderator@wravelcommunity.com',
+      email: 'moderator@travelcommunity.com',
       password: 'Moderator@12345',
       role: 'moderator',
       name: 'Moderator',
@@ -49,7 +49,7 @@ function AdminLogin() {
     if (location.state?.demo) {
       setFormData(prev => ({
         ...prev,
-        email: 'admin@wravelcommunity.com'
+        email: 'admin@travelcommunity.com'
       }));
     }
   }, [location]);
@@ -111,7 +111,7 @@ function AdminLogin() {
 
       // Show success animation
       setSuccess(true);
-      
+
       // Redirect after success animation
       setTimeout(() => {
         navigate('/admin/dashboard');
@@ -246,7 +246,7 @@ function AdminLogin() {
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  placeholder="admin@wravelcommunity.com"
+                  placeholder="admin@travelcommunity.com"
                   className="w-full bg-white/5 border border-white/10 rounded-xl pl-12 pr-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent focus:bg-white/10 transition-all"
                   required
                   disabled={loading}

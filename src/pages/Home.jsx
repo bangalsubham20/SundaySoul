@@ -95,7 +95,7 @@ function Home() {
       id: 1,
       name: 'Priya Singh',
       location: 'Delhi',
-      text: 'WravelCommunity changed my travel life! Met amazing people and created unforgettable memories.',
+      text: 'TravelCommunity changed my travel life! Met amazing people and created unforgettable memories.',
       rating: 5,
       image: 'https://i.pravatar.cc/80?img=1',
       role: 'Adventure Enthusiast',
@@ -371,11 +371,10 @@ function Home() {
                 whileHover={{ scale: 1.15, y: -10 }}
                 onMouseEnter={() => setActiveCategory(i)}
                 onMouseLeave={() => setActiveCategory(null)}
-                className={`relative p-6 rounded-2xl cursor-pointer group overflow-hidden border border-slate-700 hover:border-purple-500 transition-all ${
-                  activeCategory === i
+                className={`relative p-6 rounded-2xl cursor-pointer group overflow-hidden border border-slate-700 hover:border-purple-500 transition-all ${activeCategory === i
                     ? 'bg-gradient-to-br ' + cat.color
                     : 'bg-slate-800/50 hover:bg-slate-800'
-                }`}
+                  }`}
               >
                 <motion.div
                   animate={{ y: [0, -10, 0] }}
@@ -384,9 +383,8 @@ function Home() {
                 >
                   {cat.icon}
                 </motion.div>
-                <p className={`font-bold text-lg transition-colors ${
-                  activeCategory === i ? 'text-white' : 'text-gray-300 group-hover:text-white'
-                }`}>
+                <p className={`font-bold text-lg transition-colors ${activeCategory === i ? 'text-white' : 'text-gray-300 group-hover:text-white'
+                  }`}>
                   {cat.name}
                 </p>
               </motion.div>
@@ -644,7 +642,7 @@ function Home() {
             viewport={{ once: true }}
             className="text-center text-gray-500 border-t border-slate-700 pt-8"
           >
-            <p>© 2025 WravelCommunity. Made with ❤️ for adventurers.</p>
+            <p>© 2025 TravelCommunity. Made with ❤️ for adventurers.</p>
           </motion.div>
         </div>
       </motion.footer>

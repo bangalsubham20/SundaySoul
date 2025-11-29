@@ -20,7 +20,7 @@ function Testimonials() {
       id: 3,
       name: 'Shriti C.',
       trip: 'Leh Ladakh Trip',
-      text: 'Professional yet personal touch. The best-organized trip I've been on!',
+      text: 'Professional yet personal touch. The best-organized trip I\'ve been on!',
       rating: 5,
     },
   ];
@@ -28,7 +28,7 @@ function Testimonials() {
   return (
     <section className="py-16 bg-white">
       <div className="max-w-7xl mx-auto px-4">
-        <h2 className="text-4xl font-bold text-gray-800 mb-12 text-center">What Wravelers Say</h2>
+        <h2 className="text-4xl font-bold text-gray-800 mb-12 text-center">What Travelers Say</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {testimonials.map(testimonial => (
             <div key={testimonial.id} className="bg-gray-50 p-6 rounded-lg">
