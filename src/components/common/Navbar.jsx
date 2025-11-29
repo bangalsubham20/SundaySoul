@@ -62,7 +62,7 @@ function Navbar() {
     <motion.nav
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="sticky top-0 z-50 backdrop-blur-xl bg-gradient-to-b from-white/10 to-white/5 border-b border-white/10 shadow-2xl"
+      className="sticky top-0 z-50 backdrop-blur-xl bg-gradient-to-b from-slate-950/80 to-slate-950/40 border-b border-white/10 shadow-2xl"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
@@ -80,7 +80,7 @@ function Navbar() {
               >
                 ✈️
               </motion.div>
-              <span className="text-xl font-black bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400 group-hover:from-pink-400 group-hover:to-purple-400 transition-all">
+              <span className="text-xl font-black bg-clip-text text-transparent bg-gradient-to-r from-primary-400 to-accent-400 group-hover:from-accent-400 group-hover:to-primary-400 transition-all">
                 Traveler
               </span>
             </Link>
@@ -101,15 +101,15 @@ function Navbar() {
                   <Link
                     to={item.path}
                     className={`flex items-center gap-1 font-semibold transition-all relative group ${isActive
-                        ? 'text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400'
-                        : 'text-slate-300 hover:text-white'
+                      ? 'text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-accent-400'
+                      : 'text-slate-300 hover:text-white'
                       }`}
                   >
                     <Icon size={18} />
                     {item.label}
                     <motion.div
                       layoutId="activeTab"
-                      className={`absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-purple-400 to-pink-400 ${isActive ? '' : 'hidden'
+                      className={`absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-primary-400 to-accent-400 ${isActive ? '' : 'hidden'
                         }`}
                       transition={{ type: 'spring', stiffness: 300, damping: 30 }}
                     />
@@ -144,7 +144,7 @@ function Navbar() {
                       onClick={() => setIsProfileOpen(!isProfileOpen)}
                       className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all"
                     >
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center">
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-r from-primary-500 to-accent-500 flex items-center justify-center">
                         <FiUser className="text-white" size={16} />
                       </div>
                       <span className="text-white font-semibold text-sm hidden sm:inline">
@@ -165,7 +165,7 @@ function Navbar() {
                           initial={{ opacity: 0, y: -10, scale: 0.95 }}
                           animate={{ opacity: 1, y: 0, scale: 1 }}
                           exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                          className="absolute right-0 mt-2 w-48 backdrop-blur-xl bg-gradient-to-br from-white/10 to-white/5 border border-white/10 rounded-lg shadow-2xl overflow-hidden"
+                          className="absolute right-0 mt-2 w-48 backdrop-blur-xl bg-slate-900/90 border border-white/10 rounded-lg shadow-2xl overflow-hidden"
                         >
                           <div className="p-4 border-b border-white/10">
                             <p className="text-white font-bold">{user.name}</p>
@@ -230,7 +230,7 @@ function Navbar() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => navigate('/register')}
-                  className="px-6 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold rounded-lg hover:shadow-lg transition-all"
+                  className="px-6 py-2 bg-gradient-to-r from-primary-500 to-accent-500 text-white font-semibold rounded-lg hover:shadow-lg transition-all"
                 >
                   Sign Up
                 </motion.button>
@@ -244,7 +244,7 @@ function Navbar() {
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setIsOpen(!isOpen)}
-              className="text-white hover:text-purple-400 transition"
+              className="text-white hover:text-primary-400 transition"
             >
               {isOpen ? <FiX size={28} /> : <FiMenu size={28} />}
             </motion.button>
@@ -274,8 +274,8 @@ function Navbar() {
                     <Link
                       to={item.path}
                       className={`block px-4 py-3 rounded-lg transition-all flex items-center gap-2 ${isActive
-                          ? 'bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 border border-purple-500/30'
-                          : 'text-slate-300 hover:bg-white/5 hover:text-white border border-white/10'
+                        ? 'bg-gradient-to-r from-primary-500/20 to-accent-500/20 text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-accent-400 border border-primary-500/30'
+                        : 'text-slate-300 hover:bg-white/5 hover:text-white border border-white/10'
                         }`}
                       onClick={handleNavClick}
                     >
@@ -352,7 +352,7 @@ function Navbar() {
                       navigate('/register');
                       handleNavClick();
                     }}
-                    className="block w-full px-4 py-3 rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:shadow-lg transition-all font-semibold"
+                    className="block w-full px-4 py-3 rounded-lg bg-gradient-to-r from-primary-500 to-accent-500 text-white hover:shadow-lg transition-all font-semibold"
                   >
                     Sign Up
                   </button>

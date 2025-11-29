@@ -62,12 +62,12 @@ function Footer() {
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       transition={{ duration: 0.6 }}
-      className="relative bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 text-white border-t border-white/10"
+      className="relative bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 text-white border-t border-white/10 font-sans"
     >
       {/* Decorative Background */}
       <div className="absolute inset-0 overflow-hidden">
         <motion.div
-          className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-purple-600/10 via-indigo-600/5 to-transparent rounded-full blur-3xl"
+          className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-primary-600/10 via-accent-600/5 to-transparent rounded-full blur-3xl"
           animate={{ y: [0, 30, 0] }}
           transition={{ duration: 10, repeat: Infinity }}
         />
@@ -97,7 +97,7 @@ function Footer() {
                 ✈️
               </motion.div>
               <div>
-                <p className="text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">
+                <p className="text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-primary-400 to-accent-400">
                   Traveler
                 </p>
                 <p className="text-xs text-slate-500">Travel Community</p>
@@ -108,7 +108,7 @@ function Footer() {
             </p>
             <motion.div
               whileHover={{ x: 5 }}
-              className="flex items-center gap-2 text-purple-400 hover:text-purple-300 cursor-pointer transition text-sm font-semibold"
+              className="flex items-center gap-2 text-primary-400 hover:text-primary-300 cursor-pointer transition text-sm font-semibold"
             >
               Join our community
               <FiArrowRight size={16} />
@@ -117,7 +117,7 @@ function Footer() {
 
           {/* Quick Links */}
           <motion.div variants={itemVariants} className="space-y-4">
-            <h3 className="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">
+            <h3 className="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary-400 to-accent-400">
               Quick Links
             </h3>
             <ul className="space-y-3">
@@ -136,7 +136,7 @@ function Footer() {
                     <motion.span
                       initial={{ x: -5, opacity: 0 }}
                       whileHover={{ x: 0, opacity: 1 }}
-                      className="text-purple-400"
+                      className="text-primary-400"
                     >
                       →
                     </motion.span>
@@ -149,7 +149,7 @@ function Footer() {
 
           {/* Legal Links */}
           <motion.div variants={itemVariants} className="space-y-4">
-            <h3 className="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">
+            <h3 className="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary-400 to-accent-400">
               Legal
             </h3>
             <ul className="space-y-3">
@@ -168,7 +168,7 @@ function Footer() {
                     <motion.span
                       initial={{ x: -5, opacity: 0 }}
                       whileHover={{ x: 0, opacity: 1 }}
-                      className="text-purple-400"
+                      className="text-primary-400"
                     >
                       →
                     </motion.span>
@@ -181,7 +181,7 @@ function Footer() {
 
           {/* Contact Section */}
           <motion.div variants={itemVariants} className="space-y-4">
-            <h3 className="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">
+            <h3 className="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary-400 to-accent-400">
               Contact Us
             </h3>
             <div className="space-y-3">
@@ -199,10 +199,10 @@ function Footer() {
                     className="flex items-center gap-3 text-slate-400 hover:text-white transition-all group"
                   >
                     <motion.div
-                      className="p-2 rounded-lg bg-white/5 border border-white/10 group-hover:bg-purple-500/20 group-hover:border-purple-500/30 transition-all"
+                      className="p-2 rounded-lg bg-white/5 border border-white/10 group-hover:bg-primary-500/20 group-hover:border-primary-500/30 transition-all"
                       whileHover={{ scale: 1.1 }}
                     >
-                      <Icon size={16} className="text-purple-400" />
+                      <Icon size={16} className="text-primary-400" />
                     </motion.div>
                     <span className="text-sm">{info.label}</span>
                   </motion.a>
@@ -217,7 +217,7 @@ function Footer() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mb-12 p-8 backdrop-blur-xl bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/20 rounded-2xl"
+          className="mb-12 p-8 backdrop-blur-xl bg-gradient-to-r from-primary-500/10 to-accent-500/10 border border-primary-500/20 rounded-2xl"
         >
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div>
@@ -231,12 +231,12 @@ function Footer() {
               <input
                 type="email"
                 placeholder="Enter your email"
-                className="px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+                className="px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all"
               />
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold rounded-lg hover:shadow-lg transition-all whitespace-nowrap"
+                className="px-6 py-3 bg-gradient-to-r from-primary-500 to-accent-500 text-white font-bold rounded-lg hover:shadow-lg transition-all whitespace-nowrap"
               >
                 Subscribe
               </motion.button>
@@ -265,10 +265,10 @@ function Footer() {
                 viewport={{ once: true }}
                 whileHover={{ scale: 1.2, rotate: 10 }}
                 whileTap={{ scale: 0.9 }}
-                className="p-3 rounded-full bg-white/5 border border-white/10 hover:bg-purple-500/20 hover:border-purple-500/30 transition-all group"
+                className="p-3 rounded-full bg-white/5 border border-white/10 hover:bg-primary-500/20 hover:border-primary-500/30 transition-all group"
                 title={social.label}
               >
-                <Icon size={20} className="text-slate-400 group-hover:text-purple-400 transition-all" />
+                <Icon size={20} className="text-slate-400 group-hover:text-primary-400 transition-all" />
               </motion.a>
             );
           })}
@@ -311,7 +311,7 @@ function Footer() {
             <motion.span
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              className="text-xs px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-300"
+              className="text-xs px-3 py-1 rounded-full bg-primary-500/10 border border-primary-500/20 text-primary-300"
             >
               v1.0.0
             </motion.span>

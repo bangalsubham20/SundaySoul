@@ -29,25 +29,33 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-blue-400/60 via-indigo-600/60 to-fuchsia-400/60 relative overflow-hidden">
-      {/* Animated Circles */}
+    <div className="min-h-screen flex items-center justify-center bg-slate-950 relative overflow-hidden font-sans">
+      {/* Animated Background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-primary-950/20 to-slate-950 z-0" />
+
+      {/* Animated Orbs */}
       <motion.div
         animate={{ x: [0, 100, 0], y: [0, 50, 0] }}
         transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
-        className="absolute top-[-80px] left-[-80px] w-96 h-96 bg-fuchsia-400/30 rounded-full blur-3xl"
+        className="absolute top-[-80px] left-[-80px] w-96 h-96 bg-primary-500/20 rounded-full blur-3xl z-0"
       />
       <motion.div
         animate={{ x: [0, -100, 0], y: [0, -80, 0] }}
         transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
-        className="absolute bottom-[-80px] right-[-80px] w-96 h-96 bg-blue-400/30 rounded-full blur-3xl"
+        className="absolute bottom-[-80px] right-[-80px] w-96 h-96 bg-accent-500/20 rounded-full blur-3xl z-0"
       />
+
       <motion.div
-        initial={{ opacity: 0, scale: 0.8, y: 30 }}
+        initial={{ opacity: 0, scale: 0.9, y: 30 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ duration: 0.7 }}
-        className="w-full max-w-md bg-white/50 shadow-2xl rounded-3xl p-8 md:p-12 backdrop-blur-xl border border-white border-opacity-30"
+        transition={{ duration: 0.6 }}
+        className="w-full max-w-md bg-white/5 shadow-2xl rounded-3xl p-8 md:p-12 backdrop-blur-xl border border-white/10 relative z-10"
       >
-        <h2 className="text-4xl font-bold text-center mb-8 text-gray-800 drop-shadow">Welcome Back</h2>
+        <div className="text-center mb-8">
+          <h2 className="text-4xl font-black text-white mb-2 tracking-tight">Welcome Back</h2>
+          <p className="text-slate-400">Sign in to continue your adventure</p>
+        </div>
+
         <AnimatePresence>
           {error && (
             <motion.div
@@ -55,20 +63,21 @@ export default function Login() {
               exit={{ opacity: 0, y: -8 }}
               initial={{ opacity: 0, y: -16 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 text-sm"
+              className="bg-red-500/10 border border-red-500/30 text-red-300 px-4 py-3 rounded-xl mb-6 text-sm flex items-center gap-2"
             >
-              {error}
+              <span>⚠️</span> {error}
             </motion.div>
           )}
         </AnimatePresence>
+
         <form className="space-y-6" onSubmit={handleSubmit}>
           <div>
-            <label className="block mb-1 text-gray-700 font-semibold">Email</label>
-            <div className="relative">
-              <FiMail className="absolute left-3 top-3 text-gray-400" size={20} />
+            <label className="block mb-2 text-slate-300 font-semibold text-sm">Email Address</label>
+            <div className="relative group">
+              <FiMail className="absolute left-4 top-3.5 text-slate-500 group-focus-within:text-primary-400 transition-colors" size={20} />
               <input
-                className="w-full px-10 py-2 bg-white/80 border border-gray-300 rounded-lg focus:border-blue-400 focus:outline-none shadow-sm transition-all"
-                placeholder="you@email.com"
+                className="w-full pl-12 pr-4 py-3 bg-slate-900/50 border border-slate-700 rounded-xl focus:border-primary-500 focus:ring-1 focus:ring-primary-500 focus:outline-none text-white placeholder-slate-600 transition-all"
+                placeholder="you@example.com"
                 autoFocus
                 type="email"
                 name="email"
@@ -78,12 +87,13 @@ export default function Login() {
               />
             </div>
           </div>
+
           <div>
-            <label className="block mb-1 text-gray-700 font-semibold">Password</label>
-            <div className="relative">
-              <FiLock className="absolute left-3 top-3 text-gray-400" size={20} />
+            <label className="block mb-2 text-slate-300 font-semibold text-sm">Password</label>
+            <div className="relative group">
+              <FiLock className="absolute left-4 top-3.5 text-slate-500 group-focus-within:text-primary-400 transition-colors" size={20} />
               <input
-                className="w-full px-10 py-2 bg-white/80 border border-gray-300 rounded-lg focus:border-blue-400 focus:outline-none shadow-sm transition-all pr-12"
+                className="w-full pl-12 pr-12 py-3 bg-slate-900/50 border border-slate-700 rounded-xl focus:border-primary-500 focus:ring-1 focus:ring-primary-500 focus:outline-none text-white placeholder-slate-600 transition-all"
                 placeholder="••••••••"
                 required
                 type={showPassword ? 'text' : 'password'}
@@ -93,27 +103,37 @@ export default function Login() {
               />
               <button
                 type="button"
-                className="absolute right-3 top-3 text-gray-400 focus:outline-none"
+                className="absolute right-4 top-3.5 text-slate-500 hover:text-white focus:outline-none transition-colors"
                 tabIndex={-1}
                 onClick={() => setShowPassword((v) => !v)}
               >
                 {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
               </button>
             </div>
+            <div className="flex justify-end mt-2">
+              <a href="#" className="text-xs text-primary-400 hover:text-primary-300 transition-colors">Forgot Password?</a>
+            </div>
           </div>
+
           <button
             type="submit"
-            className="w-full h-12 mt-4 rounded-lg bg-gradient-to-tr from-blue-500 via-indigo-500 to-fuchsia-500 text-white font-bold text-lg shadow-lg hover:scale-[1.03] transition-transform"
+            className="w-full py-3.5 rounded-xl bg-gradient-to-r from-primary-600 to-accent-600 text-white font-bold text-lg shadow-lg shadow-primary-500/20 hover:shadow-primary-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={loading}
           >
-            {loading ? 'Logging in...' : 'Login'}
+            {loading ? (
+              <span className="flex items-center justify-center gap-2">
+                <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                Logging in...
+              </span>
+            ) : 'Login'}
           </button>
         </form>
-        <p className="text-center text-gray-600 mt-6">
+
+        <p className="text-center text-slate-400 mt-8">
           Don't have an account?{' '}
           <Link
             to="/register"
-            className="text-fuchsia-600 font-bold hover:underline"
+            className="text-primary-400 font-bold hover:text-primary-300 transition-colors"
           >
             Sign Up
           </Link>

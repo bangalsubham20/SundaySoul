@@ -36,15 +36,6 @@ function Home() {
     },
   };
 
-  const slideInVariants = {
-    hidden: { opacity: 0, x: -60 },
-    visible: {
-      opacity: 1,
-      x: 0,
-      transition: { duration: 0.8, ease: 'easeOut' },
-    },
-  };
-
   const featuredTrips = [
     {
       id: 1,
@@ -82,8 +73,8 @@ function Home() {
   ];
 
   const categories = [
-    { icon: '⛰️', name: 'Trekking', color: 'from-blue-400 to-blue-600' },
-    { icon: '🎒', name: 'Backpacking', color: 'from-purple-400 to-purple-600' },
+    { icon: '⛰️', name: 'Trekking', color: 'from-primary-400 to-primary-600' },
+    { icon: '🎒', name: 'Backpacking', color: 'from-accent-400 to-accent-600' },
     { icon: '👩‍👩‍👩', name: 'All Girls', color: 'from-pink-400 to-pink-600' },
     { icon: '🏍️', name: 'Biking', color: 'from-orange-400 to-orange-600' },
     { icon: '🏕️', name: 'Weekend', color: 'from-green-400 to-green-600' },
@@ -128,13 +119,13 @@ function Home() {
   ];
 
   return (
-    <div className="bg-black text-white overflow-hidden">
+    <div className="bg-slate-950 text-white overflow-hidden font-sans">
       {/* Hero Section with Parallax */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1 }}
-        className="relative min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 overflow-hidden flex items-center"
+        className="relative min-h-screen bg-gradient-to-br from-slate-950 via-primary-950 to-slate-950 overflow-hidden flex items-center"
       >
         {/* Animated Background Elements */}
         <motion.div
@@ -142,7 +133,7 @@ function Home() {
             x: mousePosition.x * 0.05,
             y: mousePosition.y * 0.05,
           }}
-          className="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-full blur-3xl"
+          className="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-br from-primary-500/20 to-accent-500/20 rounded-full blur-3xl"
         />
         <motion.div
           animate={{
@@ -154,7 +145,7 @@ function Home() {
         <motion.div
           animate={{ y: [0, 30, 0] }}
           transition={{ duration: 6, repeat: Infinity }}
-          className="absolute top-1/2 left-1/2 w-72 h-72 bg-gradient-to-r from-indigo-500/10 to-purple-500/10 rounded-full blur-3xl"
+          className="absolute top-1/2 left-1/2 w-72 h-72 bg-gradient-to-r from-primary-500/10 to-accent-500/10 rounded-full blur-3xl"
         />
 
         {/* Content */}
@@ -163,7 +154,7 @@ function Home() {
             initial={{ opacity: 0, y: -60 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.1 }}
-            className="text-6xl md:text-8xl font-black mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400"
+            className="text-6xl md:text-8xl font-black mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary-400 via-accent-400 to-primary-400 animate-gradient-x"
           >
             Wander. Travel. Connect.
           </motion.h1>
@@ -172,7 +163,7 @@ function Home() {
             initial={{ opacity: 0, y: -40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="text-2xl md:text-3xl text-gray-300 mb-12 max-w-2xl leading-relaxed"
+            className="text-2xl md:text-3xl text-slate-300 mb-12 max-w-2xl leading-relaxed font-light"
           >
             Join India's largest community of adventure seekers and explore hidden gems with like-minded travelers
           </motion.div>
@@ -193,25 +184,25 @@ function Home() {
             className="flex flex-col sm:flex-row gap-6"
           >
             <motion.div
-              whileHover={{ scale: 1.08, y: -5 }}
+              whileHover={{ scale: 1.05, y: -5 }}
               whileTap={{ scale: 0.95 }}
             >
               <Button
                 size="lg"
                 onClick={() => navigate('/trips')}
-                className="text-lg px-8 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 shadow-xl"
+                className="text-lg px-8 bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-500 hover:to-primary-400 shadow-xl shadow-primary-500/30"
               >
                 🧳 Explore Trips
               </Button>
             </motion.div>
             <motion.div
-              whileHover={{ scale: 1.08, y: -5 }}
+              whileHover={{ scale: 1.05, y: -5 }}
               whileTap={{ scale: 0.95 }}
             >
               <Button
                 size="lg"
                 onClick={() => navigate('/register')}
-                className="text-lg px-8 border-2 border-purple-400 text-purple-400 hover:bg-purple-400 hover:text-white transition-all"
+                className="text-lg px-8 border-2 border-accent-500 text-accent-500 hover:bg-accent-500 hover:text-white transition-all shadow-lg shadow-accent-500/10"
               >
                 🚀 Get Started
               </Button>
@@ -237,9 +228,9 @@ function Home() {
             className="text-center mb-16"
           >
             <h2 className="text-5xl md:text-6xl font-black mb-4">
-              🌍 Featured <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">Trips</span>
+              🌍 Featured <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary-400 to-accent-400">Trips</span>
             </h2>
-            <p className="text-xl text-gray-400">Handpicked adventures for the perfect getaway</p>
+            <p className="text-xl text-slate-400">Handpicked adventures for the perfect getaway</p>
           </motion.div>
 
           <motion.div
@@ -253,27 +244,27 @@ function Home() {
               <motion.div
                 key={trip.id}
                 variants={itemVariants}
-                whileHover={{ y: -15, boxShadow: '0 30px 60px rgba(139, 92, 246, 0.3)' }}
+                whileHover={{ y: -15, boxShadow: '0 30px 60px rgba(139, 92, 246, 0.15)' }}
                 onClick={() => navigate(`/trips/${trip.id}`)}
-                className="group relative bg-gradient-to-b from-slate-800 to-slate-900 rounded-2xl overflow-hidden cursor-pointer border border-slate-700 hover:border-purple-500 transition-all"
+                className="group relative bg-white/5 backdrop-blur-sm rounded-3xl overflow-hidden cursor-pointer border border-white/10 hover:border-primary-500/50 transition-all duration-500"
               >
                 {/* Image Container */}
-                <div className="relative h-64 overflow-hidden bg-slate-700">
+                <div className="relative h-72 overflow-hidden bg-slate-800">
                   <motion.img
                     src={trip.img}
                     alt={trip.title}
                     className="w-full h-full object-cover"
                     whileHover={{ scale: 1.15 }}
-                    transition={{ duration: 0.6 }}
+                    transition={{ duration: 0.8 }}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-80" />
 
                   {/* Tags */}
                   <div className="absolute top-4 left-4 flex gap-2">
                     <motion.span
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
-                      className="px-3 py-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xs font-bold rounded-full"
+                      className="px-4 py-1.5 bg-white/10 backdrop-blur-md border border-white/20 text-white text-xs font-bold rounded-full uppercase tracking-wider"
                     >
                       {trip.tag}
                     </motion.span>
@@ -284,32 +275,32 @@ function Home() {
                     initial={{ opacity: 0, scale: 0 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 0.3 }}
-                    className="absolute top-4 right-4 flex items-center gap-1 bg-yellow-400/90 text-slate-900 px-3 py-1 rounded-full font-bold shadow-lg"
+                    className="absolute top-4 right-4 flex items-center gap-1 bg-yellow-400 text-slate-950 px-3 py-1 rounded-full font-bold shadow-lg"
                   >
                     ⭐ {trip.rating}
                   </motion.div>
                 </div>
 
                 {/* Content */}
-                <div className="p-6">
-                  <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-purple-400 transition">{trip.title}</h3>
-                  <p className="text-gray-400 text-sm mb-4 line-clamp-2">{trip.desc}</p>
+                <div className="p-8">
+                  <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-primary-400 transition duration-300">{trip.title}</h3>
+                  <p className="text-slate-400 text-sm mb-6 line-clamp-2 leading-relaxed">{trip.desc}</p>
 
                   {/* Meta */}
-                  <div className="flex gap-4 mb-4 text-xs text-gray-500">
-                    <span>⏱️ {trip.duration}</span>
-                    <span>📊 {trip.difficulty}</span>
+                  <div className="flex gap-4 mb-6 text-xs text-slate-500 font-medium uppercase tracking-wide">
+                    <span className="flex items-center gap-1">⏱️ {trip.duration}</span>
+                    <span className="flex items-center gap-1">📊 {trip.difficulty}</span>
                   </div>
 
-                  <div className="flex justify-between items-center pt-4 border-t border-slate-700">
-                    <span className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
+                  <div className="flex justify-between items-center pt-6 border-t border-white/10">
+                    <span className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-accent-400">
                       {trip.price}
                     </span>
                     <motion.button
                       whileHover={{ x: 5 }}
-                      className="text-purple-400 hover:text-purple-300"
+                      className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-primary-500 hover:text-white transition-all"
                     >
-                      <FiArrowRight size={24} />
+                      <FiArrowRight size={20} />
                     </motion.button>
                   </div>
                 </div>
@@ -327,7 +318,7 @@ function Home() {
             <Button
               size="lg"
               onClick={() => navigate('/trips')}
-              className="border-2 border-purple-400 text-purple-400 hover:bg-purple-400 hover:text-white px-12"
+              className="border-2 border-primary-500 text-primary-400 hover:bg-primary-500 hover:text-white px-12 rounded-full"
             >
               See All Trips <FiArrowRight className="inline ml-2" size={20} />
             </Button>
@@ -341,7 +332,7 @@ function Home() {
         whileInView={{ opacity: 1 }}
         transition={{ duration: 1 }}
         viewport={{ once: true }}
-        className="py-24 px-4"
+        className="py-24 px-4 bg-slate-900/50"
       >
         <div className="max-w-7xl mx-auto">
           <motion.div
@@ -352,9 +343,9 @@ function Home() {
             className="text-center mb-16"
           >
             <h2 className="text-5xl md:text-6xl font-black mb-4">
-              📂 Explore <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">Categories</span>
+              📂 Explore <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary-400 to-accent-400">Categories</span>
             </h2>
-            <p className="text-xl text-gray-400">Find trips that match your travel style</p>
+            <p className="text-xl text-slate-400">Find trips that match your travel style</p>
           </motion.div>
 
           <motion.div
@@ -368,22 +359,22 @@ function Home() {
               <motion.div
                 key={i}
                 variants={itemVariants}
-                whileHover={{ scale: 1.15, y: -10 }}
+                whileHover={{ scale: 1.05, y: -10 }}
                 onMouseEnter={() => setActiveCategory(i)}
                 onMouseLeave={() => setActiveCategory(null)}
-                className={`relative p-6 rounded-2xl cursor-pointer group overflow-hidden border border-slate-700 hover:border-purple-500 transition-all ${activeCategory === i
-                    ? 'bg-gradient-to-br ' + cat.color
-                    : 'bg-slate-800/50 hover:bg-slate-800'
+                className={`relative p-6 rounded-3xl cursor-pointer group overflow-hidden border border-white/5 transition-all duration-300 ${activeCategory === i
+                  ? 'bg-gradient-to-br ' + cat.color + ' shadow-2xl shadow-primary-500/20'
+                  : 'bg-white/5 hover:bg-white/10'
                   }`}
               >
                 <motion.div
                   animate={{ y: [0, -10, 0] }}
                   transition={{ duration: 2, repeat: Infinity }}
-                  className="text-6xl mb-3"
+                  className="text-5xl mb-4"
                 >
                   {cat.icon}
                 </motion.div>
-                <p className={`font-bold text-lg transition-colors ${activeCategory === i ? 'text-white' : 'text-gray-300 group-hover:text-white'
+                <p className={`font-bold text-lg transition-colors ${activeCategory === i ? 'text-white' : 'text-slate-300 group-hover:text-white'
                   }`}>
                   {cat.name}
                 </p>
@@ -399,7 +390,7 @@ function Home() {
         whileInView={{ opacity: 1 }}
         transition={{ duration: 1 }}
         viewport={{ once: true }}
-        className="py-24 px-4 bg-gradient-to-r from-slate-900 via-purple-900/30 to-slate-900"
+        className="py-24 px-4 bg-gradient-to-r from-slate-950 via-primary-950/30 to-slate-950 border-y border-white/5"
       >
         <div className="max-w-7xl mx-auto">
           <motion.div
@@ -421,17 +412,17 @@ function Home() {
                   key={i}
                   variants={itemVariants}
                   whileHover={{ scale: 1.1, y: -5 }}
-                  className="text-center"
+                  className="text-center p-6 rounded-3xl bg-white/5 border border-white/5 hover:border-primary-500/30 transition-all"
                 >
                   <motion.div
                     animate={{ y: [0, -5, 0] }}
                     transition={{ duration: 2, repeat: Infinity }}
-                    className="text-5xl md:text-6xl font-black mb-3 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400"
+                    className="text-4xl md:text-5xl font-black mb-3 text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-accent-400"
                   >
                     {stat.number}
                   </motion.div>
-                  <div className="flex items-center justify-center gap-2 text-gray-300">
-                    <IconComponent size={20} />
+                  <div className="flex items-center justify-center gap-2 text-slate-400 font-medium">
+                    <IconComponent size={18} className="text-primary-500" />
                     <p>{stat.label}</p>
                   </div>
                 </motion.div>
@@ -458,9 +449,9 @@ function Home() {
             className="text-center mb-16"
           >
             <h2 className="text-5xl md:text-6xl font-black mb-4">
-              💬 What Travelers <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">Say</span>
+              💬 What Travelers <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary-400 to-accent-400">Say</span>
             </h2>
-            <p className="text-xl text-gray-400">Join thousands of satisfied adventurers</p>
+            <p className="text-xl text-slate-400">Join thousands of satisfied adventurers</p>
           </motion.div>
 
           <motion.div
@@ -474,74 +465,36 @@ function Home() {
               <motion.div
                 key={testimonial.id}
                 variants={itemVariants}
-                whileHover={{ y: -10, boxShadow: '0 20px 40px rgba(139, 92, 246, 0.2)' }}
-                className="bg-gradient-to-br from-slate-800 to-slate-900 p-8 rounded-2xl border border-slate-700 hover:border-purple-500 transition-all"
+                whileHover={{ y: -10, boxShadow: '0 20px 40px rgba(139, 92, 246, 0.1)' }}
+                className="bg-white/5 backdrop-blur-md p-8 rounded-3xl border border-white/10 hover:border-primary-500/50 transition-all"
               >
-                <div className="flex gap-1 mb-4">
+                <div className="flex gap-1 mb-6">
                   {Array.from({ length: testimonial.rating }).map((_, i) => (
                     <motion.span
                       key={i}
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
                       transition={{ delay: i * 0.1 }}
-                      className="text-2xl"
+                      className="text-xl text-yellow-400"
                     >
                       ⭐
                     </motion.span>
                   ))}
                 </div>
 
-                <p className="text-gray-300 mb-6 italic">"{testimonial.text}"</p>
+                <p className="text-slate-300 mb-8 italic leading-relaxed text-lg">"{testimonial.text}"</p>
 
-                <div className="flex items-center gap-4 pt-6 border-t border-slate-700">
+                <div className="flex items-center gap-4 pt-6 border-t border-white/10">
                   <img
                     src={testimonial.image}
                     alt={testimonial.name}
-                    className="w-12 h-12 rounded-full"
+                    className="w-14 h-14 rounded-full border-2 border-primary-500"
                   />
                   <div>
-                    <p className="font-bold text-white">{testimonial.name}</p>
-                    <p className="text-sm text-gray-500">{testimonial.role} • {testimonial.location}</p>
+                    <p className="font-bold text-white text-lg">{testimonial.name}</p>
+                    <p className="text-sm text-slate-500">{testimonial.role} • {testimonial.location}</p>
                   </div>
                 </div>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </motion.section>
-
-      {/* Features */}
-      <motion.section
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        transition={{ duration: 1 }}
-        viewport={{ once: true }}
-        className="py-24 px-4"
-      >
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
-          >
-            {features.map((feature, i) => (
-              <motion.div
-                key={i}
-                variants={itemVariants}
-                whileHover={{ scale: 1.08, y: -10 }}
-                className={`p-6 rounded-xl bg-gradient-to-br ${feature.color} text-white border border-slate-700 hover:border-white transition-all shadow-xl`}
-              >
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-                  className="text-5xl mb-4"
-                >
-                  {feature.icon}
-                </motion.div>
-                <h3 className="font-bold text-lg mb-2">{feature.title}</h3>
-                <p className="text-white/80 text-sm">{feature.desc}</p>
               </motion.div>
             ))}
           </motion.div>
@@ -554,17 +507,20 @@ function Home() {
         whileInView={{ opacity: 1 }}
         transition={{ duration: 1 }}
         viewport={{ once: true }}
-        className="py-24 px-4 bg-gradient-to-r from-purple-900 via-slate-900 to-purple-900"
+        className="py-32 px-4 relative overflow-hidden"
       >
-        <div className="max-w-4xl mx-auto text-center">
+        <div className="absolute inset-0 bg-gradient-to-r from-primary-900/50 via-slate-900 to-primary-900/50" />
+        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10" />
+
+        <div className="max-w-4xl mx-auto text-center relative z-10">
           <motion.h2
             initial={{ opacity: 0, y: -40 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="text-5xl md:text-7xl font-black mb-6 text-white"
+            className="text-5xl md:text-7xl font-black mb-8 text-white tracking-tight"
           >
-            Ready for Your Next Adventure?
+            Ready for Your Next <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-400 to-primary-400">Adventure?</span>
           </motion.h2>
 
           <motion.p
@@ -572,7 +528,7 @@ function Home() {
             whileInView={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
             viewport={{ once: true }}
-            className="text-xl text-gray-300 mb-12"
+            className="text-2xl text-slate-300 mb-12 font-light"
           >
             Join our community today and start exploring amazing destinations
           </motion.p>
@@ -584,19 +540,19 @@ function Home() {
             viewport={{ once: true }}
             className="flex flex-col sm:flex-row gap-6 justify-center"
           >
-            <motion.div whileHover={{ scale: 1.08, y: -5 }} whileTap={{ scale: 0.95 }}>
+            <motion.div whileHover={{ scale: 1.05, y: -5 }} whileTap={{ scale: 0.95 }}>
               <Button
                 onClick={() => navigate('/register')}
-                className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white text-lg px-12 shadow-2xl"
+                className="bg-gradient-to-r from-primary-600 to-accent-500 hover:from-primary-500 hover:to-accent-400 text-white text-xl px-12 py-4 shadow-2xl shadow-primary-500/40 rounded-full"
                 size="lg"
               >
                 Sign Up Now 🚀
               </Button>
             </motion.div>
-            <motion.div whileHover={{ scale: 1.08, y: -5 }} whileTap={{ scale: 0.95 }}>
+            <motion.div whileHover={{ scale: 1.05, y: -5 }} whileTap={{ scale: 0.95 }}>
               <Button
                 onClick={() => navigate('/trips')}
-                className="border-2 border-purple-400 text-purple-400 hover:bg-purple-400 hover:text-white text-lg px-12"
+                className="bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 text-xl px-12 py-4 rounded-full"
                 size="lg"
               >
                 Explore Trips
@@ -612,7 +568,7 @@ function Home() {
         whileInView={{ opacity: 1 }}
         transition={{ duration: 0.7 }}
         viewport={{ once: true }}
-        className="py-12 px-4 border-t border-slate-700"
+        className="py-12 px-4 border-t border-white/5 bg-slate-950"
       >
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
@@ -628,10 +584,10 @@ function Home() {
                 whileInView={{ opacity: 1 }}
                 transition={{ delay: i * 0.1 }}
                 viewport={{ once: true }}
-                className="text-center text-gray-400"
+                className="text-center text-slate-500 hover:text-primary-400 transition-colors duration-300"
               >
-                <p className="text-2xl mb-2">{item.icon}</p>
-                <p className="text-sm">{item.text}</p>
+                <p className="text-3xl mb-3">{item.icon}</p>
+                <p className="text-sm font-medium uppercase tracking-wider">{item.text}</p>
               </motion.div>
             ))}
           </div>
@@ -640,7 +596,7 @@ function Home() {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            className="text-center text-gray-500 border-t border-slate-700 pt-8"
+            className="text-center text-slate-600 border-t border-white/5 pt-8"
           >
             <p>© 2025 TravelCommunity. Made with ❤️ for adventurers.</p>
           </motion.div>
