@@ -2,10 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Button from '../components/common/Button';
+import { useAuth } from '../hooks/useAuth';
+import { adminAccounts } from '../config/adminConfig';
 import { FiMail, FiLock, FiAlertCircle, FiEye, FiEyeOff, FiCheck, FiArrowRight } from 'react-icons/fi';
 
 function AdminLogin() {
   const navigate = useNavigate();
+  const { loginWithData } = useAuth();
   const location = useLocation();
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -19,30 +22,7 @@ function AdminLogin() {
     password: ''
   });
 
-  // Valid admin accounts with roles and permissions
-  const adminAccounts = [
-    {
-      email: 'admin@travelcommunity.com',
-      password: 'Admin@123456',
-      role: 'admin',
-      name: 'Admin User',
-      permissions: ['manage_trips', 'manage_bookings', 'manage_users', 'view_analytics']
-    },
-    {
-      email: 'superadmin@travelcommunity.com',
-      password: 'SuperAdmin@12345',
-      role: 'superadmin',
-      name: 'Super Admin',
-      permissions: ['all']
-    },
-    {
-      email: 'moderator@travelcommunity.com',
-      password: 'Moderator@12345',
-      role: 'moderator',
-      name: 'Moderator',
-      permissions: ['manage_bookings', 'view_analytics']
-    }
-  ];
+  // Admin accounts are imported from config
 
   // Auto-fill demo email if coming from home
   useEffect(() => {
@@ -96,7 +76,16 @@ function AdminLogin() {
       }
 
       // Store admin session
-      localStorage.setItem('adminToken', `admin_token_${Date.now()}_${Math.random()}`);
+      const adminToken = `admin_token_${Date.now()}_${Math.random()}`;
+
+      // Update global auth state
+      loginWithData({
+        ...validAdmin,
+        fullName: validAdmin.name
+      }, adminToken);
+
+      // Keep these for legacy/specific admin checks if needed
+      localStorage.setItem('adminToken', adminToken);
       localStorage.setItem('adminRole', validAdmin.role);
       localStorage.setItem('adminEmail', validAdmin.email);
       localStorage.setItem('adminName', validAdmin.name);
@@ -147,15 +136,16 @@ function AdminLogin() {
   };
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 text-white overflow-hidden flex items-center justify-center px-4 py-8">
+    <div className="relative min-h-screen bg-teal-900 text-white overflow-hidden flex items-center justify-center px-4 py-8 selection:bg-cyan-500 selection:text-teal-900">
       {/* Animated Background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-teal-950 via-teal-900 to-black z-0" />
       <motion.div
-        className="fixed -top-96 -right-96 w-[500px] h-[500px] rounded-full bg-gradient-to-br from-purple-600/20 via-indigo-600/15 to-transparent blur-3xl -z-10"
+        className="fixed -top-96 -right-96 w-[500px] h-[500px] rounded-full bg-gradient-to-br from-cyan-600/10 via-teal-600/10 to-transparent blur-3xl -z-10"
         animate={{ y: [0, 60, 0], x: [0, 30, 0] }}
         transition={{ duration: 12, repeat: Infinity }}
       />
       <motion.div
-        className="fixed -bottom-96 -left-96 w-[500px] h-[500px] rounded-full bg-gradient-to-tr from-blue-600/20 via-cyan-500/15 to-transparent blur-3xl -z-10"
+        className="fixed -bottom-96 -left-96 w-[500px] h-[500px] rounded-full bg-gradient-to-tr from-teal-600/10 via-cyan-500/10 to-transparent blur-3xl -z-10"
         animate={{ y: [0, -50, 0], x: [0, -30, 0] }}
         transition={{ duration: 15, repeat: Infinity }}
       />
@@ -176,12 +166,12 @@ function AdminLogin() {
             <motion.div
               animate={{ scale: [1, 1.2, 1] }}
               transition={{ duration: 1, repeat: Infinity }}
-              className="w-20 h-20 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-2xl"
+              className="w-20 h-20 bg-gradient-to-br from-cyan-400 to-teal-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-2xl"
             >
               <FiCheck className="text-white" size={40} />
             </motion.div>
             <p className="text-2xl font-bold text-white">Welcome back! 🎉</p>
-            <p className="text-slate-300 mt-2">Redirecting to dashboard...</p>
+            <p className="text-grey-300 mt-2">Redirecting to dashboard...</p>
           </motion.div>
         </motion.div>
       )}
@@ -190,7 +180,7 @@ function AdminLogin() {
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.6 }}
-        className="w-full max-w-md"
+        className="w-full max-w-md relative z-10"
       >
         {/* Header */}
         <motion.div
@@ -200,11 +190,11 @@ function AdminLogin() {
           className="text-center mb-8"
         >
           <motion.div variants={itemVariants} className="mb-4">
-            <h1 className="text-5xl font-black mb-2 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-400 to-red-400">
+            <h1 className="text-5xl font-display font-black mb-2 bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-teal-400 to-cyan-200">
               ⚙️ Admin Portal
             </h1>
           </motion.div>
-          <motion.p variants={itemVariants} className="text-slate-400 text-lg">
+          <motion.p variants={itemVariants} className="text-grey-400 text-lg">
             Secure access for administrators only
           </motion.p>
         </motion.div>
@@ -214,7 +204,7 @@ function AdminLogin() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="backdrop-blur-xl bg-gradient-to-br from-white/10 to-white/5 border border-white/10 rounded-3xl p-8 shadow-2xl hover:border-white/20 transition-all"
+          className="backdrop-blur-xl bg-teal-900/60 border border-white/10 rounded-3xl p-8 shadow-2xl hover:border-white/20 transition-all"
         >
           {/* Error Alert */}
           {error && (
@@ -236,18 +226,18 @@ function AdminLogin() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.4 }}
             >
-              <label className="block text-sm font-bold text-slate-300 mb-2">
+              <label className="block text-sm font-bold text-grey-300 mb-2">
                 Admin Email
               </label>
               <div className="relative group">
-                <FiMail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-purple-400 transition" size={20} />
+                <FiMail className="absolute left-4 top-1/2 -translate-y-1/2 text-grey-400 group-focus-within:text-cyan-400 transition" size={20} />
                 <input
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
                   placeholder="admin@travelcommunity.com"
-                  className="w-full bg-white/5 border border-white/10 rounded-xl pl-12 pr-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent focus:bg-white/10 transition-all"
+                  className="w-full bg-black/40 border border-white/10 rounded-xl pl-12 pr-4 py-3 text-white placeholder-grey-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent focus:bg-black/60 transition-all"
                   required
                   disabled={loading}
                 />
@@ -260,18 +250,18 @@ function AdminLogin() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.5 }}
             >
-              <label className="block text-sm font-bold text-slate-300 mb-2">
+              <label className="block text-sm font-bold text-grey-300 mb-2">
                 Password
               </label>
               <div className="relative group">
-                <FiLock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-purple-400 transition" size={20} />
+                <FiLock className="absolute left-4 top-1/2 -translate-y-1/2 text-grey-400 group-focus-within:text-cyan-400 transition" size={20} />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   name="password"
                   value={formData.password}
                   onChange={handleInputChange}
                   placeholder="Enter your password"
-                  className="w-full bg-white/5 border border-white/10 rounded-xl pl-12 pr-12 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent focus:bg-white/10 transition-all"
+                  className="w-full bg-black/40 border border-white/10 rounded-xl pl-12 pr-12 py-3 text-white placeholder-grey-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent focus:bg-black/60 transition-all"
                   required
                   disabled={loading}
                 />
@@ -279,7 +269,7 @@ function AdminLogin() {
                   whileHover={{ scale: 1.1 }}
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-300 transition"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-grey-400 hover:text-grey-300 transition"
                   tabIndex={-1}
                 >
                   {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
@@ -299,10 +289,10 @@ function AdminLogin() {
                 id="rememberMe"
                 checked={rememberMe}
                 onChange={(e) => setRememberMe(e.target.checked)}
-                className="w-4 h-4 accent-purple-500 cursor-pointer rounded"
+                className="w-4 h-4 accent-cyan-500 cursor-pointer rounded"
                 disabled={loading}
               />
-              <label htmlFor="rememberMe" className="text-sm text-slate-400 cursor-pointer hover:text-slate-300 transition">
+              <label htmlFor="rememberMe" className="text-sm text-grey-400 cursor-pointer hover:text-grey-300 transition">
                 Remember email
               </label>
             </motion.div>
@@ -318,7 +308,7 @@ function AdminLogin() {
                 whileTap={{ scale: 0.98 }}
                 type="submit"
                 disabled={loading}
-                className="w-full py-3 bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 text-white font-bold rounded-xl hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="w-full py-3 bg-gradient-to-r from-cyan-600 via-teal-500 to-cyan-600 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-cyan-500/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {loading ? (
                   <>
@@ -350,7 +340,7 @@ function AdminLogin() {
               <div className="w-full border-t border-white/10"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-gradient-to-br from-white/10 to-white/5 text-slate-400">Demo Credentials</span>
+              <span className="px-2 bg-teal-900/60 text-grey-400">Demo Credentials</span>
             </div>
           </motion.div>
 
@@ -370,14 +360,14 @@ function AdminLogin() {
                 whileHover={{ scale: 1.02, x: 5 }}
                 onClick={() => handleDemoLogin(account.email)}
                 disabled={loading}
-                className="w-full text-left p-3 bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 hover:border-white/20 transition-all cursor-pointer group disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full text-left p-3 bg-black/20 border border-white/10 rounded-lg hover:bg-white/5 hover:border-cyan-500/30 transition-all cursor-pointer group disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="font-semibold text-white group-hover:text-purple-300 transition">{account.name}</p>
-                    <p className="text-xs text-slate-500 group-hover:text-slate-400 transition">{account.email}</p>
+                    <p className="font-semibold text-white group-hover:text-cyan-300 transition">{account.name}</p>
+                    <p className="text-xs text-grey-500 group-hover:text-grey-400 transition">{account.email}</p>
                   </div>
-                  <span className="text-xs px-2 py-1 bg-purple-500/20 text-purple-300 rounded-full">
+                  <span className="text-xs px-2 py-1 bg-cyan-500/10 text-cyan-300 rounded-full border border-cyan-500/20">
                     {account.role}
                   </span>
                 </div>
@@ -391,7 +381,7 @@ function AdminLogin() {
             animate={{ opacity: 1 }}
             transition={{ delay: 1.2 }}
             onClick={() => setShowDemo(!showDemo)}
-            className="w-full text-center text-sm text-slate-400 hover:text-slate-300 py-2 transition"
+            className="w-full text-center text-sm text-grey-400 hover:text-grey-300 py-2 transition"
           >
             {showDemo ? '▼ Hide' : '▶ Show'} Demo Accounts
           </motion.button>
@@ -402,7 +392,7 @@ function AdminLogin() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.3 }}
             onClick={() => navigate('/')}
-            className="w-full mt-4 text-slate-400 hover:text-slate-300 text-sm font-semibold transition py-2"
+            className="w-full mt-4 text-grey-400 hover:text-grey-300 text-sm font-semibold transition py-2"
           >
             ← Back to Website
           </motion.button>
@@ -413,7 +403,7 @@ function AdminLogin() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.4 }}
-          className="text-center text-xs text-slate-500 mt-6 px-4"
+          className="text-center text-xs text-grey-500 mt-6 px-4"
         >
           🔒 This is a secure admin portal. Please change your password after your first login.
         </motion.p>

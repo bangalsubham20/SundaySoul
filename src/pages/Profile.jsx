@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import Button from '../components/common/Button';
-import Card from '../components/common/Card';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiEdit2, FiLogOut, FiBookmark, FiStar, FiX, FiCheck, FiCamera, FiBell, FiLock, FiTrash2 } from 'react-icons/fi';
@@ -159,7 +158,7 @@ function Profile() {
     const styles = {
       confirmed: 'from-green-500/10 to-green-600/10 border-green-500/30 text-green-300',
       pending: 'from-yellow-500/10 to-yellow-600/10 border-yellow-500/30 text-yellow-300',
-      completed: 'from-blue-500/10 to-blue-600/10 border-blue-500/30 text-blue-300',
+      completed: 'from-cyan-500/10 to-cyan-600/10 border-cyan-500/30 text-cyan-300',
       cancelled: 'from-red-500/10 to-red-600/10 border-red-500/30 text-red-300'
     };
     return styles[status] || styles.pending;
@@ -174,7 +173,6 @@ function Profile() {
 
   const totalBookings = userBookings.length;
   const completedTrips = userBookings.filter(b => b.status === 'completed').length;
-  const upcomingTrips = userBookings.filter(b => b.status === 'confirmed' || b.status === 'pending').length;
   const avgRating = userReviews.length > 0
     ? (userReviews.reduce((sum, r) => sum + r.rating, 0) / userReviews.length).toFixed(1)
     : 0;
@@ -183,13 +181,13 @@ function Profile() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 flex items-center justify-center px-4">
+      <div className="min-h-screen bg-teal-900 flex items-center justify-center px-4">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="backdrop-blur-xl bg-white/5 border border-white/10 rounded-2xl p-12 max-w-md w-full text-center shadow-2xl"
+          className="backdrop-blur-xl bg-teal-900/60 border border-white/10 rounded-2xl p-12 max-w-md w-full text-center shadow-2xl"
         >
-          <p className="text-2xl text-slate-300 mb-6">Please log in to view your profile</p>
+          <p className="text-2xl text-grey-300 mb-6">Please log in to view your profile</p>
           <Button fullWidth onClick={() => navigate('/login')}>Go to Login</Button>
         </motion.div>
       </div>
@@ -197,16 +195,17 @@ function Profile() {
   }
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 text-white pb-16 overflow-hidden">
+    <div className="relative min-h-screen bg-teal-900 text-white pb-16 overflow-hidden selection:bg-cyan-500 selection:text-teal-900">
       {/* Animated Background */}
-      <motion.div className="fixed -top-96 -right-96 w-[500px] h-[500px] rounded-full bg-gradient-to-br from-purple-600/20 via-indigo-600/15 to-transparent blur-3xl -z-10"
+      <div className="absolute inset-0 bg-gradient-to-br from-teal-950 via-teal-900 to-black z-0" />
+      <motion.div className="fixed -top-96 -right-96 w-[500px] h-[500px] rounded-full bg-gradient-to-br from-cyan-600/10 via-teal-600/10 to-transparent blur-3xl -z-10"
         animate={{ y: [0, 60, 0] }}
         transition={{ duration: 12, repeat: Infinity }} />
-      <motion.div className="fixed -bottom-96 -left-96 w-[500px] h-[500px] rounded-full bg-gradient-to-tr from-blue-600/20 via-cyan-500/15 to-transparent blur-3xl -z-10"
+      <motion.div className="fixed -bottom-96 -left-96 w-[500px] h-[500px] rounded-full bg-gradient-to-tr from-teal-600/10 via-cyan-500/10 to-transparent blur-3xl -z-10"
         animate={{ y: [0, -50, 0] }}
         transition={{ duration: 15, repeat: Infinity }} />
 
-      <div className="max-w-7xl mx-auto px-4 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 relative z-10 pt-24">
         {/* Error Alert */}
         <AnimatePresence>
           {error && (
@@ -229,7 +228,7 @@ function Profile() {
             transition={{ duration: 0.6 }}
             className="lg:col-span-1"
           >
-            <div className="sticky top-20 backdrop-blur-xl bg-gradient-to-br from-white/10 to-white/5 border border-white/10 rounded-2xl p-8 shadow-2xl hover:border-white/20 transition-all">
+            <div className="sticky top-24 backdrop-blur-xl bg-teal-900/60 border border-white/10 rounded-2xl p-8 shadow-2xl hover:border-white/20 transition-all">
               {/* Avatar */}
               <motion.div
                 initial={{ scale: 0 }}
@@ -240,20 +239,20 @@ function Profile() {
                 <img
                   src={formData.avatar}
                   alt={formData.name}
-                  className="w-28 h-28 rounded-full object-cover ring-4 ring-purple-500/50 shadow-lg"
+                  className="w-28 h-28 rounded-full object-cover ring-4 ring-cyan-500/30 shadow-lg"
                 />
                 <motion.button
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.95 }}
-                  className="absolute bottom-0 right-0 bg-gradient-to-r from-purple-500 to-pink-500 p-2 rounded-full text-white shadow-lg"
+                  className="absolute bottom-0 right-0 bg-gradient-to-r from-cyan-500 to-teal-500 p-2 rounded-full text-white shadow-lg"
                 >
                   <FiCamera size={16} />
                 </motion.button>
               </motion.div>
 
-              <h2 className="text-3xl font-black text-white text-center mb-2">{formData.name}</h2>
-              <p className="text-sm text-slate-400 text-center mb-1">{formData.email}</p>
-              <p className="text-sm text-slate-500 text-center italic line-clamp-2">{formData.bio}</p>
+              <h2 className="text-3xl font-display font-black text-white text-center mb-2">{formData.name}</h2>
+              <p className="text-sm text-grey-400 text-center mb-1">{formData.email}</p>
+              <p className="text-sm text-grey-500 text-center italic line-clamp-2">{formData.bio}</p>
 
               {/* Stats */}
               <motion.div
@@ -263,20 +262,20 @@ function Profile() {
                 className="grid grid-cols-3 gap-4 my-8 py-6 border-t border-b border-white/10"
               >
                 <div className="text-center hover:scale-110 transition cursor-pointer">
-                  <p className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-pink-400">
+                  <p className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-teal-400">
                     {totalBookings}
                   </p>
-                  <p className="text-xs text-slate-400 mt-1">Trips</p>
+                  <p className="text-xs text-grey-400 mt-1">Trips</p>
                 </div>
                 <div className="text-center hover:scale-110 transition cursor-pointer">
                   <p className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-400">
                     {completedTrips}
                   </p>
-                  <p className="text-xs text-slate-400 mt-1">Completed</p>
+                  <p className="text-xs text-grey-400 mt-1">Completed</p>
                 </div>
                 <div className="text-center hover:scale-110 transition cursor-pointer">
-                  <p className="text-2xl font-black">⭐{avgRating}</p>
-                  <p className="text-xs text-slate-400 mt-1">Rating</p>
+                  <p className="text-2xl font-black text-yellow-400">⭐{avgRating}</p>
+                  <p className="text-xs text-grey-400 mt-1">Rating</p>
                 </div>
               </motion.div>
 
@@ -286,7 +285,7 @@ function Profile() {
                   <Button
                     fullWidth
                     onClick={() => setIsEditing(!isEditing)}
-                    className={isEditing ? 'bg-white/10' : 'bg-gradient-to-r from-purple-500 to-pink-500'}
+                    variant={isEditing ? 'secondary' : 'primary'}
                   >
                     <FiEdit2 className="inline mr-2" size={16} />
                     {isEditing ? 'Cancel' : 'Edit Profile'}
@@ -296,7 +295,7 @@ function Profile() {
                   <Button
                     fullWidth
                     onClick={handleLogout}
-                    className="bg-red-500/20 border border-red-500/30 text-red-300 hover:bg-red-500/30"
+                    className="bg-red-500/10 border border-red-500/30 text-red-300 hover:bg-red-500/20"
                   >
                     <FiLogOut className="inline mr-2" size={16} />
                     Logout
@@ -306,11 +305,11 @@ function Profile() {
 
               {/* Member Badge */}
               <div className="pt-6 border-t border-white/10 text-center">
-                <p className="text-xs text-slate-400">Member since</p>
-                <p className="text-sm font-bold text-purple-400 mt-1">
+                <p className="text-xs text-grey-400">Member since</p>
+                <p className="text-sm font-bold text-cyan-400 mt-1">
                   {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'Recently'}
                 </p>
-                <p className="text-xs text-slate-500 mt-2">TravelerForLife 🌍</p>
+                <p className="text-xs text-grey-500 mt-2">TravelerForLife 🌍</p>
               </div>
             </div>
           </motion.div>
@@ -329,53 +328,53 @@ function Profile() {
                   initial={{ opacity: 0, y: -20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
-                  className="backdrop-blur-xl bg-gradient-to-br from-white/10 to-white/5 border border-purple-500/30 rounded-2xl p-8 shadow-2xl"
+                  className="backdrop-blur-xl bg-teal-900/60 border border-cyan-500/30 rounded-2xl p-8 shadow-2xl"
                 >
-                  <h2 className="text-3xl font-bold text-white mb-6">Edit Profile</h2>
+                  <h2 className="text-3xl font-display font-bold text-white mb-6">Edit Profile</h2>
 
                   <div className="space-y-5">
                     <div>
-                      <label className="text-sm font-semibold text-slate-300 mb-2 block">Full Name</label>
+                      <label className="text-sm font-semibold text-grey-300 mb-2 block">Full Name</label>
                       <input
                         type="text"
                         name="name"
                         value={formData.name}
                         onChange={handleInputChange}
-                        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500 transition"
+                        className="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-2 text-white placeholder-grey-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition"
                       />
                     </div>
 
                     <div>
-                      <label className="text-sm font-semibold text-slate-300 mb-2 block">Email</label>
+                      <label className="text-sm font-semibold text-grey-300 mb-2 block">Email</label>
                       <input
                         type="email"
                         name="email"
                         value={formData.email}
                         disabled
-                        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-slate-500 cursor-not-allowed opacity-60"
+                        className="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-2 text-grey-500 cursor-not-allowed opacity-60"
                       />
-                      <p className="text-xs text-slate-500 mt-1">Email cannot be changed</p>
+                      <p className="text-xs text-grey-500 mt-1">Email cannot be changed</p>
                     </div>
 
                     <div>
-                      <label className="text-sm font-semibold text-slate-300 mb-2 block">Phone</label>
+                      <label className="text-sm font-semibold text-grey-300 mb-2 block">Phone</label>
                       <input
                         type="tel"
                         name="phone"
                         value={formData.phone}
                         onChange={handleInputChange}
-                        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500 transition"
+                        className="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-2 text-white placeholder-grey-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition"
                       />
                     </div>
 
                     <div>
-                      <label className="text-sm font-semibold text-slate-300 mb-2 block">Bio</label>
+                      <label className="text-sm font-semibold text-grey-300 mb-2 block">Bio</label>
                       <textarea
                         name="bio"
                         value={formData.bio}
                         onChange={handleInputChange}
                         rows="4"
-                        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500 transition resize-none"
+                        className="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-2 text-white placeholder-grey-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition resize-none"
                         placeholder="Tell us about yourself..."
                       />
                     </div>
@@ -388,7 +387,7 @@ function Profile() {
                         </Button>
                       </motion.div>
                       <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="flex-1">
-                        <Button fullWidth onClick={() => setIsEditing(false)} className="bg-white/10 border border-white/20">
+                        <Button fullWidth onClick={() => setIsEditing(false)} variant="secondary">
                           <FiX className="inline mr-2" size={16} />
                           Cancel
                         </Button>
@@ -404,7 +403,7 @@ function Profile() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3 }}
-              className="backdrop-blur-xl bg-white/5 border border-white/10 rounded-2xl p-6 shadow-2xl"
+              className="backdrop-blur-xl bg-teal-900/60 border border-white/10 rounded-2xl p-6 shadow-2xl"
             >
               <div className="flex gap-6 border-b border-white/10 overflow-x-auto">
                 {[
@@ -419,8 +418,8 @@ function Profile() {
                       whileHover={{ y: -2 }}
                       onClick={() => setActiveTab(tab.id)}
                       className={`pb-4 font-semibold capitalize whitespace-nowrap flex items-center gap-2 transition ${activeTab === tab.id
-                          ? 'text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 border-b-2 border-purple-500'
-                          : 'text-slate-400 hover:text-slate-300'
+                        ? 'text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-teal-400 border-b-2 border-cyan-500'
+                        : 'text-grey-400 hover:text-grey-300'
                         }`}
                     >
                       <Icon size={18} /> {tab.label}
@@ -439,8 +438,8 @@ function Profile() {
                     className="pt-6 space-y-4"
                   >
                     <div className="flex justify-between items-center mb-6">
-                      <h2 className="text-2xl font-bold text-white">My Bookings</h2>
-                      <Button onClick={() => navigate('/trips')} size="sm">Book New Trip</Button>
+                      <h2 className="text-2xl font-display font-bold text-white">My Bookings</h2>
+                      <Button onClick={() => navigate('/trips')} size="sm" variant="outline">Book New Trip</Button>
                     </div>
 
                     {userBookings.length > 0 ? (
@@ -454,7 +453,7 @@ function Profile() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: idx * 0.1 }}
-                            className="backdrop-blur-lg bg-white/5 border border-white/10 rounded-xl overflow-hidden hover:border-white/20 hover:bg-white/8 transition-all"
+                            className="backdrop-blur-lg bg-black/20 border border-white/10 rounded-xl overflow-hidden hover:border-cyan-500/30 hover:bg-white/5 transition-all"
                           >
                             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                               <div className="md:col-span-1 h-40 overflow-hidden">
@@ -471,7 +470,7 @@ function Profile() {
                                 <div className="flex justify-between items-start mb-3">
                                   <div>
                                     <h3 className="text-lg font-bold text-white">{booking.tripName}</h3>
-                                    <p className="text-slate-400 text-sm">📍 {booking.destination}</p>
+                                    <p className="text-grey-400 text-sm">📍 {booking.destination}</p>
                                   </div>
                                   <motion.span
                                     initial={{ scale: 0 }}
@@ -490,7 +489,7 @@ function Profile() {
                                     { label: 'Price', value: `₹${booking.price.toLocaleString()}` }
                                   ].map((item, i) => (
                                     <div key={i}>
-                                      <p className="text-slate-500 text-xs">{item.label}</p>
+                                      <p className="text-grey-500 text-xs">{item.label}</p>
                                       <p className="font-semibold text-white">{item.value}</p>
                                     </div>
                                   ))}
@@ -503,12 +502,12 @@ function Profile() {
                                         ✓ Starts in {daysLeft} days
                                       </p>
                                     ) : (
-                                      <p className="text-sm text-slate-400">
+                                      <p className="text-sm text-grey-400">
                                         Completed on {booking.endDate}
                                       </p>
                                     )}
                                   </div>
-                                  <Button size="sm" className="bg-white/10 border border-white/20">
+                                  <Button size="sm" variant="secondary">
                                     View Details
                                   </Button>
                                 </div>
@@ -521,9 +520,9 @@ function Profile() {
                       <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        className="backdrop-blur-lg bg-white/5 border border-white/10 rounded-xl p-12 text-center"
+                        className="backdrop-blur-lg bg-black/20 border border-white/10 rounded-xl p-12 text-center"
                       >
-                        <p className="text-slate-400 mb-4">No bookings yet</p>
+                        <p className="text-grey-400 mb-4">No bookings yet</p>
                         <Button onClick={() => navigate('/trips')}>Start Exploring</Button>
                       </motion.div>
                     )}
@@ -538,7 +537,7 @@ function Profile() {
                     exit={{ opacity: 0, y: -10 }}
                     className="pt-6 space-y-4"
                   >
-                    <h2 className="text-2xl font-bold text-white mb-6">My Reviews ({userReviews.length})</h2>
+                    <h2 className="text-2xl font-display font-bold text-white mb-6">My Reviews ({userReviews.length})</h2>
 
                     {userReviews.length > 0 ? (
                       userReviews.map((review, idx) => (
@@ -547,31 +546,31 @@ function Profile() {
                           initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: idx * 0.1 }}
-                          className="backdrop-blur-lg bg-white/5 border border-white/10 rounded-xl p-6 hover:border-white/20 transition-all"
+                          className="backdrop-blur-lg bg-black/20 border border-white/10 rounded-xl p-6 hover:border-white/20 transition-all"
                         >
                           <div className="flex justify-between items-start mb-3">
                             <div>
                               <h3 className="text-lg font-bold text-white">{review.tripName}</h3>
-                              <p className="text-sm text-slate-500">Reviewed on {review.date}</p>
+                              <p className="text-sm text-grey-500">Reviewed on {review.date}</p>
                             </div>
-                            <div className="text-lg">{'⭐'.repeat(review.rating)}</div>
+                            <div className="text-lg text-yellow-400">{'⭐'.repeat(review.rating)}</div>
                           </div>
 
                           <h4 className="font-bold text-white mb-2">{review.title}</h4>
-                          <p className="text-slate-300 mb-4">{review.text}</p>
+                          <p className="text-grey-300 mb-4">{review.text}</p>
 
                           <div className="flex items-center justify-between pt-4 border-t border-white/10">
-                            <p className="text-sm text-slate-500">{review.helpful} travelers found this helpful</p>
+                            <p className="text-sm text-grey-500">{review.helpful} travelers found this helpful</p>
                             <div className="flex gap-2">
-                              <Button size="sm" className="bg-white/10">Edit</Button>
-                              <Button size="sm" className="bg-red-500/10 text-red-400">Delete</Button>
+                              <Button size="sm" variant="secondary">Edit</Button>
+                              <Button size="sm" className="bg-red-500/10 text-red-400 border border-red-500/20">Delete</Button>
                             </div>
                           </div>
                         </motion.div>
                       ))
                     ) : (
-                      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="backdrop-blur-lg bg-white/5 border border-white/10 rounded-xl p-12 text-center">
-                        <p className="text-slate-400 mb-4">No reviews yet</p>
+                      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="backdrop-blur-lg bg-black/20 border border-white/10 rounded-xl p-12 text-center">
+                        <p className="text-grey-400 mb-4">No reviews yet</p>
                         <Button onClick={() => navigate('/trips')}>Explore Trips</Button>
                       </motion.div>
                     )}
@@ -586,7 +585,7 @@ function Profile() {
                     exit={{ opacity: 0, y: -10 }}
                     className="pt-6 space-y-6"
                   >
-                    <div className="backdrop-blur-lg bg-white/5 border border-white/10 rounded-xl p-6">
+                    <div className="backdrop-blur-lg bg-black/20 border border-white/10 rounded-xl p-6">
                       <h3 className="text-xl font-bold text-white mb-4">Notifications</h3>
 
                       <div className="space-y-3">
@@ -605,9 +604,9 @@ function Profile() {
                           >
                             <div>
                               <p className="font-semibold text-white">{item.label}</p>
-                              <p className="text-sm text-slate-500">{item.desc}</p>
+                              <p className="text-sm text-grey-500">{item.desc}</p>
                             </div>
-                            <input type="checkbox" defaultChecked={item.defaultChecked} className="w-5 h-5 accent-purple-500" />
+                            <input type="checkbox" defaultChecked={item.defaultChecked} className="w-5 h-5 accent-cyan-500" />
                           </motion.div>
                         ))}
                       </div>

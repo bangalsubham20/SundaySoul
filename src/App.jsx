@@ -2,6 +2,7 @@ import React, { Suspense, lazy } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Navbar from './components/common/Navbar';
 import Footer from './components/common/Footer';
+import SmoothScroll from './components/common/SmoothScroll';
 import LoadingSpinner from './components/common/LoadingSpinner';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/auth/ProtectedRoute';
@@ -32,6 +33,7 @@ const LoadingFallback = () => (
 function App() {
   return (
     <BrowserRouter>
+      <SmoothScroll />
       <AuthProvider>
         <div className="flex flex-col min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800">
           {/* Navbar - hidden on admin routes */}
@@ -42,7 +44,7 @@ function App() {
             <Suspense fallback={<LoadingFallback />}>
               <Routes>
                 {/* ========== PUBLIC ROUTES ========== */}
-                
+
                 {/* Home */}
                 <Route path="/" element={<Home />} />
 

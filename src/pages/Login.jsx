@@ -29,31 +29,31 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-950 relative overflow-hidden font-sans">
+    <div className="min-h-screen flex items-center justify-center bg-teal-900 relative overflow-hidden font-sans selection:bg-cyan-500 selection:text-teal-900">
       {/* Animated Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-primary-950/20 to-slate-950 z-0" />
+      <div className="absolute inset-0 bg-gradient-to-br from-teal-950 via-teal-900 to-black z-0" />
 
       {/* Animated Orbs */}
       <motion.div
         animate={{ x: [0, 100, 0], y: [0, 50, 0] }}
         transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
-        className="absolute top-[-80px] left-[-80px] w-96 h-96 bg-primary-500/20 rounded-full blur-3xl z-0"
+        className="absolute top-[-80px] left-[-80px] w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl z-0"
       />
       <motion.div
         animate={{ x: [0, -100, 0], y: [0, -80, 0] }}
         transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
-        className="absolute bottom-[-80px] right-[-80px] w-96 h-96 bg-accent-500/20 rounded-full blur-3xl z-0"
+        className="absolute bottom-[-80px] right-[-80px] w-96 h-96 bg-teal-500/10 rounded-full blur-3xl z-0"
       />
 
       <motion.div
         initial={{ opacity: 0, scale: 0.9, y: 30 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="w-full max-w-md bg-white/5 shadow-2xl rounded-3xl p-8 md:p-12 backdrop-blur-xl border border-white/10 relative z-10"
+        className="w-full max-w-md bg-teal-900/60 shadow-2xl rounded-3xl p-8 md:p-12 backdrop-blur-xl border border-white/10 relative z-10"
       >
         <div className="text-center mb-8">
-          <h2 className="text-4xl font-black text-white mb-2 tracking-tight">Welcome Back</h2>
-          <p className="text-slate-400">Sign in to continue your adventure</p>
+          <h2 className="text-4xl font-display font-black text-white mb-2 tracking-tight">Welcome Back</h2>
+          <p className="text-grey-400">Sign in to continue your adventure</p>
         </div>
 
         <AnimatePresence>
@@ -72,11 +72,11 @@ export default function Login() {
 
         <form className="space-y-6" onSubmit={handleSubmit}>
           <div>
-            <label className="block mb-2 text-slate-300 font-semibold text-sm">Email Address</label>
+            <label className="block mb-2 text-grey-300 font-semibold text-sm">Email Address</label>
             <div className="relative group">
-              <FiMail className="absolute left-4 top-3.5 text-slate-500 group-focus-within:text-primary-400 transition-colors" size={20} />
+              <FiMail className="absolute left-4 top-3.5 text-grey-500 group-focus-within:text-cyan-400 transition-colors" size={20} />
               <input
-                className="w-full pl-12 pr-4 py-3 bg-slate-900/50 border border-slate-700 rounded-xl focus:border-primary-500 focus:ring-1 focus:ring-primary-500 focus:outline-none text-white placeholder-slate-600 transition-all"
+                className="w-full pl-12 pr-4 py-3 bg-black/40 border border-white/10 rounded-xl focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 focus:outline-none text-white placeholder-grey-600 transition-all"
                 placeholder="you@example.com"
                 autoFocus
                 type="email"
@@ -89,11 +89,11 @@ export default function Login() {
           </div>
 
           <div>
-            <label className="block mb-2 text-slate-300 font-semibold text-sm">Password</label>
+            <label className="block mb-2 text-grey-300 font-semibold text-sm">Password</label>
             <div className="relative group">
-              <FiLock className="absolute left-4 top-3.5 text-slate-500 group-focus-within:text-primary-400 transition-colors" size={20} />
+              <FiLock className="absolute left-4 top-3.5 text-grey-500 group-focus-within:text-cyan-400 transition-colors" size={20} />
               <input
-                className="w-full pl-12 pr-12 py-3 bg-slate-900/50 border border-slate-700 rounded-xl focus:border-primary-500 focus:ring-1 focus:ring-primary-500 focus:outline-none text-white placeholder-slate-600 transition-all"
+                className="w-full pl-12 pr-12 py-3 bg-black/40 border border-white/10 rounded-xl focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 focus:outline-none text-white placeholder-grey-600 transition-all"
                 placeholder="••••••••"
                 required
                 type={showPassword ? 'text' : 'password'}
@@ -103,7 +103,7 @@ export default function Login() {
               />
               <button
                 type="button"
-                className="absolute right-4 top-3.5 text-slate-500 hover:text-white focus:outline-none transition-colors"
+                className="absolute right-4 top-3.5 text-grey-500 hover:text-white focus:outline-none transition-colors"
                 tabIndex={-1}
                 onClick={() => setShowPassword((v) => !v)}
               >
@@ -111,13 +111,13 @@ export default function Login() {
               </button>
             </div>
             <div className="flex justify-end mt-2">
-              <a href="#" className="text-xs text-primary-400 hover:text-primary-300 transition-colors">Forgot Password?</a>
+              <a href="#" className="text-xs text-cyan-400 hover:text-cyan-300 transition-colors">Forgot Password?</a>
             </div>
           </div>
 
           <button
             type="submit"
-            className="w-full py-3.5 rounded-xl bg-gradient-to-r from-primary-600 to-accent-600 text-white font-bold text-lg shadow-lg shadow-primary-500/20 hover:shadow-primary-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-3.5 rounded-xl bg-gradient-to-r from-cyan-600 to-teal-600 text-white font-bold text-lg shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={loading}
           >
             {loading ? (
@@ -129,11 +129,11 @@ export default function Login() {
           </button>
         </form>
 
-        <p className="text-center text-slate-400 mt-8">
+        <p className="text-center text-grey-400 mt-8">
           Don't have an account?{' '}
           <Link
             to="/register"
-            className="text-primary-400 font-bold hover:text-primary-300 transition-colors"
+            className="text-cyan-400 font-bold hover:text-cyan-300 transition-colors"
           >
             Sign Up
           </Link>

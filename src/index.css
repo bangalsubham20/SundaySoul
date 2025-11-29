@@ -4,15 +4,14 @@
 
 @layer base {
   html {
-    scroll-behavior: smooth;
     -webkit-tap-highlight-color: transparent;
   }
 
   body {
-    @apply bg-slate-50 text-slate-900 font-sans antialiased;
+    @apply bg-teal-900 text-grey-400 font-sans antialiased selection:bg-cyan-500 selection:text-teal-900;
     background-image:
-      radial-gradient(at 0% 0%, rgba(139, 92, 246, 0.05) 0px, transparent 50%),
-      radial-gradient(at 100% 0%, rgba(249, 115, 22, 0.05) 0px, transparent 50%);
+      radial-gradient(at 0% 0%, rgba(0, 229, 255, 0.1) 0px, transparent 50%),
+      radial-gradient(at 100% 100%, rgba(20, 184, 166, 0.1) 0px, transparent 50%);
     background-attachment: fixed;
   }
 
@@ -22,11 +21,11 @@
   h4,
   h5,
   h6 {
-    @apply font-display font-bold tracking-tight;
+    @apply font-display font-bold tracking-tight text-white;
   }
 
   h1 {
-    @apply text-4xl md:text-5xl lg:text-6xl;
+    @apply text-4xl md:text-5xl lg:text-7xl;
   }
 
   h2 {
@@ -40,31 +39,31 @@
 
 @layer components {
   .btn {
-    @apply inline-flex items-center justify-center px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform active:scale-95 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply inline-flex items-center justify-center px-8 py-3 rounded-full font-bold tracking-wide transition-all duration-300 transform active:scale-95 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-teal-900 disabled:opacity-50 disabled:cursor-not-allowed uppercase text-sm;
   }
 
   .btn-primary {
-    @apply btn bg-gradient-to-r from-primary-600 to-primary-500 text-white shadow-lg shadow-primary-500/30 hover:shadow-primary-500/50 hover:-translate-y-0.5 focus:ring-primary-500;
+    @apply btn bg-gradient-to-r from-cyan-500 to-teal-400 text-teal-900 shadow-neon-primary hover:shadow-neon-primary-hover hover:-translate-y-0.5 focus:ring-cyan-500;
   }
 
   .btn-secondary {
-    @apply btn bg-white text-slate-700 border border-slate-200 shadow-sm hover:bg-slate-50 hover:border-slate-300 focus:ring-slate-200;
+    @apply btn bg-white/10 text-white border border-white/20 backdrop-blur-sm hover:bg-white/20 hover:border-white/40 focus:ring-white/50;
   }
 
-  .btn-accent {
-    @apply btn bg-gradient-to-r from-accent-500 to-accent-600 text-white shadow-lg shadow-accent-500/30 hover:shadow-accent-500/50 hover:-translate-y-0.5 focus:ring-accent-500;
+  .btn-outline {
+    @apply btn border-2 border-cyan-500 text-cyan-500 hover:bg-cyan-500/10 hover:shadow-neon-secondary focus:ring-cyan-500;
   }
 
   .card {
-    @apply bg-white/80 backdrop-blur-md border border-white/20 rounded-2xl shadow-xl shadow-slate-200/50 transition-all duration-300 hover:shadow-2xl hover:shadow-slate-200/60 hover:-translate-y-1;
+    @apply bg-teal-900/60 backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl transition-all duration-300 hover:border-white/20;
   }
 
   .input-field {
-    @apply w-full px-4 py-3 bg-white/50 backdrop-blur-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 transition-all duration-200 placeholder:text-slate-400;
+    @apply w-full px-5 py-4 bg-black/40 backdrop-blur-sm border border-white/10 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500 transition-all duration-200 placeholder:text-grey-400/50;
   }
 
   .glass-panel {
-    @apply bg-white/70 backdrop-blur-lg border border-white/30 shadow-xl;
+    @apply bg-teal-900/80 backdrop-blur-2xl border border-white/10 shadow-2xl;
   }
 
   .container-max {
@@ -74,11 +73,7 @@
 
 @layer utilities {
   .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary-600 to-accent-500;
-  }
-
-  .text-gradient-primary {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary-600 to-primary-400;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-teal-300;
   }
 
   .flex-center {
@@ -92,13 +87,34 @@
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-transparent;
+  @apply bg-teal-900;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-slate-300 rounded-full hover:bg-slate-400 transition-colors;
+  @apply bg-teal-700 rounded-full hover:bg-cyan-600 transition-colors;
+}
+
+/* Lenis Smooth Scroll */
+html.lenis {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
 }

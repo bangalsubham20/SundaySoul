@@ -1,16 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../hooks/useAuth';
 import { FiMenu, FiX, FiUser, FiLogOut, FiSettings, FiChevronDown, FiHome, FiMapPin, FiUsers } from 'react-icons/fi';
-import Button from './Button';
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleLogout = () => {
     logout();
@@ -62,10 +70,11 @@ function Navbar() {
     <motion.nav
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="sticky top-0 z-50 backdrop-blur-xl bg-gradient-to-b from-slate-950/80 to-slate-950/40 border-b border-white/10 shadow-2xl"
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'bg-teal-900/80 backdrop-blur-xl border-b border-white/10 shadow-2xl' : 'bg-transparent'
+        }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center h-20">
           {/* Logo */}
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
             <Link
@@ -78,10 +87,10 @@ function Navbar() {
                 transition={{ duration: 3, repeat: Infinity }}
                 className="text-3xl"
               >
-                ✈️
+                🏔️
               </motion.div>
-              <span className="text-xl font-black bg-clip-text text-transparent bg-gradient-to-r from-primary-400 to-accent-400 group-hover:from-accent-400 group-hover:to-primary-400 transition-all">
-                Traveler
+              <span className="text-2xl font-display font-black tracking-tighter text-white group-hover:text-cyan-400 transition-colors">
+                TRAVELER
               </span>
             </Link>
           </motion.div>
@@ -100,19 +109,20 @@ function Navbar() {
                 <motion.div key={item.path} variants={itemVariants}>
                   <Link
                     to={item.path}
-                    className={`flex items-center gap-1 font-semibold transition-all relative group ${isActive
-                      ? 'text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-accent-400'
-                      : 'text-slate-300 hover:text-white'
+                    className={`flex items-center gap-2 font-medium transition-all relative group ${isActive
+                      ? 'text-cyan-400'
+                      : 'text-white/80 hover:text-white'
                       }`}
                   >
-                    <Icon size={18} />
+                    <Icon size={16} />
                     {item.label}
-                    <motion.div
-                      layoutId="activeTab"
-                      className={`absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-primary-400 to-accent-400 ${isActive ? '' : 'hidden'
-                        }`}
-                      transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                    />
+                    {isActive && (
+                      <motion.div
+                        layoutId="activeTab"
+                        className="absolute -bottom-2 left-0 right-0 h-0.5 bg-cyan-400 shadow-[0_0_10px_rgba(0,229,255,0.5)]"
+                        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                      />
+                    )}
                   </Link>
                 </motion.div>
               );
@@ -127,9 +137,9 @@ function Navbar() {
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={() => navigate('/admin/dashboard')}
-                      className="flex items-center gap-2 px-4 py-2 bg-orange-500/20 border border-orange-500/30 text-orange-300 rounded-lg hover:bg-orange-500/30 hover:border-orange-500/50 transition-all"
+                      className="flex items-center gap-2 px-4 py-2 bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 rounded-full hover:bg-cyan-500/20 transition-all text-sm font-bold uppercase tracking-wider"
                     >
-                      <FiSettings size={16} />
+                      <FiSettings size={14} />
                       Admin
                     </motion.button>
                   </motion.div>
@@ -142,19 +152,19 @@ function Navbar() {
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={() => setIsProfileOpen(!isProfileOpen)}
-                      className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all"
+                      className="flex items-center gap-3 px-4 py-2 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all"
                     >
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-r from-primary-500 to-accent-500 flex items-center justify-center">
-                        <FiUser className="text-white" size={16} />
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-400 to-teal-600 flex items-center justify-center shadow-lg">
+                        <FiUser className="text-white" size={14} />
                       </div>
-                      <span className="text-white font-semibold text-sm hidden sm:inline">
+                      <span className="text-white font-bold text-sm hidden sm:inline uppercase tracking-wide">
                         {user.name?.split(' ')[0]}
                       </span>
                       <motion.div
                         animate={{ rotate: isProfileOpen ? 180 : 0 }}
                         transition={{ duration: 0.2 }}
                       >
-                        <FiChevronDown size={16} className="text-slate-400" />
+                        <FiChevronDown size={14} className="text-white/50" />
                       </motion.div>
                     </motion.button>
 
@@ -162,50 +172,50 @@ function Navbar() {
                     <AnimatePresence>
                       {isProfileOpen && (
                         <motion.div
-                          initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                          initial={{ opacity: 0, y: 10, scale: 0.95 }}
                           animate={{ opacity: 1, y: 0, scale: 1 }}
-                          exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                          className="absolute right-0 mt-2 w-48 backdrop-blur-xl bg-slate-900/90 border border-white/10 rounded-lg shadow-2xl overflow-hidden"
+                          exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                          className="absolute right-0 mt-4 w-56 bg-teal-900/90 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl overflow-hidden"
                         >
-                          <div className="p-4 border-b border-white/10">
-                            <p className="text-white font-bold">{user.name}</p>
-                            <p className="text-slate-400 text-sm">{user.email}</p>
+                          <div className="p-4 border-b border-white/10 bg-black/20">
+                            <p className="text-white font-bold truncate">{user.name}</p>
+                            <p className="text-white/50 text-xs truncate">{user.email}</p>
                           </div>
 
                           <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ staggerChildren: 0.05 }}
-                            className="py-2"
+                            className="p-2"
                           >
                             <motion.button
-                              whileHover={{ x: 5 }}
+                              whileHover={{ x: 5, backgroundColor: 'rgba(255,255,255,0.05)' }}
                               onClick={() => {
                                 navigate('/profile');
                                 setIsProfileOpen(false);
                               }}
-                              className="w-full text-left px-4 py-2 text-slate-300 hover:text-white hover:bg-white/5 transition-all flex items-center gap-2"
+                              className="w-full text-left px-3 py-2 text-white/80 rounded-lg transition-all flex items-center gap-3 text-sm"
                             >
-                              <FiUser size={16} /> My Profile
+                              <FiUser size={16} className="text-cyan-400" /> My Profile
                             </motion.button>
 
                             <motion.button
-                              whileHover={{ x: 5 }}
+                              whileHover={{ x: 5, backgroundColor: 'rgba(255,255,255,0.05)' }}
                               onClick={() => {
                                 navigate('/');
                                 setIsProfileOpen(false);
                               }}
-                              className="w-full text-left px-4 py-2 text-slate-300 hover:text-white hover:bg-white/5 transition-all flex items-center gap-2"
+                              className="w-full text-left px-3 py-2 text-white/80 rounded-lg transition-all flex items-center gap-3 text-sm"
                             >
-                              <FiSettings size={16} /> Preferences
+                              <FiSettings size={16} className="text-cyan-400" /> Preferences
                             </motion.button>
 
-                            <div className="border-t border-white/10 my-2"></div>
+                            <div className="h-px bg-white/10 my-2"></div>
 
                             <motion.button
-                              whileHover={{ x: 5 }}
+                              whileHover={{ x: 5, backgroundColor: 'rgba(239,68,68,0.1)' }}
                               onClick={handleLogout}
-                              className="w-full text-left px-4 py-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-all flex items-center gap-2"
+                              className="w-full text-left px-3 py-2 text-red-400 rounded-lg transition-all flex items-center gap-3 text-sm font-medium"
                             >
                               <FiLogOut size={16} /> Logout
                             </motion.button>
@@ -217,23 +227,13 @@ function Navbar() {
                 </motion.div>
               </>
             ) : (
-              <motion.div variants={itemVariants} className="flex space-x-3">
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => navigate('/login')}
-                  className="px-6 py-2 text-white font-semibold border border-white/20 rounded-lg hover:bg-white/10 transition-all"
-                >
+              <motion.div variants={itemVariants} className="flex space-x-4">
+                <Link to="/login" className="btn-secondary px-6 py-2 rounded-full text-sm font-bold">
                   Login
-                </motion.button>
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => navigate('/register')}
-                  className="px-6 py-2 bg-gradient-to-r from-primary-500 to-accent-500 text-white font-semibold rounded-lg hover:shadow-lg transition-all"
-                >
+                </Link>
+                <Link to="/register" className="btn-primary px-6 py-2 rounded-full text-sm font-bold shadow-lg shadow-cyan-500/20">
                   Sign Up
-                </motion.button>
+                </Link>
               </motion.div>
             )}
           </motion.div>
@@ -244,9 +244,9 @@ function Navbar() {
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setIsOpen(!isOpen)}
-              className="text-white hover:text-primary-400 transition"
+              className="p-2 text-white hover:text-cyan-400 transition"
             >
-              {isOpen ? <FiX size={28} /> : <FiMenu size={28} />}
+              {isOpen ? <FiX size={24} /> : <FiMenu size={24} />}
             </motion.button>
           </motion.div>
         </div>
@@ -259,105 +259,108 @@ function Navbar() {
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3 }}
-              className="md:hidden pb-4 space-y-2 border-t border-white/10"
+              className="md:hidden overflow-hidden bg-teal-900/95 backdrop-blur-xl border-t border-white/10 rounded-b-2xl shadow-2xl"
             >
-              {navItems.map((item, idx) => {
-                const Icon = item.icon;
-                const isActive = location.pathname === item.path;
-                return (
-                  <motion.div
-                    key={item.path}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: idx * 0.05 }}
-                  >
-                    <Link
-                      to={item.path}
-                      className={`block px-4 py-3 rounded-lg transition-all flex items-center gap-2 ${isActive
-                        ? 'bg-gradient-to-r from-primary-500/20 to-accent-500/20 text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-accent-400 border border-primary-500/30'
-                        : 'text-slate-300 hover:bg-white/5 hover:text-white border border-white/10'
-                        }`}
-                      onClick={handleNavClick}
+              <div className="p-4 space-y-2">
+                {navItems.map((item, idx) => {
+                  const Icon = item.icon;
+                  const isActive = location.pathname === item.path;
+                  return (
+                    <motion.div
+                      key={item.path}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: idx * 0.05 }}
                     >
-                      <Icon size={18} /> {item.label}
-                    </Link>
-                  </motion.div>
-                );
-              })}
+                      <Link
+                        to={item.path}
+                        className={`block px-4 py-3 rounded-xl transition-all flex items-center gap-3 font-medium ${isActive
+                          ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20'
+                          : 'text-white/70 hover:bg-white/5 hover:text-white'
+                          }`}
+                        onClick={handleNavClick}
+                      >
+                        <Icon size={18} /> {item.label}
+                      </Link>
+                    </motion.div>
+                  );
+                })}
 
-              {user ? (
-                <>
-                  {/* Admin Link Mobile */}
-                  {isAdmin && (
+                {user ? (
+                  <>
+                    <div className="h-px bg-white/10 my-2"></div>
+                    {/* Admin Link Mobile */}
+                    {isAdmin && (
+                      <motion.div
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.15 }}
+                      >
+                        <Link
+                          to="/admin/dashboard"
+                          className="block px-4 py-3 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 hover:bg-cyan-500/20 transition-all flex items-center gap-3 font-medium"
+                          onClick={handleNavClick}
+                        >
+                          <FiSettings size={18} /> Admin Panel
+                        </Link>
+                      </motion.div>
+                    )}
+
                     <motion.div
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.15 }}
+                      transition={{ delay: isAdmin ? 0.2 : 0.15 }}
                     >
                       <Link
-                        to="/admin/dashboard"
-                        className="block px-4 py-3 rounded-lg bg-orange-500/20 border border-orange-500/30 text-orange-300 hover:bg-orange-500/30 transition-all flex items-center gap-2"
+                        to="/profile"
+                        className="block px-4 py-3 rounded-xl text-white/70 hover:bg-white/5 hover:text-white transition-all flex items-center gap-3 font-medium"
                         onClick={handleNavClick}
                       >
-                        <FiSettings size={18} /> Admin Panel
+                        <FiUser size={18} /> My Profile
                       </Link>
                     </motion.div>
-                  )}
 
-                  <motion.div
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: isAdmin ? 0.2 : 0.15 }}
-                  >
-                    <Link
-                      to="/profile"
-                      className="block px-4 py-3 rounded-lg text-slate-300 hover:bg-white/5 hover:text-white border border-white/10 transition-all flex items-center gap-2"
-                      onClick={handleNavClick}
+                    <motion.div
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: isAdmin ? 0.25 : 0.2 }}
                     >
-                      <FiUser size={18} /> My Profile
-                    </Link>
-                  </motion.div>
-
+                      <button
+                        onClick={handleLogout}
+                        className="block w-full text-left px-4 py-3 rounded-xl text-red-400 hover:bg-red-500/10 transition-all flex items-center gap-3 font-medium"
+                      >
+                        <FiLogOut size={18} /> Logout
+                      </button>
+                    </motion.div>
+                  </>
+                ) : (
                   <motion.div
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: isAdmin ? 0.25 : 0.2 }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.15 }}
+                    className="grid grid-cols-2 gap-3 pt-2"
                   >
                     <button
-                      onClick={handleLogout}
-                      className="block w-full text-left px-4 py-3 rounded-lg text-red-400 hover:bg-red-500/10 hover:text-red-300 border border-red-500/30 transition-all flex items-center gap-2"
+                      onClick={() => {
+                        navigate('/login');
+                        handleNavClick();
+                      }}
+                      className="btn-secondary w-full py-3 rounded-xl text-sm font-bold"
                     >
-                      <FiLogOut size={18} /> Logout
+                      Login
+                    </button>
+                    <button
+                      onClick={() => {
+                        navigate('/register');
+                        handleNavClick();
+                      }}
+                      className="btn-primary w-full py-3 rounded-xl text-sm font-bold"
+                    >
+                      Sign Up
                     </button>
                   </motion.div>
-                </>
-              ) : (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.15 }}
-                  className="space-y-2 pt-2"
-                >
-                  <button
-                    onClick={() => {
-                      navigate('/login');
-                      handleNavClick();
-                    }}
-                    className="block w-full px-4 py-3 rounded-lg border border-white/20 text-white hover:bg-white/10 transition-all font-semibold"
-                  >
-                    Login
-                  </button>
-                  <button
-                    onClick={() => {
-                      navigate('/register');
-                      handleNavClick();
-                    }}
-                    className="block w-full px-4 py-3 rounded-lg bg-gradient-to-r from-primary-500 to-accent-500 text-white hover:shadow-lg transition-all font-semibold"
-                  >
-                    Sign Up
-                  </button>
-                </motion.div>
-              )}
+                )}
+              </div>
             </motion.div>
           )}
         </AnimatePresence>

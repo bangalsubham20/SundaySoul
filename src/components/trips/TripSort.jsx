@@ -31,7 +31,7 @@ function TripSort({ sortBy, onSortChange }) {
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full px-4 py-3 rounded-xl border-2 border-gray-300 hover:border-orange-400 focus:border-orange-500 focus:outline-none bg-white text-gray-800 font-semibold cursor-pointer transition flex items-center justify-between shadow-md hover:shadow-lg"
+        className="w-full px-4 py-3 rounded-xl border border-white/10 hover:border-cyan-500/50 focus:border-cyan-500 focus:outline-none bg-teal-900/60 backdrop-blur-xl text-white font-semibold cursor-pointer transition flex items-center justify-between shadow-lg"
       >
         <span className="flex items-center gap-2">
           {currentSort?.label || 'Sort by...'}
@@ -40,7 +40,7 @@ function TripSort({ sortBy, onSortChange }) {
           animate={{ rotate: isOpen ? 180 : 0 }}
           transition={{ duration: 0.2 }}
         >
-          <FiChevronDown size={20} className="text-gray-500" />
+          <FiChevronDown size={20} className="text-grey-400" />
         </motion.div>
       </motion.button>
 
@@ -63,9 +63,9 @@ function TripSort({ sortBy, onSortChange }) {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -10, scale: 0.95 }}
               transition={{ duration: 0.2 }}
-              className="absolute top-full left-0 right-0 z-40 mt-2 bg-white border-2 border-gray-200 rounded-xl shadow-lg overflow-hidden"
+              className="absolute top-full left-0 right-0 z-40 mt-2 bg-teal-900/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl overflow-hidden"
             >
-              <div className="max-h-80 overflow-y-auto">
+              <div className="max-h-80 overflow-y-auto custom-scrollbar">
                 {sortOptions.map((option, index) => (
                   <motion.button
                     key={option.value}
@@ -76,19 +76,18 @@ function TripSort({ sortBy, onSortChange }) {
                       onSortChange(option.value);
                       setIsOpen(false);
                     }}
-                    className={`w-full px-4 py-3 text-left flex items-center justify-between transition-all border-b border-gray-100 hover:bg-orange-50 ${
-                      sortBy === option.value ? 'bg-orange-100' : ''
-                    }`}
+                    className={`w-full px-4 py-3 text-left flex items-center justify-between transition-all border-b border-white/5 hover:bg-white/10 ${sortBy === option.value ? 'bg-cyan-900/30' : ''
+                      }`}
                   >
                     <div>
-                      <p className="font-semibold text-gray-800">{option.label}</p>
-                      <p className="text-xs text-gray-500">{option.description}</p>
+                      <p className="font-semibold text-white">{option.label}</p>
+                      <p className="text-xs text-grey-400">{option.description}</p>
                     </div>
                     {sortBy === option.value && (
                       <motion.div
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
-                        className="text-orange-500"
+                        className="text-cyan-400"
                       >
                         <FiCheck size={20} />
                       </motion.div>
@@ -106,9 +105,9 @@ function TripSort({ sortBy, onSortChange }) {
         <motion.div
           initial={{ opacity: 0, y: 5 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mt-3 text-xs text-gray-500"
+          className="mt-3 text-xs text-grey-400"
         >
-          Sorted by: <span className="font-semibold text-orange-600">{currentSort.label}</span>
+          Sorted by: <span className="font-semibold text-cyan-400">{currentSort.label}</span>
         </motion.div>
       )}
     </motion.div>

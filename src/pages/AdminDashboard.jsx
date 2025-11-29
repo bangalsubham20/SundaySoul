@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import Button from '../components/common/Button';
 import Card from '../components/common/Card';
-import { 
-  FiEdit2, FiTrash2, FiPlus, FiEye, FiBarChart2, FiUsers, FiCalendar, 
+import {
+  FiEdit2, FiTrash2, FiPlus, FiEye, FiBarChart2, FiUsers, FiCalendar,
   FiDollarSign, FiLogOut, FiSearch, FiFilter, FiX, FiCheck, FiAlertCircle,
   FiDownload, FiMail, FiPhone, FiMapPin, FiTag, FiPercent, FiGift
 } from 'react-icons/fi';
@@ -207,7 +207,7 @@ function AdminDashboard() {
   };
 
   const handleUpdateBookingStatus = (bookingId, newStatus) => {
-    setBookings(bookings.map(b => 
+    setBookings(bookings.map(b =>
       b.id === bookingId ? { ...b, status: newStatus } : b
     ));
   };
@@ -230,7 +230,7 @@ function AdminDashboard() {
       b.amount,
       b.status
     ]);
-    
+
     const csv = [headers, ...csvData].map(row => row.join(',')).join('\n');
     const blob = new Blob([csv], { type: 'text/csv' });
     const url = window.URL.createObjectURL(blob);
@@ -271,7 +271,7 @@ function AdminDashboard() {
   };
 
   const handleToggleOffer = (offerId) => {
-    setOffers(offers.map(o => 
+    setOffers(offers.map(o =>
       o.id === offerId ? { ...o, active: !o.active } : o
     ));
   };
@@ -286,8 +286,8 @@ function AdminDashboard() {
     const colors = {
       active: 'from-green-500/10 to-green-600/10 border-green-500/30 text-green-300',
       pending: 'from-yellow-500/10 to-yellow-600/10 border-yellow-500/30 text-yellow-300',
-      confirmed: 'from-blue-500/10 to-blue-600/10 border-blue-500/30 text-blue-300',
-      completed: 'from-purple-500/10 to-purple-600/10 border-purple-500/30 text-purple-300',
+      confirmed: 'from-cyan-500/10 to-cyan-600/10 border-cyan-500/30 text-cyan-300',
+      completed: 'from-teal-500/10 to-teal-600/10 border-teal-500/30 text-teal-300',
       cancelled: 'from-red-500/10 to-red-600/10 border-red-500/30 text-red-300'
     };
     return colors[status] || colors.pending;
@@ -298,7 +298,7 @@ function AdminDashboard() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       whileHover={{ y: -5 }}
-      className="backdrop-blur-xl bg-gradient-to-br from-white/10 to-white/5 border border-white/10 rounded-2xl p-6 shadow-2xl hover:border-white/20 transition-all"
+      className="backdrop-blur-xl bg-teal-900/60 border border-white/10 rounded-2xl p-6 shadow-2xl hover:border-white/20 transition-all"
     >
       <div className="flex items-center justify-between mb-4">
         <Icon size={32} className={`${color}`} />
@@ -308,7 +308,7 @@ function AdminDashboard() {
           </span>
         )}
       </div>
-      <p className="text-slate-400 text-sm mb-1">{label}</p>
+      <p className="text-grey-400 text-sm mb-1">{label}</p>
       <p className={`text-4xl font-black bg-clip-text text-transparent bg-gradient-to-r ${color}`}>
         {value}
       </p>
@@ -318,19 +318,20 @@ function AdminDashboard() {
   // Filter bookings
   const filteredBookings = bookings.filter(booking => {
     const matchesSearch = booking.userName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         booking.bookingId.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         booking.tripName.toLowerCase().includes(searchTerm.toLowerCase());
+      booking.bookingId.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      booking.tripName.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = filterStatus === 'all' || booking.status === filterStatus;
     return matchesSearch && matchesStatus;
   });
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 text-white overflow-hidden">
+    <div className="relative min-h-screen bg-teal-900 text-white overflow-hidden selection:bg-cyan-500 selection:text-teal-900">
       {/* Animated Background */}
-      <motion.div className="fixed -top-96 -right-96 w-[500px] h-[500px] rounded-full bg-gradient-to-br from-purple-600/20 via-indigo-600/15 to-transparent blur-3xl -z-10"
+      <div className="absolute inset-0 bg-gradient-to-br from-teal-950 via-teal-900 to-black z-0" />
+      <motion.div className="fixed -top-96 -right-96 w-[500px] h-[500px] rounded-full bg-gradient-to-br from-cyan-600/10 via-teal-600/10 to-transparent blur-3xl -z-10"
         animate={{ y: [0, 60, 0] }}
         transition={{ duration: 12, repeat: Infinity }} />
-      <motion.div className="fixed -bottom-96 -left-96 w-[500px] h-[500px] rounded-full bg-gradient-to-tr from-blue-600/20 via-cyan-500/15 to-transparent blur-3xl -z-10"
+      <motion.div className="fixed -bottom-96 -left-96 w-[500px] h-[500px] rounded-full bg-gradient-to-tr from-teal-600/10 via-cyan-500/10 to-transparent blur-3xl -z-10"
         animate={{ y: [0, -50, 0] }}
         transition={{ duration: 15, repeat: Infinity }} />
 
@@ -338,14 +339,14 @@ function AdminDashboard() {
       <motion.div
         initial={{ opacity: 0, y: -30 }}
         animate={{ opacity: 1, y: 0 }}
-        className="backdrop-blur-xl bg-white/5 border-b border-white/10 shadow-2xl sticky top-0 z-40"
+        className="backdrop-blur-xl bg-teal-900/80 border-b border-white/10 shadow-2xl sticky top-0 z-40"
       >
         <div className="max-w-7xl mx-auto px-4 py-6 flex justify-between items-center">
-          <h1 className="text-4xl font-black bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">
+          <h1 className="text-4xl font-display font-black bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-teal-400">
             ⚙️ Admin Dashboard
           </h1>
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-            <Button onClick={() => navigate('/')} className="bg-red-500/20 border border-red-500/30 text-red-300">
+            <Button onClick={() => navigate('/')} className="bg-red-500/20 border border-red-500/30 text-red-300 hover:bg-red-500/30">
               <FiLogOut className="inline mr-2" size={18} />
               Logout
             </Button>
@@ -373,11 +374,10 @@ function AdminDashboard() {
                 key={tab.id}
                 whileHover={{ y: -2 }}
                 onClick={() => setActiveTab(tab.id)}
-                className={`pb-4 font-bold capitalize whitespace-nowrap flex items-center gap-2 transition ${
-                  activeTab === tab.id
-                    ? 'text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 border-b-2 border-purple-500'
-                    : 'text-slate-400 hover:text-slate-300'
-                }`}
+                className={`pb-4 font-bold capitalize whitespace-nowrap flex items-center gap-2 transition ${activeTab === tab.id
+                    ? 'text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-teal-400 border-b-2 border-cyan-500'
+                    : 'text-grey-400 hover:text-grey-300'
+                  }`}
               >
                 <Icon size={18} /> {tab.label}
               </motion.button>
@@ -397,16 +397,16 @@ function AdminDashboard() {
             >
               {/* Stats Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <StatCard icon={FiCalendar} label="Total Bookings" value={totalBookings} color="from-orange-400 to-pink-400" trend={12} />
+                <StatCard icon={FiCalendar} label="Total Bookings" value={totalBookings} color="from-orange-400 to-amber-400" trend={12} />
                 <StatCard icon={FiCheck} label="Confirmed" value={confirmedBookings} color="from-green-400 to-emerald-400" />
-                <StatCard icon={FiDollarSign} label="Total Revenue" value={`₹${(totalRevenue / 100000).toFixed(1)}L`} color="from-yellow-400 to-orange-400" trend={8} />
+                <StatCard icon={FiDollarSign} label="Total Revenue" value={`₹${(totalRevenue / 100000).toFixed(1)}L`} color="from-cyan-400 to-teal-400" trend={8} />
                 <StatCard icon={FiTag} label="Active Offers" value={totalOffers} color="from-purple-400 to-indigo-400" />
               </div>
 
               {/* Recent Activity */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Recent Bookings */}
-                <Card variant="elevated" className="p-6">
+                <Card className="p-6 backdrop-blur-xl bg-teal-900/60 border border-white/10">
                   <h2 className="text-2xl font-bold text-white mb-6">Recent Bookings</h2>
                   <div className="space-y-3">
                     {bookings.slice(0, 5).map((booking, idx) => (
@@ -415,11 +415,11 @@ function AdminDashboard() {
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: idx * 0.05 }}
-                        className="flex items-center justify-between p-4 bg-white/5 border border-white/10 rounded-xl hover:bg-white/8 transition-all"
+                        className="flex items-center justify-between p-4 bg-black/20 border border-white/10 rounded-xl hover:bg-white/5 transition-all"
                       >
                         <div>
                           <p className="font-bold text-white">{booking.userName}</p>
-                          <p className="text-slate-400 text-sm">{booking.tripName}</p>
+                          <p className="text-grey-400 text-sm">{booking.tripName}</p>
                         </div>
                         <span className={`text-xs font-bold px-3 py-1 rounded-full backdrop-blur-lg bg-gradient-to-r ${getStatusColor(booking.status)} border`}>
                           {booking.status}
@@ -432,8 +432,8 @@ function AdminDashboard() {
                 {/* Revenue Chart Placeholder */}
                 <Card variant="gradient" className="p-6">
                   <h2 className="text-2xl font-bold text-white mb-6">Revenue Overview</h2>
-                  <div className="h-64 flex items-center justify-center bg-white/5 rounded-lg">
-                    <p className="text-slate-400">Chart visualization here</p>
+                  <div className="h-64 flex items-center justify-center bg-black/20 rounded-lg border border-white/10">
+                    <p className="text-grey-400">Chart visualization here</p>
                   </div>
                 </Card>
               </div>
@@ -451,22 +451,22 @@ function AdminDashboard() {
             >
               {/* Search & Filters */}
               <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
-                <div className="flex-1 relative">
-                  <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+                <div className="flex-1 relative w-full">
+                  <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-grey-400" />
                   <input
                     type="text"
                     placeholder="Search bookings..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-12 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    className="w-full bg-black/40 border border-white/10 rounded-xl px-12 py-3 text-white placeholder-grey-500 focus:outline-none focus:ring-2 focus:ring-cyan-500"
                   />
                 </div>
-                
-                <div className="flex gap-2">
+
+                <div className="flex gap-2 w-full md:w-auto">
                   <select
                     value={filterStatus}
                     onChange={(e) => setFilterStatus(e.target.value)}
-                    className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    className="bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500 flex-1 md:flex-none"
                   >
                     <option value="all">All Status</option>
                     <option value="confirmed">Confirmed</option>
@@ -483,13 +483,13 @@ function AdminDashboard() {
               </div>
 
               {/* Bookings Table */}
-              <Card variant="elevated" className="overflow-hidden">
+              <Card className="overflow-hidden backdrop-blur-xl bg-teal-900/60 border border-white/10">
                 <div className="overflow-x-auto">
                   <table className="w-full">
-                    <thead className="bg-white/10 border-b border-white/10">
+                    <thead className="bg-black/20 border-b border-white/10">
                       <tr>
                         {['Booking ID', 'Customer', 'Trip', 'Travelers', 'Date', 'Amount', 'Status', 'Actions'].map(header => (
-                          <th key={header} className="px-6 py-4 text-left text-sm font-bold text-slate-300">{header}</th>
+                          <th key={header} className="px-6 py-4 text-left text-sm font-bold text-grey-300">{header}</th>
                         ))}
                       </tr>
                     </thead>
@@ -502,15 +502,15 @@ function AdminDashboard() {
                           transition={{ delay: idx * 0.05 }}
                           className="hover:bg-white/5 transition-all"
                         >
-                          <td className="px-6 py-4 text-sm font-bold text-purple-400">{booking.bookingId}</td>
+                          <td className="px-6 py-4 text-sm font-bold text-cyan-400">{booking.bookingId}</td>
                           <td className="px-6 py-4">
                             <p className="text-sm font-bold text-white">{booking.userName}</p>
-                            <p className="text-xs text-slate-400">{booking.userEmail}</p>
+                            <p className="text-xs text-grey-400">{booking.userEmail}</p>
                           </td>
-                          <td className="px-6 py-4 text-sm text-slate-300">{booking.tripName}</td>
+                          <td className="px-6 py-4 text-sm text-grey-300">{booking.tripName}</td>
                           <td className="px-6 py-4 text-sm text-white font-semibold">{booking.numberOfTravelers}</td>
-                          <td className="px-6 py-4 text-sm text-slate-400">{booking.bookingDate}</td>
-                          <td className="px-6 py-4 text-sm font-bold text-orange-400">₹{booking.amount.toLocaleString()}</td>
+                          <td className="px-6 py-4 text-sm text-grey-400">{booking.bookingDate}</td>
+                          <td className="px-6 py-4 text-sm font-bold text-teal-400">₹{booking.amount.toLocaleString()}</td>
                           <td className="px-6 py-4">
                             <select
                               value={booking.status}
@@ -527,7 +527,7 @@ function AdminDashboard() {
                             <motion.button
                               whileHover={{ scale: 1.1 }}
                               onClick={() => handleViewBooking(booking)}
-                              className="text-blue-400 hover:text-blue-300 transition"
+                              className="text-cyan-400 hover:text-cyan-300 transition"
                               title="View Details"
                             >
                               <FiEye size={18} />
@@ -563,16 +563,16 @@ function AdminDashboard() {
                       animate={{ scale: 1 }}
                       exit={{ scale: 0.9 }}
                       onClick={(e) => e.stopPropagation()}
-                      className="backdrop-blur-xl bg-slate-900/95 border border-white/10 rounded-2xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl"
+                      className="backdrop-blur-xl bg-teal-900/95 border border-white/10 rounded-2xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl"
                     >
                       <div className="flex justify-between items-start mb-6">
                         <div>
                           <h2 className="text-3xl font-bold text-white mb-2">Booking Details</h2>
-                          <p className="text-slate-400">ID: {selectedItem.bookingId}</p>
+                          <p className="text-grey-400">ID: {selectedItem.bookingId}</p>
                         </div>
                         <button
                           onClick={() => setShowModal(null)}
-                          className="text-slate-400 hover:text-white transition"
+                          className="text-grey-400 hover:text-white transition"
                         >
                           <FiX size={24} />
                         </button>
@@ -580,56 +580,56 @@ function AdminDashboard() {
 
                       <div className="space-y-6">
                         {/* Customer Info */}
-                        <div className="p-6 bg-white/5 border border-white/10 rounded-xl">
+                        <div className="p-6 bg-black/20 border border-white/10 rounded-xl">
                           <h3 className="font-bold text-white mb-4 flex items-center gap-2">
                             <FiUser /> Customer Information
                           </h3>
                           <div className="grid grid-cols-2 gap-4 text-sm">
                             <div>
-                              <p className="text-slate-400">Name</p>
+                              <p className="text-grey-400">Name</p>
                               <p className="text-white font-semibold">{selectedItem.userName}</p>
                             </div>
                             <div>
-                              <p className="text-slate-400">Email</p>
+                              <p className="text-grey-400">Email</p>
                               <p className="text-white font-semibold">{selectedItem.userEmail}</p>
                             </div>
                             <div>
-                              <p className="text-slate-400">Phone</p>
+                              <p className="text-grey-400">Phone</p>
                               <p className="text-white font-semibold">{selectedItem.userPhone}</p>
                             </div>
                             <div>
-                              <p className="text-slate-400">Emergency Contact</p>
+                              <p className="text-grey-400">Emergency Contact</p>
                               <p className="text-white font-semibold">{selectedItem.emergencyName}</p>
-                              <p className="text-slate-500 text-xs">{selectedItem.emergencyContact}</p>
+                              <p className="text-grey-500 text-xs">{selectedItem.emergencyContact}</p>
                             </div>
                           </div>
                         </div>
 
                         {/* Trip Info */}
-                        <div className="p-6 bg-white/5 border border-white/10 rounded-xl">
+                        <div className="p-6 bg-black/20 border border-white/10 rounded-xl">
                           <h3 className="font-bold text-white mb-4 flex items-center gap-2">
                             <FiMapPin /> Trip Information
                           </h3>
                           <div className="grid grid-cols-2 gap-4 text-sm">
                             <div>
-                              <p className="text-slate-400">Trip Name</p>
+                              <p className="text-grey-400">Trip Name</p>
                               <p className="text-white font-semibold">{selectedItem.tripName}</p>
                             </div>
                             <div>
-                              <p className="text-slate-400">Trip Date</p>
+                              <p className="text-grey-400">Trip Date</p>
                               <p className="text-white font-semibold">{selectedItem.tripDate}</p>
                             </div>
                             <div>
-                              <p className="text-slate-400">Number of Travelers</p>
+                              <p className="text-grey-400">Number of Travelers</p>
                               <p className="text-white font-semibold">{selectedItem.numberOfTravelers}</p>
                             </div>
                             <div>
-                              <p className="text-slate-400">Booking Date</p>
+                              <p className="text-grey-400">Booking Date</p>
                               <p className="text-white font-semibold">{selectedItem.bookingDate}</p>
                             </div>
                             {selectedItem.specialRequirements && (
                               <div className="col-span-2">
-                                <p className="text-slate-400">Special Requirements</p>
+                                <p className="text-grey-400">Special Requirements</p>
                                 <p className="text-white">{selectedItem.specialRequirements}</p>
                               </div>
                             )}
@@ -637,13 +637,13 @@ function AdminDashboard() {
                         </div>
 
                         {/* Payment Info */}
-                        <div className="p-6 bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/30 rounded-xl">
+                        <div className="p-6 bg-gradient-to-r from-cyan-900/20 to-teal-900/20 border border-cyan-500/30 rounded-xl">
                           <h3 className="font-bold text-white mb-4 flex items-center gap-2">
                             <FiDollarSign /> Payment Information
                           </h3>
                           <div className="space-y-3">
                             <div className="flex justify-between">
-                              <span className="text-slate-300">Total Amount</span>
+                              <span className="text-grey-300">Total Amount</span>
                               <span className="text-white font-bold">₹{selectedItem.amount.toLocaleString()}</span>
                             </div>
                             {selectedItem.discount > 0 && (
@@ -653,15 +653,15 @@ function AdminDashboard() {
                               </div>
                             )}
                             <div className="flex justify-between">
-                              <span className="text-slate-300">Paid Amount</span>
+                              <span className="text-grey-300">Paid Amount</span>
                               <span className="text-white font-bold">₹{selectedItem.paidAmount.toLocaleString()}</span>
                             </div>
                             <div className="flex justify-between">
-                              <span className="text-slate-300">Payment Method</span>
+                              <span className="text-grey-300">Payment Method</span>
                               <span className="text-white font-semibold capitalize">{selectedItem.paymentMethod}</span>
                             </div>
                             <div className="flex justify-between pt-3 border-t border-white/10">
-                              <span className="text-slate-300">Status</span>
+                              <span className="text-grey-300">Status</span>
                               <span className={`text-xs font-bold px-3 py-1 rounded-full backdrop-blur-lg bg-gradient-to-r ${getStatusColor(selectedItem.status)} border`}>
                                 {selectedItem.status}
                               </span>
@@ -717,7 +717,7 @@ function AdminDashboard() {
                       <div className="flex justify-between items-start mb-4">
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-2">
-                            <h3 className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">
+                            <h3 className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-teal-400">
                               {offer.code}
                             </h3>
                             {offer.active ? (
@@ -730,25 +730,25 @@ function AdminDashboard() {
                               </span>
                             )}
                           </div>
-                          <p className="text-slate-300 mb-3">{offer.description}</p>
-                          
+                          <p className="text-grey-300 mb-3">{offer.description}</p>
+
                           <div className="grid grid-cols-2 gap-3 text-sm">
                             <div>
-                              <p className="text-slate-400">Discount</p>
+                              <p className="text-grey-400">Discount</p>
                               <p className="text-white font-bold">
                                 {offer.type === 'percentage' ? `${offer.discount}%` : `₹${offer.discount}`}
                               </p>
                             </div>
                             <div>
-                              <p className="text-slate-400">Min Amount</p>
+                              <p className="text-grey-400">Min Amount</p>
                               <p className="text-white font-bold">₹{offer.minAmount.toLocaleString()}</p>
                             </div>
                             <div>
-                              <p className="text-slate-400">Usage</p>
+                              <p className="text-grey-400">Usage</p>
                               <p className="text-white font-bold">{offer.usedCount}/{offer.usageLimit}</p>
                             </div>
                             <div>
-                              <p className="text-slate-400">Valid Until</p>
+                              <p className="text-grey-400">Valid Until</p>
                               <p className="text-white font-bold">{offer.validUntil}</p>
                             </div>
                           </div>
@@ -792,33 +792,28 @@ function AdminDashboard() {
                       animate={{ scale: 1 }}
                       exit={{ scale: 0.9 }}
                       onClick={(e) => e.stopPropagation()}
-                      className="backdrop-blur-xl bg-slate-900/95 border border-white/10 rounded-2xl p-8 max-w-2xl w-full shadow-2xl"
+                      className="backdrop-blur-xl bg-teal-900/95 border border-white/10 rounded-2xl p-8 max-w-2xl w-full shadow-2xl"
                     >
                       <h2 className="text-3xl font-bold text-white mb-6">Create New Offer</h2>
-                      
+
                       <div className="space-y-4 mb-6">
                         <div className="grid grid-cols-2 gap-4">
                           <div>
-                            <label className="block text-sm font-semibold text-slate-300 mb-2">
-                              Promo Code *
-                            </label>
+                            <label className="block text-sm font-semibold text-grey-300 mb-2">Code</label>
                             <input
                               type="text"
                               value={newOffer.code}
-                              onChange={(e) => setNewOffer({...newOffer, code: e.target.value.toUpperCase()})}
-                              className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                              placeholder="e.g., SUMMER20"
+                              onChange={(e) => setNewOffer({ ...newOffer, code: e.target.value.toUpperCase() })}
+                              className="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-2 text-white placeholder-grey-500 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                              placeholder="e.g. SUMMER25"
                             />
                           </div>
-
                           <div>
-                            <label className="block text-sm font-semibold text-slate-300 mb-2">
-                              Discount Type *
-                            </label>
+                            <label className="block text-sm font-semibold text-grey-300 mb-2">Type</label>
                             <select
                               value={newOffer.type}
-                              onChange={(e) => setNewOffer({...newOffer, type: e.target.value})}
-                              className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                              onChange={(e) => setNewOffer({ ...newOffer, type: e.target.value })}
+                              className="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
                             >
                               <option value="percentage">Percentage (%)</option>
                               <option value="fixed">Fixed Amount (₹)</option>
@@ -827,87 +822,63 @@ function AdminDashboard() {
                         </div>
 
                         <div>
-                          <label className="block text-sm font-semibold text-slate-300 mb-2">
-                            Description *
-                          </label>
+                          <label className="block text-sm font-semibold text-grey-300 mb-2">Description</label>
                           <input
                             type="text"
                             value={newOffer.description}
-                            onChange={(e) => setNewOffer({...newOffer, description: e.target.value})}
-                            className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                            placeholder="Brief description of the offer"
+                            onChange={(e) => setNewOffer({ ...newOffer, description: e.target.value })}
+                            className="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-2 text-white placeholder-grey-500 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                            placeholder="Offer description"
                           />
                         </div>
 
                         <div className="grid grid-cols-2 gap-4">
                           <div>
-                            <label className="block text-sm font-semibold text-slate-300 mb-2">
-                              Discount Value *
-                            </label>
+                            <label className="block text-sm font-semibold text-grey-300 mb-2">Discount Value</label>
                             <input
                               type="number"
                               value={newOffer.discount}
-                              onChange={(e) => setNewOffer({...newOffer, discount: e.target.value})}
-                              className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                              placeholder={newOffer.type === 'percentage' ? 'e.g., 10' : 'e.g., 2000'}
+                              onChange={(e) => setNewOffer({ ...newOffer, discount: e.target.value })}
+                              className="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-2 text-white placeholder-grey-500 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                              placeholder="10"
                             />
                           </div>
-
                           <div>
-                            <label className="block text-sm font-semibold text-slate-300 mb-2">
-                              Min Booking Amount
-                            </label>
+                            <label className="block text-sm font-semibold text-grey-300 mb-2">Min Amount</label>
                             <input
                               type="number"
                               value={newOffer.minAmount}
-                              onChange={(e) => setNewOffer({...newOffer, minAmount: e.target.value})}
-                              className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                              placeholder="e.g., 10000"
+                              onChange={(e) => setNewOffer({ ...newOffer, minAmount: e.target.value })}
+                              className="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-2 text-white placeholder-grey-500 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                              placeholder="0"
                             />
                           </div>
                         </div>
 
                         <div className="grid grid-cols-2 gap-4">
                           <div>
-                            <label className="block text-sm font-semibold text-slate-300 mb-2">
-                              Valid From
-                            </label>
-                            <input
-                              type="date"
-                              value={newOffer.validFrom}
-                              onChange={(e) => setNewOffer({...newOffer, validFrom: e.target.value})}
-                              className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
-                            />
-                          </div>
-
-                          <div>
-                            <label className="block text-sm font-semibold text-slate-300 mb-2">
-                              Valid Until
-                            </label>
+                            <label className="block text-sm font-semibold text-grey-300 mb-2">Valid Until</label>
                             <input
                               type="date"
                               value={newOffer.validUntil}
-                              onChange={(e) => setNewOffer({...newOffer, validUntil: e.target.value})}
-                              className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                              onChange={(e) => setNewOffer({ ...newOffer, validUntil: e.target.value })}
+                              className="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-2 text-white placeholder-grey-500 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-semibold text-grey-300 mb-2">Usage Limit</label>
+                            <input
+                              type="number"
+                              value={newOffer.usageLimit}
+                              onChange={(e) => setNewOffer({ ...newOffer, usageLimit: e.target.value })}
+                              className="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-2 text-white placeholder-grey-500 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                              placeholder="100"
                             />
                           </div>
                         </div>
-
-                        <div>
-                          <label className="block text-sm font-semibold text-slate-300 mb-2">
-                            Usage Limit
-                          </label>
-                          <input
-                            type="number"
-                            value={newOffer.usageLimit}
-                            onChange={(e) => setNewOffer({...newOffer, usageLimit: e.target.value})}
-                            className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                            placeholder="e.g., 100"
-                          />
-                        </div>
                       </div>
 
-                      <div className="flex gap-4">
+                      <div className="flex gap-3">
                         <Button fullWidth onClick={handleAddOffer}>
                           Create Offer
                         </Button>
@@ -919,6 +890,24 @@ function AdminDashboard() {
                   </motion.div>
                 )}
               </AnimatePresence>
+            </motion.div>
+          )}
+
+          {/* Placeholders for other tabs */}
+          {(activeTab === 'trips' || activeTab === 'users') && (
+            <motion.div
+              key="placeholder"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="flex flex-col items-center justify-center py-20 text-center"
+            >
+              <div className="w-24 h-24 bg-teal-900/40 rounded-full flex items-center justify-center mb-6">
+                <FiAlertCircle size={48} className="text-cyan-400" />
+              </div>
+              <h2 className="text-2xl font-bold text-white mb-2">Coming Soon</h2>
+              <p className="text-grey-400 mb-8">This module is currently under development.</p>
+              <Button onClick={() => setActiveTab('dashboard')}>Back to Dashboard</Button>
             </motion.div>
           )}
         </AnimatePresence>

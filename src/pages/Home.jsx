@@ -1,607 +1,289 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import SearchBar from '../components/home/SearchBar';
-import Button from '../components/common/Button';
-import Card from '../components/common/Card';
-import { FiArrowRight, FiCheck, FiStar, FiTrendingUp, FiUsers } from 'react-icons/fi';
+import { FiArrowRight, FiCheck, FiStar, FiTrendingUp, FiUsers, FiMapPin, FiCalendar, FiActivity } from 'react-icons/fi';
 
 function Home() {
   const navigate = useNavigate();
-  const [activeCategory, setActiveCategory] = useState(null);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-    };
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.15, delayChildren: 0.2 },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.6, ease: 'easeOut' },
-    },
-  };
+  const { scrollY } = useScroll();
+  const y1 = useTransform(scrollY, [0, 500], [0, 200]);
+  const y2 = useTransform(scrollY, [0, 500], [0, -150]);
 
   const featuredTrips = [
     {
       id: 1,
-      title: 'Himalayan Adventure',
+      title: 'Mystic Himalayas',
       price: '₹18,500',
-      desc: 'Trek through scenic mountain trails and experience the thrill of nature.',
-      img: 'https://images.pexels.com/photos/2161499/pexels-photo-2161499.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-      rating: 4.8,
-      duration: '8 days',
+      desc: 'Traverse the ancient trails of the Himalayas, where snow-capped peaks meet the endless sky.',
+      img: 'https://images.unsplash.com/photo-1518098268026-4e1877a1c37b?q=80&w=2070&auto=format&fit=crop',
+      rating: 4.9,
+      duration: '8 Days',
       difficulty: 'Moderate',
-      tag: 'Popular',
+      tag: 'Bestseller',
     },
     {
       id: 2,
-      title: 'Goa Beach Escape',
+      title: 'Coastal Odyssey',
       price: '₹22,000',
-      desc: 'Relax, surf, and party at India\'s most vibrant coastal paradise.',
-      img: 'https://images.pexels.com/photos/3552472/pexels-photo-3552472.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-      rating: 4.9,
-      duration: '5 days',
+      desc: 'Discover the untouched beaches and hidden coves of the Konkan coast.',
+      img: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2073&auto=format&fit=crop',
+      rating: 4.8,
+      duration: '5 Days',
       difficulty: 'Easy',
-      tag: 'Featured',
+      tag: 'Trending',
     },
     {
       id: 3,
-      title: 'Spiti Valley Expedition',
+      title: 'Spiti: The Middle Land',
       price: '₹27,000',
-      desc: 'Explore the cold desert\'s breathtaking beauty and monasteries.',
-      img: 'https://images.pexels.com/photos/31307356/pexels-photo-31307356/free-photo-of-spectacular-view-of-key-monastery-in-winter.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-      rating: 4.7,
-      duration: '10 days',
-      difficulty: 'Hard',
-      tag: 'Trending',
+      desc: 'A journey through the stark, hauntingly beautiful landscapes of the cold desert.',
+      img: 'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?q=80&w=2070&auto=format&fit=crop',
+      rating: 4.9,
+      duration: '10 Days',
+      difficulty: 'Challenging',
+      tag: 'Adventure',
     },
   ];
 
   const categories = [
-    { icon: '⛰️', name: 'Trekking', color: 'from-primary-400 to-primary-600' },
-    { icon: '🎒', name: 'Backpacking', color: 'from-accent-400 to-accent-600' },
-    { icon: '👩‍👩‍👩', name: 'All Girls', color: 'from-pink-400 to-pink-600' },
-    { icon: '🏍️', name: 'Biking', color: 'from-orange-400 to-orange-600' },
-    { icon: '🏕️', name: 'Weekend', color: 'from-green-400 to-green-600' },
-    { icon: '✈️', name: 'International', color: 'from-indigo-400 to-indigo-600' },
-  ];
-
-  const testimonials = [
-    {
-      id: 1,
-      name: 'Priya Singh',
-      location: 'Delhi',
-      text: 'TravelCommunity changed my travel life! Met amazing people and created unforgettable memories.',
-      rating: 5,
-      image: 'https://i.pravatar.cc/80?img=1',
-      role: 'Adventure Enthusiast',
-    },
-    {
-      id: 2,
-      name: 'Rahul Kumar',
-      location: 'Mumbai',
-      text: 'Best experience ever! Professional team, perfect itinerary, and wonderful group bonding.',
-      rating: 5,
-      image: 'https://i.pravatar.cc/80?img=2',
-      role: 'Travel Blogger',
-    },
-    {
-      id: 3,
-      name: 'Anjali Sharma',
-      location: 'Bangalore',
-      text: 'Loved every moment! Safe, fun, educational, and truly memorable adventure!',
-      rating: 5,
-      image: 'https://i.pravatar.cc/80?img=3',
-      role: 'Photographer',
-    },
-  ];
-
-  const features = [
-    { icon: '🔒', title: 'Secure Bookings', desc: 'Safe & verified payments', color: 'from-blue-500 to-cyan-500' },
-    { icon: '🛡️', title: 'Travel Insurance', desc: 'Up to ₹4.5 lakhs coverage', color: 'from-purple-500 to-pink-500' },
-    { icon: '👥', title: 'Verified Community', desc: 'Trusted travelers only', color: 'from-green-500 to-emerald-500' },
-    { icon: '⭐', title: 'Rated 4.8★', desc: 'Thousands of happy travelers', color: 'from-orange-500 to-red-500' },
+    { icon: '🏔️', name: 'Trekking', desc: 'Conquer the peaks' },
+    { icon: '🎒', name: 'Backpacking', desc: 'Travel light, travel far' },
+    { icon: '🏍️', name: 'Biking', desc: 'Ride the wind' },
+    { icon: '🏕️', name: 'Camping', desc: 'Sleep under stars' },
+    { icon: '🌊', name: 'Coastal', desc: 'Sun, sand, and sea' },
+    { icon: '🦁', name: 'Wildlife', desc: 'Into the wild' },
   ];
 
   return (
-    <div className="bg-slate-950 text-white overflow-hidden font-sans">
-      {/* Hero Section with Parallax */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1 }}
-        className="relative min-h-screen bg-gradient-to-br from-slate-950 via-primary-950 to-slate-950 overflow-hidden flex items-center"
-      >
-        {/* Animated Background Elements */}
-        <motion.div
-          animate={{
-            x: mousePosition.x * 0.05,
-            y: mousePosition.y * 0.05,
-          }}
-          className="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-br from-primary-500/20 to-accent-500/20 rounded-full blur-3xl"
-        />
-        <motion.div
-          animate={{
-            x: -mousePosition.x * 0.03,
-            y: -mousePosition.y * 0.03,
-          }}
-          className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-tr from-blue-500/20 to-cyan-500/20 rounded-full blur-3xl"
-        />
-        <motion.div
-          animate={{ y: [0, 30, 0] }}
-          transition={{ duration: 6, repeat: Infinity }}
-          className="absolute top-1/2 left-1/2 w-72 h-72 bg-gradient-to-r from-primary-500/10 to-accent-500/10 rounded-full blur-3xl"
-        />
+    <div className="bg-teal-900 text-white overflow-hidden font-sans selection:bg-cyan-500 selection:text-teal-900">
 
-        {/* Content */}
-        <div className="relative w-full max-w-7xl mx-auto px-4 py-20 z-10">
-          <motion.h1
-            initial={{ opacity: 0, y: -60 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.1 }}
-            className="text-6xl md:text-8xl font-black mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary-400 via-accent-400 to-primary-400 animate-gradient-x"
-          >
-            Wander. Travel. Connect.
-          </motion.h1>
+      {/* Hero Section */}
+      <div className="relative h-screen w-full overflow-hidden">
+        {/* Background Image with Parallax */}
+        <motion.div
+          style={{ y: y1 }}
+          className="absolute inset-0 z-0"
+        >
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-teal-900/20 to-teal-900 z-10" />
+          <img
+            src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=2074&auto=format&fit=crop"
+            alt="Hero Background"
+            className="w-full h-full object-cover scale-110"
+          />
+        </motion.div>
 
+        {/* Hero Content */}
+        <div className="relative z-20 h-full flex flex-col justify-center items-center text-center px-4 max-w-7xl mx-auto">
           <motion.div
-            initial={{ opacity: 0, y: -40 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="text-2xl md:text-3xl text-slate-300 mb-12 max-w-2xl leading-relaxed font-light"
+            transition={{ duration: 1, delay: 0.2 }}
           >
-            Join India's largest community of adventure seekers and explore hidden gems with like-minded travelers
+            <h2 className="text-cyan-400 font-bold tracking-[0.2em] uppercase mb-4 text-sm md:text-base">
+              Discover the Untamed
+            </h2>
+            <h1 className="text-6xl md:text-8xl lg:text-9xl font-display font-black text-white mb-8 tracking-tight leading-none">
+              WILD<span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-teal-500">SOUL</span>
+            </h1>
+            <p className="text-xl md:text-2xl text-grey-400 max-w-2xl mx-auto mb-12 font-light leading-relaxed">
+              Join a community of explorers seeking the raw beauty of nature.
+              Your next great adventure begins here.
+            </p>
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
+            initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.5 }}
-            className="w-full max-w-2xl mb-12"
+            transition={{ duration: 0.8, delay: 0.6 }}
+            className="w-full max-w-3xl"
           >
             <SearchBar />
           </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.7 }}
-            className="flex flex-col sm:flex-row gap-6"
-          >
-            <motion.div
-              whileHover={{ scale: 1.05, y: -5 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Button
-                size="lg"
-                onClick={() => navigate('/trips')}
-                className="text-lg px-8 bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-500 hover:to-primary-400 shadow-xl shadow-primary-500/30"
-              >
-                🧳 Explore Trips
-              </Button>
-            </motion.div>
-            <motion.div
-              whileHover={{ scale: 1.05, y: -5 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Button
-                size="lg"
-                onClick={() => navigate('/register')}
-                className="text-lg px-8 border-2 border-accent-500 text-accent-500 hover:bg-accent-500 hover:text-white transition-all shadow-lg shadow-accent-500/10"
-              >
-                🚀 Get Started
-              </Button>
-            </motion.div>
-          </motion.div>
         </div>
-      </motion.div>
 
-      {/* Featured Trips */}
-      <motion.section
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        transition={{ duration: 1 }}
-        viewport={{ once: true }}
-        className="py-24 px-4 relative"
-      >
+        {/* Scroll Indicator */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.5, duration: 1 }}
+          className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2"
+        >
+          <span className="text-xs uppercase tracking-widest text-white/50">Scroll to Explore</span>
+          <motion.div
+            animate={{ y: [0, 10, 0] }}
+            transition={{ duration: 2, repeat: Infinity }}
+            className="w-px h-12 bg-gradient-to-b from-cyan-500 to-transparent"
+          />
+        </motion.div>
+      </div>
+
+      {/* Featured Trips Section */}
+      <section className="py-32 px-4 relative z-10 bg-teal-900">
         <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: -40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-5xl md:text-6xl font-black mb-4">
-              🌍 Featured <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary-400 to-accent-400">Trips</span>
-            </h2>
-            <p className="text-xl text-slate-400">Handpicked adventures for the perfect getaway</p>
-          </motion.div>
+          <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+            <div>
+              <h2 className="text-4xl md:text-6xl font-display font-bold text-white mb-4">
+                Curated <span className="text-cyan-400">Expeditions</span>
+              </h2>
+              <p className="text-grey-400 text-lg max-w-xl">
+                Handpicked adventures designed to challenge your limits and soothe your soul.
+              </p>
+            </div>
+            <button
+              onClick={() => navigate('/trips')}
+              className="group flex items-center gap-2 text-cyan-400 font-bold uppercase tracking-wider hover:text-white transition-colors"
+            >
+              View All Trips
+              <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
+            </button>
+          </div>
 
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="grid grid-cols-1 md:grid-cols-3 gap-8"
-          >
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {featuredTrips.map((trip, idx) => (
               <motion.div
                 key={trip.id}
-                variants={itemVariants}
-                whileHover={{ y: -15, boxShadow: '0 30px 60px rgba(139, 92, 246, 0.15)' }}
-                onClick={() => navigate(`/trips/${trip.id}`)}
-                className="group relative bg-white/5 backdrop-blur-sm rounded-3xl overflow-hidden cursor-pointer border border-white/10 hover:border-primary-500/50 transition-all duration-500"
-              >
-                {/* Image Container */}
-                <div className="relative h-72 overflow-hidden bg-slate-800">
-                  <motion.img
-                    src={trip.img}
-                    alt={trip.title}
-                    className="w-full h-full object-cover"
-                    whileHover={{ scale: 1.15 }}
-                    transition={{ duration: 0.8 }}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-80" />
-
-                  {/* Tags */}
-                  <div className="absolute top-4 left-4 flex gap-2">
-                    <motion.span
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      className="px-4 py-1.5 bg-white/10 backdrop-blur-md border border-white/20 text-white text-xs font-bold rounded-full uppercase tracking-wider"
-                    >
-                      {trip.tag}
-                    </motion.span>
-                  </div>
-
-                  {/* Rating Badge */}
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.3 }}
-                    className="absolute top-4 right-4 flex items-center gap-1 bg-yellow-400 text-slate-950 px-3 py-1 rounded-full font-bold shadow-lg"
-                  >
-                    ⭐ {trip.rating}
-                  </motion.div>
-                </div>
-
-                {/* Content */}
-                <div className="p-8">
-                  <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-primary-400 transition duration-300">{trip.title}</h3>
-                  <p className="text-slate-400 text-sm mb-6 line-clamp-2 leading-relaxed">{trip.desc}</p>
-
-                  {/* Meta */}
-                  <div className="flex gap-4 mb-6 text-xs text-slate-500 font-medium uppercase tracking-wide">
-                    <span className="flex items-center gap-1">⏱️ {trip.duration}</span>
-                    <span className="flex items-center gap-1">📊 {trip.difficulty}</span>
-                  </div>
-
-                  <div className="flex justify-between items-center pt-6 border-t border-white/10">
-                    <span className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-accent-400">
-                      {trip.price}
-                    </span>
-                    <motion.button
-                      whileHover={{ x: 5 }}
-                      className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-primary-500 hover:text-white transition-all"
-                    >
-                      <FiArrowRight size={20} />
-                    </motion.button>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-            viewport={{ once: true }}
-            className="text-center mt-16"
-          >
-            <Button
-              size="lg"
-              onClick={() => navigate('/trips')}
-              className="border-2 border-primary-500 text-primary-400 hover:bg-primary-500 hover:text-white px-12 rounded-full"
-            >
-              See All Trips <FiArrowRight className="inline ml-2" size={20} />
-            </Button>
-          </motion.div>
-        </div>
-      </motion.section>
-
-      {/* Categories Section */}
-      <motion.section
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        transition={{ duration: 1 }}
-        viewport={{ once: true }}
-        className="py-24 px-4 bg-slate-900/50"
-      >
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: -40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-5xl md:text-6xl font-black mb-4">
-              📂 Explore <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary-400 to-accent-400">Categories</span>
-            </h2>
-            <p className="text-xl text-slate-400">Find trips that match your travel style</p>
-          </motion.div>
-
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6"
-          >
-            {categories.map((cat, i) => (
-              <motion.div
-                key={i}
-                variants={itemVariants}
-                whileHover={{ scale: 1.05, y: -10 }}
-                onMouseEnter={() => setActiveCategory(i)}
-                onMouseLeave={() => setActiveCategory(null)}
-                className={`relative p-6 rounded-3xl cursor-pointer group overflow-hidden border border-white/5 transition-all duration-300 ${activeCategory === i
-                  ? 'bg-gradient-to-br ' + cat.color + ' shadow-2xl shadow-primary-500/20'
-                  : 'bg-white/5 hover:bg-white/10'
-                  }`}
-              >
-                <motion.div
-                  animate={{ y: [0, -10, 0] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                  className="text-5xl mb-4"
-                >
-                  {cat.icon}
-                </motion.div>
-                <p className={`font-bold text-lg transition-colors ${activeCategory === i ? 'text-white' : 'text-slate-300 group-hover:text-white'
-                  }`}>
-                  {cat.name}
-                </p>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </motion.section>
-
-      {/* Stats Section */}
-      <motion.section
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        transition={{ duration: 1 }}
-        viewport={{ once: true }}
-        className="py-24 px-4 bg-gradient-to-r from-slate-950 via-primary-950/30 to-slate-950 border-y border-white/5"
-      >
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="grid grid-cols-2 md:grid-cols-4 gap-8"
-          >
-            {[
-              { number: '50K+', label: 'Active Members', icon: FiUsers },
-              { number: '500+', label: 'Amazing Trips', icon: FiTrendingUp },
-              { number: '10K+', label: 'Happy Travelers', icon: FiCheck },
-              { number: '4.8★', label: 'Average Rating', icon: FiStar },
-            ].map((stat, i) => {
-              const IconComponent = stat.icon;
-              return (
-                <motion.div
-                  key={i}
-                  variants={itemVariants}
-                  whileHover={{ scale: 1.1, y: -5 }}
-                  className="text-center p-6 rounded-3xl bg-white/5 border border-white/5 hover:border-primary-500/30 transition-all"
-                >
-                  <motion.div
-                    animate={{ y: [0, -5, 0] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                    className="text-4xl md:text-5xl font-black mb-3 text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-accent-400"
-                  >
-                    {stat.number}
-                  </motion.div>
-                  <div className="flex items-center justify-center gap-2 text-slate-400 font-medium">
-                    <IconComponent size={18} className="text-primary-500" />
-                    <p>{stat.label}</p>
-                  </div>
-                </motion.div>
-              );
-            })}
-          </motion.div>
-        </div>
-      </motion.section>
-
-      {/* Testimonials */}
-      <motion.section
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        transition={{ duration: 1 }}
-        viewport={{ once: true }}
-        className="py-24 px-4"
-      >
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: -40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-5xl md:text-6xl font-black mb-4">
-              💬 What Travelers <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary-400 to-accent-400">Say</span>
-            </h2>
-            <p className="text-xl text-slate-400">Join thousands of satisfied adventurers</p>
-          </motion.div>
-
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="grid grid-cols-1 md:grid-cols-3 gap-8"
-          >
-            {testimonials.map((testimonial) => (
-              <motion.div
-                key={testimonial.id}
-                variants={itemVariants}
-                whileHover={{ y: -10, boxShadow: '0 20px 40px rgba(139, 92, 246, 0.1)' }}
-                className="bg-white/5 backdrop-blur-md p-8 rounded-3xl border border-white/10 hover:border-primary-500/50 transition-all"
-              >
-                <div className="flex gap-1 mb-6">
-                  {Array.from({ length: testimonial.rating }).map((_, i) => (
-                    <motion.span
-                      key={i}
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      transition={{ delay: i * 0.1 }}
-                      className="text-xl text-yellow-400"
-                    >
-                      ⭐
-                    </motion.span>
-                  ))}
-                </div>
-
-                <p className="text-slate-300 mb-8 italic leading-relaxed text-lg">"{testimonial.text}"</p>
-
-                <div className="flex items-center gap-4 pt-6 border-t border-white/10">
-                  <img
-                    src={testimonial.image}
-                    alt={testimonial.name}
-                    className="w-14 h-14 rounded-full border-2 border-primary-500"
-                  />
-                  <div>
-                    <p className="font-bold text-white text-lg">{testimonial.name}</p>
-                    <p className="text-sm text-slate-500">{testimonial.role} • {testimonial.location}</p>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </motion.section>
-
-      {/* CTA */}
-      <motion.section
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        transition={{ duration: 1 }}
-        viewport={{ once: true }}
-        className="py-32 px-4 relative overflow-hidden"
-      >
-        <div className="absolute inset-0 bg-gradient-to-r from-primary-900/50 via-slate-900 to-primary-900/50" />
-        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10" />
-
-        <div className="max-w-4xl mx-auto text-center relative z-10">
-          <motion.h2
-            initial={{ opacity: 0, y: -40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-5xl md:text-7xl font-black mb-8 text-white tracking-tight"
-          >
-            Ready for Your Next <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-400 to-primary-400">Adventure?</span>
-          </motion.h2>
-
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            viewport={{ once: true }}
-            className="text-2xl text-slate-300 mb-12 font-light"
-          >
-            Join our community today and start exploring amazing destinations
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            viewport={{ once: true }}
-            className="flex flex-col sm:flex-row gap-6 justify-center"
-          >
-            <motion.div whileHover={{ scale: 1.05, y: -5 }} whileTap={{ scale: 0.95 }}>
-              <Button
-                onClick={() => navigate('/register')}
-                className="bg-gradient-to-r from-primary-600 to-accent-500 hover:from-primary-500 hover:to-accent-400 text-white text-xl px-12 py-4 shadow-2xl shadow-primary-500/40 rounded-full"
-                size="lg"
-              >
-                Sign Up Now 🚀
-              </Button>
-            </motion.div>
-            <motion.div whileHover={{ scale: 1.05, y: -5 }} whileTap={{ scale: 0.95 }}>
-              <Button
-                onClick={() => navigate('/trips')}
-                className="bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 text-xl px-12 py-4 rounded-full"
-                size="lg"
-              >
-                Explore Trips
-              </Button>
-            </motion.div>
-          </motion.div>
-        </div>
-      </motion.section>
-
-      {/* Footer */}
-      <motion.footer
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        transition={{ duration: 0.7 }}
-        viewport={{ once: true }}
-        className="py-12 px-4 border-t border-white/5 bg-slate-950"
-      >
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            {[
-              { icon: '🔒', text: 'Secure Bookings' },
-              { icon: '🛡️', text: 'Travel Insurance' },
-              { icon: '👥', text: 'Verified Community' },
-              { icon: '⭐', text: 'Highly Rated' },
-            ].map((item, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                transition={{ delay: i * 0.1 }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: idx * 0.2 }}
                 viewport={{ once: true }}
-                className="text-center text-slate-500 hover:text-primary-400 transition-colors duration-300"
+                onClick={() => navigate(`/trips/${trip.id}`)}
+                className="group relative h-[500px] rounded-3xl overflow-hidden cursor-pointer"
               >
-                <p className="text-3xl mb-3">{item.icon}</p>
-                <p className="text-sm font-medium uppercase tracking-wider">{item.text}</p>
+                <div className="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition-colors duration-500 z-10" />
+                <img
+                  src={trip.img}
+                  alt={trip.title}
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent z-20" />
+
+                <div className="absolute top-6 left-6 z-30">
+                  <span className="px-4 py-2 bg-cyan-500/20 backdrop-blur-md border border-cyan-500/30 text-cyan-400 text-xs font-bold uppercase tracking-wider rounded-full">
+                    {trip.tag}
+                  </span>
+                </div>
+
+                <div className="absolute bottom-0 left-0 right-0 p-8 z-30 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                  <div className="flex justify-between items-start mb-2">
+                    <h3 className="text-2xl font-bold text-white leading-tight group-hover:text-cyan-400 transition-colors">
+                      {trip.title}
+                    </h3>
+                    <div className="flex items-center gap-1 text-yellow-400 font-bold bg-black/30 px-2 py-1 rounded-lg backdrop-blur-sm">
+                      <FiStar size={14} fill="currentColor" /> {trip.rating}
+                    </div>
+                  </div>
+
+                  <p className="text-grey-400 text-sm mb-6 line-clamp-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
+                    {trip.desc}
+                  </p>
+
+                  <div className="flex items-center justify-between border-t border-white/10 pt-4">
+                    <div className="flex gap-4 text-xs font-medium text-grey-300 uppercase tracking-wide">
+                      <span className="flex items-center gap-1"><FiCalendar className="text-cyan-500" /> {trip.duration}</span>
+                      <span className="flex items-center gap-1"><FiActivity className="text-cyan-500" /> {trip.difficulty}</span>
+                    </div>
+                    <span className="text-xl font-bold text-white">{trip.price}</span>
+                  </div>
+                </div>
               </motion.div>
             ))}
           </div>
-
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="text-center text-slate-600 border-t border-white/5 pt-8"
-          >
-            <p>© 2025 TravelCommunity. Made with ❤️ for adventurers.</p>
-          </motion.div>
         </div>
-      </motion.footer>
+      </section>
+
+      {/* Categories Section */}
+      <section className="py-24 bg-black/20 relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent" />
+        <div className="max-w-7xl mx-auto px-4 relative z-10">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-display font-bold text-white mb-4">
+              Find Your <span className="text-cyan-400">Path</span>
+            </h2>
+            <p className="text-grey-400">Choose your style of adventure</p>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            {categories.map((cat, idx) => (
+              <motion.div
+                key={idx}
+                whileHover={{ y: -10 }}
+                className="group p-6 bg-white/5 border border-white/5 hover:border-cyan-500/30 rounded-2xl cursor-pointer transition-all hover:bg-white/10 text-center"
+              >
+                <div className="text-4xl mb-4 group-hover:scale-110 transition-transform duration-300">{cat.icon}</div>
+                <h3 className="text-white font-bold mb-1 group-hover:text-cyan-400 transition-colors">{cat.name}</h3>
+                <p className="text-xs text-grey-500 group-hover:text-grey-400">{cat.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Stats Section */}
+      <section className="py-32 px-4 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5" />
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
+            {[
+              { number: '50K+', label: 'Explorers', icon: FiUsers },
+              { number: '500+', label: 'Expeditions', icon: FiMapPin },
+              { number: '10K+', label: 'Reviews', icon: FiStar },
+              { number: '100%', label: 'Adventure', icon: FiTrendingUp },
+            ].map((stat, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, scale: 0.5 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ delay: idx * 0.1 }}
+                viewport={{ once: true }}
+                className="text-center"
+              >
+                <div className="inline-flex p-4 rounded-full bg-cyan-500/10 text-cyan-400 mb-4 border border-cyan-500/20">
+                  <stat.icon size={24} />
+                </div>
+                <h3 className="text-4xl md:text-5xl font-black text-white mb-2">{stat.number}</h3>
+                <p className="text-grey-400 uppercase tracking-widest text-sm">{stat.label}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-32 px-4 relative overflow-hidden">
+        <div className="absolute inset-0">
+          <img
+            src="https://images.unsplash.com/photo-1533240332313-0db49b459ad6?q=80&w=2066&auto=format&fit=crop"
+            alt="CTA Background"
+            className="w-full h-full object-cover opacity-20"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-teal-900 via-teal-900/80 to-transparent" />
+        </div>
+
+        <div className="max-w-4xl mx-auto text-center relative z-10">
+          <h2 className="text-5xl md:text-7xl font-display font-black text-white mb-8">
+            The Wild is <span className="text-cyan-400">Calling</span>
+          </h2>
+          <p className="text-xl text-grey-300 mb-12 max-w-2xl mx-auto">
+            Don't let another adventure pass you by. Join our community today and start writing your own story.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-6 justify-center">
+            <button
+              onClick={() => navigate('/register')}
+              className="px-10 py-4 bg-cyan-500 text-teal-900 font-bold text-lg rounded-full hover:bg-cyan-400 hover:scale-105 transition-all shadow-[0_0_30px_rgba(0,229,255,0.3)]"
+            >
+              Start Your Journey
+            </button>
+            <button
+              onClick={() => navigate('/trips')}
+              className="px-10 py-4 bg-transparent border border-white/30 text-white font-bold text-lg rounded-full hover:bg-white/10 hover:border-white/50 transition-all"
+            >
+              Browse Trips
+            </button>
+          </div>
+        </div>
+      </section>
+
     </div>
   );
 }

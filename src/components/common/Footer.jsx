@@ -62,14 +62,19 @@ function Footer() {
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       transition={{ duration: 0.6 }}
-      className="relative bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 text-white border-t border-white/10 font-sans"
+      className="relative bg-teal-900 text-grey-400 border-t border-white/10 font-sans"
     >
       {/* Decorative Background */}
-      <div className="absolute inset-0 overflow-hidden">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
-          className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-primary-600/10 via-accent-600/5 to-transparent rounded-full blur-3xl"
-          animate={{ y: [0, 30, 0] }}
+          className="absolute top-0 right-0 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl"
+          animate={{ y: [0, 30, 0], opacity: [0.3, 0.6, 0.3] }}
           transition={{ duration: 10, repeat: Infinity }}
+        />
+        <motion.div
+          className="absolute bottom-0 left-0 w-96 h-96 bg-teal-500/5 rounded-full blur-3xl"
+          animate={{ y: [0, -30, 0], opacity: [0.3, 0.6, 0.3] }}
+          transition={{ duration: 12, repeat: Infinity }}
         />
       </div>
 
@@ -84,31 +89,31 @@ function Footer() {
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12"
         >
           {/* Brand Section */}
-          <motion.div variants={itemVariants} className="space-y-4">
+          <motion.div variants={itemVariants} className="space-y-6">
             <motion.div
               whileHover={{ scale: 1.05 }}
-              className="flex items-center space-x-2 cursor-pointer"
+              className="flex items-center space-x-3 cursor-pointer"
             >
               <motion.div
                 animate={{ rotate: [0, 10, -10, 0] }}
                 transition={{ duration: 3, repeat: Infinity }}
                 className="text-4xl"
               >
-                ✈️
+                🏔️
               </motion.div>
               <div>
-                <p className="text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-primary-400 to-accent-400">
-                  Traveler
+                <p className="text-2xl font-display font-black tracking-tighter text-white">
+                  TRAVELER
                 </p>
-                <p className="text-xs text-slate-500">Travel Community</p>
+                <p className="text-xs text-cyan-500 font-bold tracking-widest uppercase">Community</p>
               </div>
             </motion.div>
-            <p className="text-slate-400 text-sm leading-relaxed">
+            <p className="text-grey-400 text-sm leading-relaxed">
               India's premier social travel community. Connect with adventurers, discover hidden gems, and create unforgettable memories together.
             </p>
             <motion.div
               whileHover={{ x: 5 }}
-              className="flex items-center gap-2 text-primary-400 hover:text-primary-300 cursor-pointer transition text-sm font-semibold"
+              className="flex items-center gap-2 text-cyan-400 hover:text-cyan-300 cursor-pointer transition text-sm font-bold uppercase tracking-wide"
             >
               Join our community
               <FiArrowRight size={16} />
@@ -116,8 +121,8 @@ function Footer() {
           </motion.div>
 
           {/* Quick Links */}
-          <motion.div variants={itemVariants} className="space-y-4">
-            <h3 className="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary-400 to-accent-400">
+          <motion.div variants={itemVariants} className="space-y-6">
+            <h3 className="text-lg font-bold text-white">
               Quick Links
             </h3>
             <ul className="space-y-3">
@@ -131,12 +136,12 @@ function Footer() {
                 >
                   <Link
                     to={link.path}
-                    className="text-slate-400 hover:text-white transition-all flex items-center gap-2 group"
+                    className="text-grey-400 hover:text-cyan-400 transition-all flex items-center gap-2 group"
                   >
                     <motion.span
                       initial={{ x: -5, opacity: 0 }}
                       whileHover={{ x: 0, opacity: 1 }}
-                      className="text-primary-400"
+                      className="text-cyan-500"
                     >
                       →
                     </motion.span>
@@ -148,8 +153,8 @@ function Footer() {
           </motion.div>
 
           {/* Legal Links */}
-          <motion.div variants={itemVariants} className="space-y-4">
-            <h3 className="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary-400 to-accent-400">
+          <motion.div variants={itemVariants} className="space-y-6">
+            <h3 className="text-lg font-bold text-white">
               Legal
             </h3>
             <ul className="space-y-3">
@@ -163,12 +168,12 @@ function Footer() {
                 >
                   <a
                     href={link.path}
-                    className="text-slate-400 hover:text-white transition-all flex items-center gap-2 group"
+                    className="text-grey-400 hover:text-cyan-400 transition-all flex items-center gap-2 group"
                   >
                     <motion.span
                       initial={{ x: -5, opacity: 0 }}
                       whileHover={{ x: 0, opacity: 1 }}
-                      className="text-primary-400"
+                      className="text-cyan-500"
                     >
                       →
                     </motion.span>
@@ -180,11 +185,11 @@ function Footer() {
           </motion.div>
 
           {/* Contact Section */}
-          <motion.div variants={itemVariants} className="space-y-4">
-            <h3 className="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary-400 to-accent-400">
+          <motion.div variants={itemVariants} className="space-y-6">
+            <h3 className="text-lg font-bold text-white">
               Contact Us
             </h3>
-            <div className="space-y-3">
+            <div className="space-y-4">
               {contactInfo.map((info, idx) => {
                 const Icon = info.icon;
                 return (
@@ -196,13 +201,13 @@ function Footer() {
                     transition={{ delay: idx * 0.1 }}
                     viewport={{ once: true }}
                     whileHover={{ x: 5 }}
-                    className="flex items-center gap-3 text-slate-400 hover:text-white transition-all group"
+                    className="flex items-center gap-4 text-grey-400 hover:text-white transition-all group"
                   >
                     <motion.div
-                      className="p-2 rounded-lg bg-white/5 border border-white/10 group-hover:bg-primary-500/20 group-hover:border-primary-500/30 transition-all"
+                      className="p-2 rounded-lg bg-white/5 border border-white/10 group-hover:bg-cyan-500/20 group-hover:border-cyan-500/30 transition-all"
                       whileHover={{ scale: 1.1 }}
                     >
-                      <Icon size={16} className="text-primary-400" />
+                      <Icon size={16} className="text-cyan-500" />
                     </motion.div>
                     <span className="text-sm">{info.label}</span>
                   </motion.a>
@@ -217,26 +222,26 @@ function Footer() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mb-12 p-8 backdrop-blur-xl bg-gradient-to-r from-primary-500/10 to-accent-500/10 border border-primary-500/20 rounded-2xl"
+          className="mb-12 p-8 md:p-10 backdrop-blur-xl bg-gradient-to-r from-cyan-900/20 to-teal-900/20 border border-white/10 rounded-3xl"
         >
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <div>
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
+            <div className="text-center lg:text-left">
               <h3 className="text-2xl font-bold text-white mb-2">Stay Updated!</h3>
-              <p className="text-slate-400">Get exclusive deals and travel tips delivered to your inbox</p>
+              <p className="text-grey-400">Get exclusive deals and travel tips delivered to your inbox</p>
             </div>
             <motion.form
               whileSubmit={{ scale: 0.98 }}
-              className="flex gap-2 w-full md:w-auto"
+              className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto"
             >
               <input
                 type="email"
                 placeholder="Enter your email"
-                className="px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all"
+                className="w-full sm:w-80 px-5 py-3 rounded-full bg-black/30 border border-white/10 text-white placeholder-grey-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-all"
               />
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-6 py-3 bg-gradient-to-r from-primary-500 to-accent-500 text-white font-bold rounded-lg hover:shadow-lg transition-all whitespace-nowrap"
+                className="px-8 py-3 bg-gradient-to-r from-cyan-500 to-teal-500 text-teal-900 font-bold rounded-full hover:shadow-[0_0_20px_rgba(0,229,255,0.3)] transition-all whitespace-nowrap"
               >
                 Subscribe
               </motion.button>
@@ -265,10 +270,10 @@ function Footer() {
                 viewport={{ once: true }}
                 whileHover={{ scale: 1.2, rotate: 10 }}
                 whileTap={{ scale: 0.9 }}
-                className="p-3 rounded-full bg-white/5 border border-white/10 hover:bg-primary-500/20 hover:border-primary-500/30 transition-all group"
+                className="p-3 rounded-full bg-white/5 border border-white/10 hover:bg-cyan-500/20 hover:border-cyan-500/30 transition-all group"
                 title={social.label}
               >
-                <Icon size={20} className="text-slate-400 group-hover:text-primary-400 transition-all" />
+                <Icon size={20} className="text-grey-400 group-hover:text-cyan-400 transition-all" />
               </motion.a>
             );
           })}
@@ -280,7 +285,7 @@ function Footer() {
           whileInView={{ scaleX: 1 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent mb-8"
+          className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent mb-8"
         />
 
         {/* Bottom Section */}
@@ -288,7 +293,7 @@ function Footer() {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          className="flex flex-col md:flex-row items-center justify-between gap-4 text-slate-400 text-sm"
+          className="flex flex-col md:flex-row items-center justify-between gap-4 text-grey-500 text-sm"
         >
           <motion.p
             className="flex items-center gap-2"
@@ -298,7 +303,7 @@ function Footer() {
           </motion.p>
 
           <motion.div
-            className="flex items-center gap-1 text-slate-500"
+            className="flex items-center gap-1 text-grey-500"
             animate={{ scale: [1, 1.2, 1] }}
             transition={{ duration: 2, repeat: Infinity }}
           >
@@ -311,9 +316,9 @@ function Footer() {
             <motion.span
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              className="text-xs px-3 py-1 rounded-full bg-primary-500/10 border border-primary-500/20 text-primary-300"
+              className="text-xs px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 font-mono"
             >
-              v1.0.0
+              v2.0.0
             </motion.span>
           </div>
         </motion.div>

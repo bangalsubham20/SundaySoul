@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Button from '../components/common/Button';
-import Card from '../components/common/Card';
 import { FiCheck, FiDownload, FiShare2, FiArrowRight, FiPhone, FiMail } from 'react-icons/fi';
 
 function BookingConfirmation() {
@@ -57,12 +56,13 @@ function BookingConfirmation() {
   ];
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 text-white pb-16 overflow-hidden">
+    <div className="relative min-h-screen bg-teal-900 text-white pb-16 overflow-hidden selection:bg-cyan-500 selection:text-teal-900">
       {/* Animated Background */}
-      <motion.div className="fixed -top-96 -right-96 w-[500px] h-[500px] rounded-full bg-gradient-to-br from-green-600/20 via-emerald-600/15 to-transparent blur-3xl -z-10"
+      <div className="absolute inset-0 bg-gradient-to-br from-teal-950 via-teal-900 to-black z-0" />
+      <motion.div className="fixed -top-96 -right-96 w-[500px] h-[500px] rounded-full bg-gradient-to-br from-cyan-600/20 via-teal-600/15 to-transparent blur-3xl -z-10"
         animate={{ y: [0, 60, 0] }}
         transition={{ duration: 12, repeat: Infinity }} />
-      <motion.div className="fixed -bottom-96 -left-96 w-[500px] h-[500px] rounded-full bg-gradient-to-tr from-blue-600/20 via-cyan-500/15 to-transparent blur-3xl -z-10"
+      <motion.div className="fixed -bottom-96 -left-96 w-[500px] h-[500px] rounded-full bg-gradient-to-tr from-teal-600/20 via-cyan-500/15 to-transparent blur-3xl -z-10"
         animate={{ y: [0, -50, 0] }}
         transition={{ duration: 15, repeat: Infinity }} />
 
@@ -73,7 +73,7 @@ function BookingConfirmation() {
           initial={{ y: -100, x: `${c.left}%`, opacity: 1 }}
           animate={{ y: window.innerHeight, opacity: 0 }}
           transition={{ duration: c.duration, delay: c.delay }}
-          className="fixed w-2 h-2 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full"
+          className="fixed w-2 h-2 bg-gradient-to-r from-cyan-400 to-teal-400 rounded-full"
         />
       ))}
 
@@ -83,7 +83,7 @@ function BookingConfirmation() {
           initial={{ opacity: 0, scale: 0.9, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="backdrop-blur-xl bg-gradient-to-br from-green-500/10 to-emerald-600/10 border border-green-500/30 rounded-3xl p-12 mb-8 text-center shadow-2xl"
+          className="backdrop-blur-xl bg-gradient-to-br from-teal-900/60 to-cyan-900/40 border border-cyan-500/30 rounded-3xl p-12 mb-8 text-center shadow-2xl"
         >
           {/* Animated Checkmark */}
           <motion.div
@@ -92,7 +92,7 @@ function BookingConfirmation() {
             transition={{ delay: 0.2, type: 'spring', stiffness: 100 }}
             className="flex justify-center mb-8"
           >
-            <div className="w-24 h-24 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center shadow-2xl">
+            <div className="w-24 h-24 bg-gradient-to-br from-cyan-400 to-teal-500 rounded-full flex items-center justify-center shadow-2xl shadow-cyan-500/30">
               <motion.div
                 animate={{ scale: [1, 1.1, 1] }}
                 transition={{ duration: 2, repeat: Infinity }}
@@ -106,7 +106,7 @@ function BookingConfirmation() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="text-5xl font-black mb-4 bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-emerald-400"
+            className="text-5xl font-display font-black mb-4 bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-teal-400"
           >
             Booking Confirmed! 🎉
           </motion.h1>
@@ -114,7 +114,7 @@ function BookingConfirmation() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="text-xl text-slate-300 mb-3"
+            className="text-xl text-grey-300 mb-3"
           >
             Your trip booking has been successfully confirmed
           </motion.p>
@@ -122,7 +122,7 @@ function BookingConfirmation() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
-            className="text-slate-400"
+            className="text-grey-400"
           >
             A confirmation email has been sent to your registered email address
           </motion.p>
@@ -133,9 +133,9 @@ function BookingConfirmation() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="backdrop-blur-xl bg-white/5 border border-white/10 rounded-2xl p-8 mb-8 shadow-2xl"
+          className="backdrop-blur-xl bg-teal-900/60 border border-white/10 rounded-2xl p-8 mb-8 shadow-2xl"
         >
-          <h2 className="text-3xl font-black text-white mb-8">Booking Details</h2>
+          <h2 className="text-3xl font-display font-black text-white mb-8">Booking Details</h2>
 
           <motion.div
             variants={{
@@ -158,7 +158,7 @@ function BookingConfirmation() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.1 }}
               >
-                <p className="text-sm text-slate-400 mb-1">{item.label}</p>
+                <p className="text-sm text-grey-400 mb-1">{item.label}</p>
                 <p className="text-lg font-bold text-white">{item.value}</p>
               </motion.div>
             ))}
@@ -181,14 +181,14 @@ function BookingConfirmation() {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.5 + i * 0.08 }}
-                className="flex items-center text-slate-200"
+                className="flex items-center text-grey-300"
               >
                 <motion.div
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{ delay: 0.5 + i * 0.08 }}
                 >
-                  <FiCheck className="text-green-400 mr-3 w-5 h-5" />
+                  <FiCheck className="text-cyan-400 mr-3 w-5 h-5" />
                 </motion.div>
                 {item}
               </motion.div>
@@ -201,9 +201,9 @@ function BookingConfirmation() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="backdrop-blur-xl bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border border-blue-500/30 rounded-2xl p-8 mb-8 shadow-2xl"
+          className="backdrop-blur-xl bg-gradient-to-br from-cyan-900/20 to-teal-900/20 border border-cyan-500/30 rounded-2xl p-8 mb-8 shadow-2xl"
         >
-          <h2 className="text-3xl font-black text-white mb-8">What's Next?</h2>
+          <h2 className="text-3xl font-display font-black text-white mb-8">What's Next?</h2>
 
           <motion.div
             variants={{
@@ -221,14 +221,14 @@ function BookingConfirmation() {
                 animate={{ opacity: 1, x: 0 }}
                 whileHover={{ x: 10 }}
                 transition={{ duration: 0.3 }}
-                className="flex gap-4 p-4 backdrop-blur-lg bg-white/5 border border-white/10 rounded-xl hover:border-blue-500/30 hover:bg-white/8 transition-all"
+                className="flex gap-4 p-4 backdrop-blur-lg bg-black/20 border border-white/10 rounded-xl hover:border-cyan-500/30 hover:bg-white/5 transition-all"
               >
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-cyan-400 flex items-center justify-center font-bold flex-shrink-0 text-slate-900 text-lg">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-500 to-teal-500 flex items-center justify-center font-bold flex-shrink-0 text-white text-lg shadow-lg">
                   {step.number}
                 </div>
                 <div>
                   <p className="font-bold text-white text-lg">{step.title}</p>
-                  <p className="text-sm text-slate-400 mt-1">{step.desc}</p>
+                  <p className="text-sm text-grey-400 mt-1">{step.desc}</p>
                 </div>
                 <div className="ml-auto flex items-center">
                   <span className="text-2xl">{step.icon}</span>
@@ -249,7 +249,7 @@ function BookingConfirmation() {
             <Button
               fullWidth
               onClick={() => window.print()}
-              className="bg-white/10 border border-white/20"
+              className="bg-white/10 border border-white/20 hover:bg-white/20"
             >
               <FiDownload className="inline mr-2" />
               Download
@@ -266,7 +266,7 @@ function BookingConfirmation() {
                   window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
                 }
               }}
-              className="bg-white/10 border border-white/20"
+              className="bg-white/10 border border-white/20 hover:bg-white/20"
             >
               <FiShare2 className="inline mr-2" />
               Share
@@ -285,7 +285,7 @@ function BookingConfirmation() {
             <Button
               fullWidth
               onClick={() => navigate('/profile')}
-              className="bg-white/10 border border-white/20"
+              className="bg-white/10 border border-white/20 hover:bg-white/20"
             >
               My Bookings
             </Button>
@@ -294,7 +294,7 @@ function BookingConfirmation() {
             <Button
               fullWidth
               onClick={() => navigate('/trips')}
-              className="bg-gradient-to-r from-purple-500 to-pink-500"
+              className="bg-gradient-to-r from-cyan-600 to-teal-600 shadow-lg shadow-cyan-500/20"
             >
               More Trips <FiArrowRight className="inline ml-2" size={18} />
             </Button>
@@ -306,14 +306,14 @@ function BookingConfirmation() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
-          className="backdrop-blur-xl bg-white/5 border border-white/10 rounded-2xl p-8 shadow-2xl"
+          className="backdrop-blur-xl bg-teal-900/60 border border-white/10 rounded-2xl p-8 shadow-2xl"
         >
-          <p className="text-slate-300 text-center mb-6">Need help? We're always here</p>
+          <p className="text-grey-300 text-center mb-6">Need help? We're always here</p>
           <div className="flex flex-col md:flex-row items-center justify-center gap-6">
             <motion.a
               whileHover={{ scale: 1.05 }}
               href="tel:+919797972175"
-              className="flex items-center gap-2 text-purple-400 hover:text-purple-300 font-bold transition"
+              className="flex items-center gap-2 text-cyan-400 hover:text-cyan-300 font-bold transition"
             >
               <FiPhone size={18} />
               +91 97 97 97 21 75
@@ -322,7 +322,7 @@ function BookingConfirmation() {
             <motion.a
               whileHover={{ scale: 1.05 }}
               href="mailto:support@travelcommunity.com"
-              className="flex items-center gap-2 text-purple-400 hover:text-purple-300 font-bold transition"
+              className="flex items-center gap-2 text-cyan-400 hover:text-cyan-300 font-bold transition"
             >
               <FiMail size={18} />
               support@travelcommunity.com

@@ -12,7 +12,7 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     const token = localStorage.getItem('token');
     const userData = localStorage.getItem('user');
-    
+
     if (token && userData) {
       try {
         setUser(JSON.parse(userData));
@@ -37,11 +37,11 @@ export function AuthProvider({ children }) {
       });
 
       const { token, user: userData } = response;
-      
+
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(userData));
       setUser(userData);
-      
+
       return userData;
     } catch (err) {
       const errorMsg = err.message || 'Registration failed';
@@ -60,11 +60,11 @@ export function AuthProvider({ children }) {
       });
 
       const { token, user: userData } = response;
-      
+
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(userData));
       setUser(userData);
-      
+
       return userData;
     } catch (err) {
       const errorMsg = err.message || 'Login failed';
@@ -86,10 +86,10 @@ export function AuthProvider({ children }) {
     try {
       setError(null);
       const response = await apiClient.put('/auth/profile', userData);
-      
+
       localStorage.setItem('user', JSON.stringify(response));
       setUser(response);
-      
+
       return response;
     } catch (err) {
       const errorMsg = err.message || 'Profile update failed';
@@ -98,16 +98,24 @@ export function AuthProvider({ children }) {
     }
   };
 
+  // Login with pre-validated data (for Admin/Demo)
+  const loginWithData = (userData, token) => {
+    localStorage.setItem('token', token);
+    localStorage.setItem('user', JSON.stringify(userData));
+    setUser(userData);
+  };
+
   return (
-    <AuthContext.Provider 
-      value={{ 
-        user, 
-        loading, 
+    <AuthContext.Provider
+      value={{
+        user,
+        loading,
         error,
-        login, 
+        login,
         register,
         logout,
-        updateProfile 
+        updateProfile,
+        loginWithData
       }}
     >
       {children}

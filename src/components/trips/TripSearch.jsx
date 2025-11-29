@@ -25,11 +25,11 @@ function TripSearch({ onSearch, placeholder = "Search trips..." }) {
       className="w-full"
     >
       <div
-        className={`relative rounded-lg overflow-hidden transition-all duration-300 ${
-          isFocused ? 'shadow-lg ring-2 ring-orange-500' : 'shadow-md'
-        }`}
+        className={`relative rounded-xl overflow-hidden transition-all duration-300 border ${isFocused ? 'shadow-lg shadow-cyan-500/20 border-cyan-500/50' : 'shadow-md border-white/10'
+          }`}
         style={{
-          background: 'rgba(255,255,255,0.95)',
+          background: 'rgba(19, 78, 74, 0.6)', // teal-900/60
+          backdropFilter: 'blur(12px)'
         }}
       >
         <div className="flex items-center px-4 py-3">
@@ -38,9 +38,8 @@ function TripSearch({ onSearch, placeholder = "Search trips..." }) {
             transition={{ duration: 0.2 }}
           >
             <FiSearch
-              className={`transition-colors ${
-                isFocused ? 'text-orange-500' : 'text-gray-400'
-              }`}
+              className={`transition-colors ${isFocused ? 'text-cyan-400' : 'text-grey-400'
+                }`}
               size={20}
             />
           </motion.div>
@@ -54,7 +53,7 @@ function TripSearch({ onSearch, placeholder = "Search trips..." }) {
             onBlur={() => setIsFocused(false)}
             onKeyDown={e => { if (e.key === 'Escape') handleClear(); }}
             placeholder={placeholder}
-            className="flex-1 ml-3 outline-none text-gray-800 placeholder-gray-500 text-base bg-transparent"
+            className="flex-1 ml-3 outline-none text-white placeholder-grey-500 text-base bg-transparent font-medium"
             autoComplete="off"
           />
 
@@ -65,29 +64,13 @@ function TripSearch({ onSearch, placeholder = "Search trips..." }) {
                 animate={{ scale: 1 }}
                 exit={{ scale: 0 }}
                 onClick={handleClear}
-                className="text-gray-400 hover:text-gray-600 transition ml-2"
+                className="text-grey-400 hover:text-white transition ml-2"
               >
                 <FiX size={20} />
               </motion.button>
             )}
           </AnimatePresence>
         </div>
-
-        {/* Search suggestions or feedback */}
-        <AnimatePresence>
-          {isFocused && searchTerm && (
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="absolute top-full left-0 right-0 bg-white border-b border-l border-r border-gray-200 rounded-b-lg shadow-lg z-10"
-            >
-              <div className="p-3 text-sm text-gray-600 text-center">
-                Searching for: <span className="font-semibold text-gray-800">"{searchTerm}"</span>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
       </div>
     </motion.div>
   );
