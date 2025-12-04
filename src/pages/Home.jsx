@@ -9,6 +9,7 @@ function Home() {
   const { scrollY } = useScroll();
   const y1 = useTransform(scrollY, [0, 500], [0, 200]);
   const y2 = useTransform(scrollY, [0, 500], [0, -150]);
+  const [activeCategory, setActiveCategory] = useState(1);
 
   const featuredTrips = [
     {
@@ -47,16 +48,52 @@ function Home() {
   ];
 
   const categories = [
-    { icon: '🏔️', name: 'Trekking', desc: 'Conquer the peaks' },
-    { icon: '🎒', name: 'Backpacking', desc: 'Travel light, travel far' },
-    { icon: '🏍️', name: 'Biking', desc: 'Ride the wind' },
-    { icon: '🏕️', name: 'Camping', desc: 'Sleep under stars' },
-    { icon: '🌊', name: 'Coastal', desc: 'Sun, sand, and sea' },
-    { icon: '🦁', name: 'Wildlife', desc: 'Into the wild' },
+    {
+      id: 1,
+      name: 'Trekking',
+      desc: 'Conquer the peaks',
+      icon: '🏔️',
+      image: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2070&auto=format&fit=crop'
+    },
+    {
+      id: 2,
+      name: 'Backpacking',
+      desc: 'Travel light, travel far',
+      icon: '🎒',
+      image: 'https://images.unsplash.com/photo-1501555088652-021faa106b9b?q=80&w=2073&auto=format&fit=crop'
+    },
+    {
+      id: 3,
+      name: 'Biking',
+      desc: 'Ride the wind',
+      icon: '🏍️',
+      image: 'https://images.unsplash.com/photo-1558981403-c5f9899a28bc?q=80&w=2070&auto=format&fit=crop'
+    },
+    {
+      id: 4,
+      name: 'Camping',
+      desc: 'Sleep under stars',
+      icon: '🏕️',
+      image: 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?q=80&w=2070&auto=format&fit=crop'
+    },
+    {
+      id: 5,
+      name: 'Coastal',
+      desc: 'Sun, sand, and sea',
+      icon: '🌊',
+      image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2073&auto=format&fit=crop'
+    },
+    {
+      id: 6,
+      name: 'Wildlife',
+      desc: 'Into the wild',
+      icon: '🦁',
+      image: 'https://images.unsplash.com/photo-1564349683136-77e08dba1ef7?q=80&w=2072&auto=format&fit=crop'
+    },
   ];
 
   return (
-    <div className="bg-teal-900 text-white overflow-hidden font-sans selection:bg-cyan-500 selection:text-teal-900">
+    <div className="text-white overflow-hidden font-sans selection:bg-cyan-500 selection:text-teal-900">
 
       {/* Hero Section */}
       <div className="relative h-screen w-full overflow-hidden">
@@ -192,27 +229,80 @@ function Home() {
         </div>
       </section>
 
-      {/* Categories Section */}
-      <section className="py-24 bg-black/20 relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent" />
-        <div className="max-w-7xl mx-auto px-4 relative z-10">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-display font-bold text-white mb-4">
-              Find Your <span className="text-cyan-400">Path</span>
+      {/* Categories Section - Cinematic Expandable Gallery */}
+      <section className="py-32 bg-teal-900 relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl md:text-6xl font-display font-bold text-white mb-4">
+              Choose Your <span className="text-cyan-400">Adventure</span>
             </h2>
-            <p className="text-grey-400">Choose your style of adventure</p>
-          </div>
+            <p className="text-xl text-grey-400">Explore the world your way</p>
+          </motion.div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            {categories.map((cat, idx) => (
+          <div className="flex flex-col lg:flex-row gap-4 h-[600px] w-full">
+            {categories.map((cat) => (
               <motion.div
-                key={idx}
-                whileHover={{ y: -10 }}
-                className="group p-6 bg-white/5 border border-white/5 hover:border-cyan-500/30 rounded-2xl cursor-pointer transition-all hover:bg-white/10 text-center"
+                key={cat.id}
+                layout
+                transition={{ type: 'spring', stiffness: 200, damping: 20 }}
+                onClick={() => setActiveCategory(cat.id)}
+                onHoverStart={() => setActiveCategory(cat.id)}
+                className={`relative rounded-3xl overflow-hidden cursor-pointer ${activeCategory === cat.id
+                    ? 'lg:flex-[3] flex-[3] ring-2 ring-cyan-500/50 shadow-[0_0_30px_rgba(0,229,255,0.2)]'
+                    : 'lg:flex-[0.5] flex-[1] grayscale hover:grayscale-0'
+                  }`}
               >
-                <div className="text-4xl mb-4 group-hover:scale-110 transition-transform duration-300">{cat.icon}</div>
-                <h3 className="text-white font-bold mb-1 group-hover:text-cyan-400 transition-colors">{cat.name}</h3>
-                <p className="text-xs text-grey-500 group-hover:text-grey-400">{cat.desc}</p>
+                {/* Background Image */}
+                <motion.img
+                  src={cat.image}
+                  alt={cat.name}
+                  animate={{ scale: activeCategory === cat.id ? 1.1 : 1 }}
+                  transition={{ duration: 0.7 }}
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+
+                {/* Overlay */}
+                <div className={`absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/90 transition-opacity duration-300 ${activeCategory === cat.id ? 'opacity-80' : 'opacity-60 hover:opacity-40'
+                  }`} />
+
+                {/* Content */}
+                <div className="absolute inset-0 flex flex-col justify-end p-8">
+                  <motion.div
+                    layout="position"
+                    className={`transition-all duration-500 ${activeCategory === cat.id ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-70'
+                      }`}>
+                    <motion.div
+                      layout="position"
+                      className="text-4xl mb-2"
+                    >
+                      {cat.icon}
+                    </motion.div>
+                    <motion.h3
+                      layout="position"
+                      className={`font-display font-bold text-white mb-2 transition-all duration-300 ${activeCategory === cat.id ? 'text-3xl md:text-4xl' : 'text-xl rotate-0 lg:-rotate-90 lg:origin-bottom-left lg:translate-x-8 lg:-translate-y-8 whitespace-nowrap'
+                        }`}>
+                      {cat.name}
+                    </motion.h3>
+
+                    {activeCategory === cat.id && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.2, duration: 0.3 }}
+                      >
+                        <p className="text-grey-300 mb-4 text-lg">{cat.desc}</p>
+                        <button className="px-6 py-2 bg-cyan-500/20 border border-cyan-500/50 rounded-full text-cyan-400 text-sm font-bold uppercase tracking-wider hover:bg-cyan-500 hover:text-teal-900 transition-all shadow-[0_0_15px_rgba(0,229,255,0.3)]">
+                          Explore
+                        </button>
+                      </motion.div>
+                    )}
+                  </motion.div>
+                </div>
               </motion.div>
             ))}
           </div>
