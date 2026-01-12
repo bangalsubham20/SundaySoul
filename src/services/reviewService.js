@@ -29,7 +29,7 @@ const reviewService = {
   // Get user reviews
   getUserReviews: async () => {
     try {
-      const response = await apiClient.get(`/reviews/my-reviews`);
+      const response = await apiClient.get(`/reviews/my-reviews`, { skipAuthHandler: true });
       return response;
     } catch (error) {
       console.error('Error fetching user reviews:', error);

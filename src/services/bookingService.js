@@ -15,7 +15,7 @@ const bookingService = {
   // Get user's bookings
   getUserBookings: async () => {
     try {
-      const response = await apiClient.get('/bookings/my-bookings');
+      const response = await apiClient.get('/bookings/my-bookings', { skipAuthHandler: true });
       return response;
     } catch (error) {
       console.error('Error fetching bookings:', error);
