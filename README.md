@@ -21,7 +21,7 @@
 
 | Mystic Himalayas | Coastal Odyssey | Spiti Valley |
 | :---: | :---: | :---: |
-| ![Himalayas](https://images.unsplash.com/photo-1518098268026-4e1877a1c37b?q=80&w=400&auto=format&fit=crop) | ![Coastal](https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=400&auto=format&fit=crop) | ![Spiti](https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?q=80&w=400&auto=format&fit=crop) |
+| ![Himalayas](public/images/expeditions/himalayas-1.png) | ![Coastal](https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=400&auto=format&fit=crop) | ![Spiti](https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?q=80&w=400&auto=format&fit=crop) |
 
 ## �🛠️ Tech Stack
 
