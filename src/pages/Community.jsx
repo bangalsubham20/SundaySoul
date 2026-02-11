@@ -8,7 +8,7 @@ function Community() {
       id: 1,
       author: 'Priya Singh',
       avatar: 'https://i.pravatar.cc/150?img=1',
-      content: '🏔️ Just completed the Spiti Valley trek! Amazing experience with an incredible group. The frozen landscapes and monasteries were absolutely breathtaking. #TravelCommunity #SpitivalleyTrek',
+      content: '🏔️ Just completed the Spiti Valley trek! Amazing experience with an incredible group. The frozen landscapes and monasteries were absolutely breathtaking. #SundaySoul #SpitivalleyTrek',
       image: 'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?q=80&w=2070&auto=format&fit=crop',
       likes: 342,
       liked: false,

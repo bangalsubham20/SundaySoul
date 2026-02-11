@@ -29,7 +29,7 @@ function AdminLogin() {
     if (location.state?.demo) {
       setFormData(prev => ({
         ...prev,
-        email: 'admin@travelcommunity.com'
+        email: 'admin@sundaysoul.com'
       }));
     }
   }, [location]);
@@ -236,7 +236,7 @@ function AdminLogin() {
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  placeholder="admin@travelcommunity.com"
+                  placeholder="admin@sundaysoul.com"
                   className="w-full bg-black/40 border border-white/10 rounded-xl pl-12 pr-4 py-3 text-white placeholder-grey-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent focus:bg-black/60 transition-all"
                   required
                   disabled={loading}

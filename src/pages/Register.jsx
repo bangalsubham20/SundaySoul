@@ -68,7 +68,7 @@ export default function Register() {
           <FiCheck size={40} />
         </div>
         <h2 className="text-3xl font-display font-black text-white mb-2">Account Created!</h2>
-        <p className="text-grey-400 mb-8">Welcome to TravelCommunity.</p>
+        <p className="text-grey-400 mb-8">Welcome to SundaySoul.</p>
         <div className="flex items-center gap-2 text-cyan-400 text-sm font-semibold">
           <span className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
           Redirecting to home...

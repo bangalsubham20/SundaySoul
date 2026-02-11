@@ -45,7 +45,7 @@ function Footer() {
 
   const contactInfo = [
     { icon: FiPhone, label: '+91 97 97 97 21 75', href: 'tel:+919797972175' },
-    { icon: FiMail, label: 'support@travelcommunity.com', href: 'mailto:support@travelcommunity.com' },
+    { icon: FiMail, label: 'support@sundaysoul.com', href: 'mailto:support@sundaysoul.com' },
     { icon: FiMapPin, label: 'India', href: '#' }
   ];
 
@@ -103,7 +103,7 @@ function Footer() {
               </motion.div>
               <div>
                 <p className="text-2xl font-display font-black tracking-tighter text-white">
-                  TRAVELER
+                  SundaySoul
                 </p>
                 <p className="text-xs text-cyan-500 font-bold tracking-widest uppercase">Community</p>
               </div>
@@ -299,7 +299,7 @@ function Footer() {
             className="flex items-center gap-2"
             whileHover={{ scale: 1.05 }}
           >
-            © {currentYear} Traveler. All rights reserved.
+            © {currentYear} SundaySoul. All rights reserved.
           </motion.p>
 
           <motion.div

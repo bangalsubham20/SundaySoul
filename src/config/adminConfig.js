@@ -14,7 +14,7 @@ export const ADMIN_PERMISSIONS = {
 
 export const adminAccounts = [
     {
-        email: 'admin@travelcommunity.com',
+        email: 'admin@sundaysoul.com',
         password: 'Admin@123456',
         role: ADMIN_ROLES.ADMIN,
         name: 'Admin User',
@@ -26,14 +26,14 @@ export const adminAccounts = [
         ]
     },
     {
-        email: 'superadmin@travelcommunity.com',
+        email: 'superadmin@sundaysoul.com',
         password: 'SuperAdmin@12345',
         role: ADMIN_ROLES.SUPER_ADMIN,
         name: 'Super Admin',
         permissions: [ADMIN_PERMISSIONS.ALL]
     },
     {
-        email: 'moderator@travelcommunity.com',
+        email: 'moderator@sundaysoul.com',
         password: 'Moderator@12345',
         role: ADMIN_ROLES.MODERATOR,
         name: 'Moderator',

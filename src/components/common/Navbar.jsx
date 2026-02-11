@@ -32,9 +32,9 @@ function Navbar() {
   };
 
   // Check if user is admin
-  const isAdmin = user?.email === 'admin@travelcommunity.com' ||
-    user?.email === 'superadmin@travelcommunity.com' ||
-    user?.email === 'moderator@travelcommunity.com';
+  const isAdmin = user?.email === 'admin@sundaysoul.com' ||
+    user?.email === 'superadmin@sundaysoul.com' ||
+    user?.email === 'moderator@sundaysoul.com';
 
   const isAdminPage = location.pathname.startsWith('/admin');
 
@@ -90,7 +90,7 @@ function Navbar() {
                 🏔️
               </motion.div>
               <span className="text-2xl font-display font-black tracking-tighter text-white group-hover:text-cyan-400 transition-colors">
-                TRAVELER
+                SundaySoul
               </span>
             </Link>
           </motion.div>

@@ -261,7 +261,7 @@ function BookingConfirmation() {
               onClick={() => {
                 const text = `Just booked ${trip.name}! Booking ID: ${bookingId}`;
                 if (navigator.share) {
-                  navigator.share({ title: 'TravelCommunity', text });
+                  navigator.share({ title: 'SundaySoul', text });
                 } else {
                   window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
                 }
@@ -325,7 +325,7 @@ function BookingConfirmation() {
               className="flex items-center gap-2 text-cyan-400 hover:text-cyan-300 font-bold transition"
             >
               <FiMail size={18} />
-              support@travelcommunity.com
+              support@sundaysoul.com
             </motion.a>
           </div>
         </motion.div>
