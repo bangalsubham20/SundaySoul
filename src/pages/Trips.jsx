@@ -5,6 +5,7 @@ import Button from '../components/common/Button';
 import TripFilters from '../components/trips/TripFilters';
 import TripSort from '../components/trips/TripSort';
 import TripSearch from '../components/trips/TripSearch';
+import TripFilterHeader from '../components/trips/TripFilterHeader';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import tripService from '../services/tripService';
 import { FiGrid, FiList, FiArrowRight, FiMapPin, FiClock, FiUsers, FiStar, FiActivity } from 'react-icons/fi';
@@ -126,6 +127,8 @@ function Trips() {
     groupSize: [],
   });
 
+  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
+
   useEffect(() => {
     const fetchTrips = async () => {
       try {
@@ -218,6 +221,14 @@ function Trips() {
 
   return (
     <div className="min-h-screen bg-teal-900 text-white pb-24 font-sans selection:bg-cyan-500 selection:text-teal-900">
+      {/* Filters Drawer */}
+      <TripFilters
+        isOpen={showAdvancedFilters}
+        onClose={() => setShowAdvancedFilters(false)}
+        onFilterChange={handleFilterChange}
+        onReset={handleReset}
+      />
+
       {/* Hero Banner */}
       <div className="relative h-[40vh] overflow-hidden mb-12">
         <div className="absolute inset-0 bg-black/40 z-10" />
@@ -246,152 +257,151 @@ function Trips() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4">
+        {/* New Filter Header */}
+        <TripFilterHeader
+          filters={filters}
+          onFilterChange={handleFilterChange}
+          resultCount={sortedTrips.length}
+          onToggleAdvanced={() => setShowAdvancedFilters(true)}
+        />
+
         {/* Controls Bar */}
-        <div className="mb-12 bg-teal-800/50 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-xl">
-          <div className="flex flex-col md:flex-row gap-6 items-start md:items-center">
-            <div className="flex-1 w-full">
+        <div className="mb-8 flex flex-col md:flex-row gap-6 items-center justify-between">
+          <h2 className="text-2xl font-bold font-display hidden md:block">
+            {sortedTrips.length} Trips Available
+          </h2>
+
+          <div className="flex gap-4 items-center w-full md:w-auto">
+            <div className="flex-1 md:w-64">
               <TripSearch
                 onSearch={setSearchTerm}
-                placeholder="Search destination, activity, or vibe..."
+                placeholder="Search trips..."
               />
             </div>
-            <div className="flex gap-4 items-center w-full md:w-auto justify-between md:justify-end">
-              <TripSort sortBy={sortBy} onSortChange={setSortBy} />
-              <div className="flex gap-2 bg-black/20 rounded-xl p-1 border border-white/10">
-                <button
-                  onClick={() => setViewMode('grid')}
-                  className={`p-2 rounded-lg transition-all ${viewMode === 'grid'
-                    ? 'bg-cyan-500 text-teal-900 shadow-lg'
-                    : 'text-grey-400 hover:text-white'
-                    }`}
-                >
-                  <FiGrid size={20} />
-                </button>
-                <button
-                  onClick={() => setViewMode('list')}
-                  className={`p-2 rounded-lg transition-all ${viewMode === 'list'
-                    ? 'bg-cyan-500 text-teal-900 shadow-lg'
-                    : 'text-grey-400 hover:text-white'
-                    }`}
-                >
-                  <FiList size={20} />
-                </button>
-              </div>
+            <TripSort sortBy={sortBy} onSortChange={setSortBy} />
+            <div className="flex gap-2 bg-black/20 rounded-xl p-1 border border-white/10">
+              <button
+                onClick={() => setViewMode('grid')}
+                className={`p-2 rounded-lg transition-all ${viewMode === 'grid'
+                  ? 'bg-cyan-500 text-teal-900 shadow-lg'
+                  : 'text-grey-400 hover:text-white'
+                  }`}
+              >
+                <FiGrid size={20} />
+              </button>
+              <button
+                onClick={() => setViewMode('list')}
+                className={`p-2 rounded-lg transition-all ${viewMode === 'list'
+                  ? 'bg-cyan-500 text-teal-900 shadow-lg'
+                  : 'text-grey-400 hover:text-white'
+                  }`}
+              >
+                <FiList size={20} />
+              </button>
             </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Filters Sidebar */}
-          <div className="lg:col-span-1">
-            <div className="sticky top-24">
-              <TripFilters onFilterChange={handleFilterChange} onReset={handleReset} />
-            </div>
-          </div>
-
-          {/* Trips Grid */}
-          <div className="lg:col-span-3">
-            <AnimatePresence mode="wait">
-              {sortedTrips.length > 0 ? (
+        {/* Trips Grid - Full Width */}
+        <AnimatePresence mode="wait">
+          {sortedTrips.length > 0 ? (
+            <motion.div
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+              variants={{
+                visible: { transition: { staggerChildren: 0.05 } },
+                hidden: {},
+              }}
+              className={
+                viewMode === 'grid'
+                  ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'
+                  : 'space-y-6'
+              }
+            >
+              {sortedTrips.map((trip) => (
                 <motion.div
-                  initial="hidden"
-                  animate="visible"
-                  exit="hidden"
+                  key={trip.id}
                   variants={{
-                    visible: { transition: { staggerChildren: 0.05 } },
-                    hidden: {},
+                    hidden: { opacity: 0, y: 20 },
+                    visible: { opacity: 1, y: 0 }
                   }}
-                  className={
-                    viewMode === 'grid'
-                      ? 'grid grid-cols-1 md:grid-cols-2 gap-8'
-                      : 'space-y-6'
-                  }
+                  whileHover={{ y: -5 }}
+                  onClick={() => navigate(`/trips/${trip.id}`)}
+                  className={`group cursor-pointer relative overflow-hidden rounded-3xl bg-teal-800/30 border border-white/5 hover:border-cyan-500/30 transition-all duration-500 ${viewMode === 'list' ? 'flex flex-col md:flex-row h-auto md:h-64' : 'flex flex-col h-[500px]'
+                    }`}
                 >
-                  {sortedTrips.map((trip) => (
-                    <motion.div
-                      key={trip.id}
-                      variants={{
-                        hidden: { opacity: 0, y: 20 },
-                        visible: { opacity: 1, y: 0 }
-                      }}
-                      whileHover={{ y: -5 }}
-                      onClick={() => navigate(`/trips/${trip.id}`)}
-                      className={`group cursor-pointer relative overflow-hidden rounded-3xl bg-teal-800/30 border border-white/5 hover:border-cyan-500/30 transition-all duration-500 ${viewMode === 'list' ? 'flex flex-col md:flex-row h-auto md:h-64' : 'flex flex-col h-[500px]'
-                        }`}
-                    >
-                      {/* Image */}
-                      <div className={`relative overflow-hidden ${viewMode === 'list' ? 'w-full md:w-1/3 h-48 md:h-full' : 'h-3/5 w-full'}`}>
-                        <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors z-10" />
-                        <img
-                          src={trip.image}
-                          alt={trip.name}
-                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                        />
-                        <div className="absolute top-4 left-4 z-20">
-                          <span className="px-3 py-1 bg-black/50 backdrop-blur-md border border-white/10 text-white text-xs font-bold uppercase tracking-wider rounded-full">
-                            {trip.difficulty}
+                  {/* Image */}
+                  <div className={`relative overflow-hidden ${viewMode === 'list' ? 'w-full md:w-1/3 h-48 md:h-full' : 'h-3/5 w-full'}`}>
+                    <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors z-10" />
+                    <img
+                      src={trip.image}
+                      alt={trip.name}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                    <div className="absolute top-4 left-4 z-20">
+                      <span className="px-3 py-1 bg-black/50 backdrop-blur-md border border-white/10 text-white text-xs font-bold uppercase tracking-wider rounded-full">
+                        {trip.difficulty}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Content */}
+                  <div className={`p-6 flex flex-col justify-between ${viewMode === 'list' ? 'flex-1' : 'flex-1'}`}>
+                    <div>
+                      <div className="flex justify-between items-start mb-2">
+                        <h3 className="text-xl font-bold text-white group-hover:text-cyan-400 transition-colors">
+                          {trip.name}
+                        </h3>
+                        <div className="flex items-center gap-1 text-yellow-400 font-bold text-sm">
+                          <FiStar fill="currentColor" /> {trip.rating}
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2 text-grey-400 text-sm mb-4">
+                        <FiMapPin className="text-cyan-500" /> {trip.destination}
+                      </div>
+
+                      <p className="text-grey-400 text-sm line-clamp-2 mb-4 font-light">
+                        {trip.description}
+                      </p>
+
+                      <div className="flex flex-wrap gap-2 mb-4">
+                        {(trip.tags || []).slice(0, 3).map(tag => (
+                          <span key={tag} className="text-xs px-2 py-1 rounded-md bg-white/5 text-grey-300 border border-white/5">
+                            #{tag}
                           </span>
-                        </div>
+                        ))}
                       </div>
+                    </div>
 
-                      {/* Content */}
-                      <div className={`p-6 flex flex-col justify-between ${viewMode === 'list' ? 'flex-1' : 'flex-1'}`}>
-                        <div>
-                          <div className="flex justify-between items-start mb-2">
-                            <h3 className="text-xl font-bold text-white group-hover:text-cyan-400 transition-colors">
-                              {trip.name}
-                            </h3>
-                            <div className="flex items-center gap-1 text-yellow-400 font-bold text-sm">
-                              <FiStar fill="currentColor" /> {trip.rating}
-                            </div>
-                          </div>
-
-                          <div className="flex items-center gap-2 text-grey-400 text-sm mb-4">
-                            <FiMapPin className="text-cyan-500" /> {trip.destination}
-                          </div>
-
-                          <p className="text-grey-400 text-sm line-clamp-2 mb-4 font-light">
-                            {trip.description}
-                          </p>
-
-                          <div className="flex flex-wrap gap-2 mb-4">
-                            {(trip.tags || []).slice(0, 3).map(tag => (
-                              <span key={tag} className="text-xs px-2 py-1 rounded-md bg-white/5 text-grey-300 border border-white/5">
-                                #{tag}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-
-                        <div className="flex items-center justify-between border-t border-white/5 pt-4 mt-auto">
-                          <div className="flex gap-4 text-xs font-medium text-grey-400 uppercase tracking-wide">
-                            <span className="flex items-center gap-1"><FiClock className="text-cyan-500" /> {trip.duration}</span>
-                            <span className="flex items-center gap-1"><FiUsers className="text-cyan-500" /> {trip.groupSize}</span>
-                          </div>
-                          <div className="text-right">
-                            <span className="block text-xs text-grey-500 uppercase tracking-wider">Starting from</span>
-                            <span className="text-xl font-bold text-white">₹{trip.price.toLocaleString()}</span>
-                          </div>
-                        </div>
+                    <div className="flex items-center justify-between border-t border-white/5 pt-4 mt-auto">
+                      <div className="flex gap-4 text-xs font-medium text-grey-400 uppercase tracking-wide">
+                        <span className="flex items-center gap-1"><FiClock className="text-cyan-500" /> {trip.duration}</span>
+                        <span className="flex items-center gap-1"><FiUsers className="text-cyan-500" /> {trip.groupSize}</span>
                       </div>
-                    </motion.div>
-                  ))}
+                      <div className="text-right">
+                        <span className="block text-xs text-grey-500 uppercase tracking-wider">Starting from</span>
+                        <span className="text-xl font-bold text-white">₹{trip.price.toLocaleString()}</span>
+                      </div>
+                    </div>
+                  </div>
                 </motion.div>
-              ) : (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="bg-white/5 border border-white/10 rounded-3xl p-12 text-center"
-                >
-                  <div className="text-6xl mb-6">🏔️</div>
-                  <h3 className="text-2xl font-bold text-white mb-2">No Expeditions Found</h3>
-                  <p className="text-grey-400 mb-8">Try adjusting your filters or search for something else.</p>
-                  <Button onClick={handleReset} className="btn-primary">Clear Filters</Button>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        </div>
+              ))}
+            </motion.div>
+          ) : (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="bg-white/5 border border-white/10 rounded-3xl p-12 text-center"
+            >
+              <div className="text-6xl mb-6">🏔️</div>
+              <h3 className="text-2xl font-bold text-white mb-2">No Expeditions Found</h3>
+              <p className="text-grey-400 mb-8">Try adjusting your filters or search for something else.</p>
+              <Button onClick={handleReset} className="btn-primary">Clear Filters</Button>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );
