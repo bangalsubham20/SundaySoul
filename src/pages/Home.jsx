@@ -187,13 +187,13 @@ function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.2 }}
           >
-            <h2 className="text-cyan-400 font-bold tracking-[0.2em] uppercase mb-4 text-sm md:text-base">
+            <h2 className="text-cyan-400 font-bold tracking-[0.2em] uppercase mb-4 text-xs md:text-base">
               Discover the Untamed
             </h2>
-            <h1 className="text-6xl md:text-8xl lg:text-9xl font-display font-black text-white mb-8 tracking-tight leading-none">
+            <h1 className="text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-display font-black text-white mb-6 md:mb-8 tracking-tight leading-none">
               WILD<span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-teal-500">SOUL</span>
             </h1>
-            <p className="text-xl md:text-2xl text-grey-400 max-w-2xl mx-auto mb-12 font-light leading-relaxed">
+            <p className="text-lg md:text-2xl text-grey-400 max-w-2xl mx-auto mb-8 md:mb-12 font-light leading-relaxed px-4">
               Join a community of explorers seeking the raw beauty of nature.
               Your next great adventure begins here.
             </p>
@@ -314,7 +314,7 @@ function Home() {
             <p className="text-xl text-grey-400">Explore the world your way</p>
           </motion.div>
 
-          <div className="flex flex-col lg:flex-row gap-4 h-[600px] w-full">
+          <div className="flex flex-col lg:flex-row gap-4 h-auto lg:h-[600px] w-full">
             {categories.map((cat) => (
               <motion.div
                 key={cat.id}
@@ -322,9 +322,9 @@ function Home() {
                 transition={{ type: 'spring', stiffness: 200, damping: 20 }}
                 onClick={() => setActiveCategory(cat.id)}
                 onHoverStart={() => setActiveCategory(cat.id)}
-                className={`relative rounded-3xl overflow-hidden cursor-pointer ${activeCategory === cat.id
-                  ? 'lg:flex-[3] flex-[3] ring-2 ring-cyan-500/50 shadow-[0_0_30px_rgba(0,229,255,0.2)]'
-                  : 'lg:flex-[0.5] flex-[1] grayscale hover:grayscale-0'
+                className={`relative rounded-3xl overflow-hidden cursor-pointer transition-all duration-500 ease-in-out ${activeCategory === cat.id
+                  ? 'h-[400px] lg:h-auto lg:flex-[3] flex-none ring-2 ring-cyan-500/50 shadow-[0_0_30px_rgba(0,229,255,0.2)]'
+                  : 'h-[100px] lg:h-auto lg:flex-[0.5] flex-none grayscale hover:grayscale-0'
                   }`}
               >
                 {/* Background Image */}
@@ -441,7 +441,7 @@ function Home() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-5xl md:text-7xl font-display font-black text-white mb-8">
+            <h2 className="text-4xl sm:text-5xl md:text-7xl font-display font-black text-white mb-6 md:mb-8">
               The Wild is <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-teal-400 animate-pulse-slow">Calling</span>
             </h2>
             <p className="text-xl text-grey-300 mb-12 max-w-2xl mx-auto leading-relaxed">
@@ -449,12 +449,12 @@ function Home() {
             </p>
           </motion.div>
 
-          <div className="flex flex-col sm:flex-row gap-6 justify-center">
+          <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center px-4">
             <motion.button
               onClick={() => navigate('/register')}
               whileHover={{ scale: 1.05, boxShadow: "0 0 40px rgba(0,229,255,0.4)" }}
               whileTap={{ scale: 0.95 }}
-              className="px-10 py-4 bg-cyan-500 text-teal-900 font-bold text-lg rounded-full transition-all relative overflow-hidden group"
+              className="w-full sm:w-auto px-8 md:px-10 py-3 md:py-4 bg-cyan-500 text-teal-900 font-bold text-base md:text-lg rounded-full transition-all relative overflow-hidden group"
             >
               <span className="relative z-10">Start Your Journey</span>
               <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
@@ -464,7 +464,7 @@ function Home() {
               onClick={() => navigate('/trips')}
               whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.1)" }}
               whileTap={{ scale: 0.95 }}
-              className="px-10 py-4 bg-transparent border border-white/30 text-white font-bold text-lg rounded-full transition-all backdrop-blur-sm"
+              className="w-full sm:w-auto px-8 md:px-10 py-3 md:py-4 bg-transparent border border-white/30 text-white font-bold text-base md:text-lg rounded-full transition-all backdrop-blur-sm"
             >
               Browse Trips
             </motion.button>

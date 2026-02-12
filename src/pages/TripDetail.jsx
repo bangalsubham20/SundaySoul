@@ -291,7 +291,7 @@ function TripDetail() {
                 {trip.difficulty} • {trip.duration} Days
               </motion.div>
 
-              <h1 className="text-5xl md:text-7xl font-display font-black mb-4 text-white tracking-tight">
+              <h1 className="text-4xl md:text-7xl font-display font-black mb-4 text-white tracking-tight">
                 {trip.name}
               </h1>
 
@@ -686,16 +686,16 @@ function TripDetail() {
       </div>
 
       {/* Mobile Booking Bar */}
-      <div className="fixed bottom-0 left-0 right-0 p-4 bg-teal-900/95 backdrop-blur-xl border-t border-white/10 lg:hidden z-40">
+      <div className="fixed bottom-0 left-0 right-0 p-4 bg-teal-900/95 backdrop-blur-xl border-t border-white/10 lg:hidden z-50">
         <div className="flex items-center justify-between max-w-7xl mx-auto">
           <div>
-            <p className="text-grey-400 text-xs uppercase tracking-wider">Total Price</p>
-            <p className="text-2xl font-bold text-white">₹{trip.price.toLocaleString()}</p>
+            <p className="text-grey-400 text-[10px] uppercase tracking-wider">Total Price</p>
+            <p className="text-xl font-bold text-white">₹{trip.price.toLocaleString()}</p>
           </div>
           <Button
             size="md"
             onClick={() => user ? navigate(`/booking/${trip.id}`) : navigate('/login')}
-            className="px-8 bg-cyan-500 text-teal-900 hover:bg-cyan-400"
+            className="px-6 py-2.5 bg-cyan-500 text-teal-900 hover:bg-cyan-400 shadow-neon-secondary text-sm"
           >
             {user ? 'Book Now' : 'Login'}
           </Button>

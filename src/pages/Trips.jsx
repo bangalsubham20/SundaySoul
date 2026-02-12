@@ -141,7 +141,7 @@ function Trips() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
-                className="text-5xl md:text-8xl font-display font-normal text-white leading-[0.9] uppercase tracking-wide drop-shadow-lg"
+                className="text-4xl md:text-8xl font-display font-normal text-white leading-[0.9] uppercase tracking-wide drop-shadow-lg"
               >
                 Plan Your <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-teal-200">Next Trip</span>
@@ -163,8 +163,8 @@ function Trips() {
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
                 className={`px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-widest transition-all whitespace-nowrap border ${activeCategory === cat
-                    ? 'bg-cyan-500 border-cyan-500 text-teal-900 shadow-neon-secondary scale-105'
-                    : 'bg-teal-900/40 backdrop-blur-sm border-white/10 text-grey-400 hover:text-white hover:bg-white/5 hover:border-cyan-500/30'
+                  ? 'bg-cyan-500 border-cyan-500 text-teal-900 shadow-neon-secondary scale-105'
+                  : 'bg-teal-900/40 backdrop-blur-sm border-white/10 text-grey-400 hover:text-white hover:bg-white/5 hover:border-cyan-500/30'
                   }`}
               >
                 {cat}

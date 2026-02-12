@@ -257,9 +257,9 @@ function Navbar() {
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3 }}
-              className="md:hidden overflow-hidden bg-teal-900/95 backdrop-blur-xl border-t border-white/10 rounded-b-2xl shadow-2xl"
+              className="md:hidden overflow-hidden bg-teal-900/95 backdrop-blur-xl border-t border-white/10 shadow-2xl"
             >
-              <div className="p-4 space-y-2">
+              <div className="p-4 space-y-2 max-h-[80vh] overflow-y-auto">
                 {navItems.map((item, idx) => {
                   const Icon = item.icon;
                   const isActive = location.pathname === item.path;
@@ -272,7 +272,7 @@ function Navbar() {
                     >
                       <Link
                         to={item.path}
-                        className={`block px-4 py-3 rounded-xl transition-all flex items-center gap-3 font-medium ${isActive
+                        className={`block px-4 py-3 rounded-xl transition-all flex items-center gap-3 font-medium active:scale-95 touch-manipulation ${isActive
                           ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20'
                           : 'text-white/70 hover:bg-white/5 hover:text-white'
                           }`}
@@ -343,7 +343,7 @@ function Navbar() {
                         navigate('/login');
                         handleNavClick();
                       }}
-                      className="btn-secondary w-full py-3 rounded-xl text-sm font-bold"
+                      className="btn-secondary w-full py-3 rounded-xl text-sm font-bold active:scale-95 transition-transform"
                     >
                       Login
                     </button>
@@ -352,7 +352,7 @@ function Navbar() {
                         navigate('/register');
                         handleNavClick();
                       }}
-                      className="btn-primary w-full py-3 rounded-xl text-sm font-bold"
+                      className="btn-primary w-full py-3 rounded-xl text-sm font-bold shadow-lg shadow-cyan-500/20 active:scale-95 transition-transform"
                     >
                       Sign Up
                     </button>
