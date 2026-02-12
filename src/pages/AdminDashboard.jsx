@@ -159,7 +159,7 @@ function AdminDashboard() {
   // ========== TRIP HANDLERS ==========
   const [tripForm, setTripForm] = useState({
     name: '', destination: '', price: '', duration: '', startDate: '',
-    status: 'active', totalSeats: '', difficulty: 'Moderate',
+    status: 'active', groupSize: '', difficulty: 'Moderate',
     description: '', image: '', highlights: '', itinerary: '', inclusions: '', exclusions: ''
   });
 
@@ -194,10 +194,13 @@ function AdminDashboard() {
         endDate: new Date(new Date(tripForm.startDate).setDate(new Date(tripForm.startDate).getDate() + parseInt(tripForm.duration))).toISOString(),
         price: parseFloat(tripForm.price),
         duration: parseInt(tripForm.duration),
-        totalSeats: parseInt(tripForm.totalSeats),
-        availableSeats: parseInt(tripForm.totalSeats), // Reset available seats on create/update logic simplification
+        groupSize: parseInt(tripForm.groupSize),
+        availableSeats: parseInt(tripForm.groupSize), // Reset available seats on create/update logic simplification
         active: tripForm.status === 'active', // Map string status back to boolean
-        bookings: [] // Ensure bookings are not overwritten with invalid data
+        bookings: [], // Ensure bookings are not overwritten with invalid data
+        rating: 0.0,
+        reviews: 0,
+        tripReviews: []
       };
 
       // Remove status string from payload as backend expects 'active' boolean
@@ -207,13 +210,13 @@ function AdminDashboard() {
         // Update
         const response = await tripService.updateTrip(selectedItem.id, payload);
         // Normalize response before updating state
-        const updatedTrip = { ...response.data, status: response.data.active ? 'active' : 'inactive' };
+        const updatedTrip = { ...response, status: response.active ? 'active' : 'inactive' };
         setTrips(trips.map(t => t.id === selectedItem.id ? updatedTrip : t));
       } else {
         // Create
         const response = await tripService.createTrip(payload);
         // Normalize response
-        const newTrip = { ...response.data, status: response.data.active ? 'active' : 'inactive' };
+        const newTrip = { ...response, status: response.active ? 'active' : 'inactive' };
         setTrips([...trips, newTrip]);
       }
       setShowModal(null);
@@ -221,7 +224,7 @@ function AdminDashboard() {
       // Reset form
       setTripForm({
         name: '', destination: '', price: '', duration: '', startDate: '',
-        status: 'active', totalSeats: '', difficulty: 'Moderate',
+        status: 'active', groupSize: '', difficulty: 'Moderate',
         description: '', image: ''
       });
     } catch (error) {
@@ -234,7 +237,7 @@ function AdminDashboard() {
     setSelectedItem(null);
     setTripForm({
       name: '', destination: '', price: '', duration: '', startDate: '',
-      status: 'active', totalSeats: '', difficulty: 'Moderate',
+      status: 'active', groupSize: '', difficulty: 'Moderate',
       description: '', image: ''
     });
     setShowModal('addTrip');
@@ -1064,8 +1067,8 @@ function AdminDashboard() {
                               className="w-full bg-black/40 border border-white/10 rounded-lg p-3 text-white focus:border-cyan-500 outline-none" />
                           </div>
                           <div>
-                            <label className="block text-grey-400 text-sm mb-1">Total Seats</label>
-                            <input required type="number" value={tripForm.totalSeats} onChange={e => setTripForm({ ...tripForm, totalSeats: e.target.value })}
+                            <label className="block text-grey-400 text-sm mb-1">Group Size (Total Seats)</label>
+                            <input required type="number" value={tripForm.groupSize} onChange={e => setTripForm({ ...tripForm, groupSize: e.target.value })}
                               className="w-full bg-black/40 border border-white/10 rounded-lg p-3 text-white focus:border-cyan-500 outline-none" />
                           </div>
                         </div>
