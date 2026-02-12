@@ -444,6 +444,12 @@ function Profile() {
 
                     {userBookings.length > 0 ? (
                       userBookings.map((booking, idx) => {
+                        // Handle both API response (nested trip) and mock data (flat structure)
+                        const trip = booking.trip || {};
+                        const tripName = trip.name || booking.tripName || 'Unknown Trip';
+                        const destination = trip.destination || booking.destination || 'Unknown Destination';
+                        const image = trip.image || booking.image || 'https://via.placeholder.com/400x300?text=No+Image';
+
                         const daysLeft = calculateDaysUntil(booking.startDate);
                         const isUpcoming = daysLeft > 0;
 
@@ -458,8 +464,8 @@ function Profile() {
                             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                               <div className="md:col-span-1 h-40 overflow-hidden">
                                 <motion.img
-                                  src={booking.image}
-                                  alt={booking.tripName}
+                                  src={image}
+                                  alt={tripName}
                                   className="w-full h-full object-cover"
                                   whileHover={{ scale: 1.1 }}
                                   transition={{ duration: 0.5 }}
@@ -469,8 +475,8 @@ function Profile() {
                               <div className="md:col-span-3 p-6">
                                 <div className="flex justify-between items-start mb-3">
                                   <div>
-                                    <h3 className="text-lg font-bold text-white">{booking.tripName}</h3>
-                                    <p className="text-grey-400 text-sm">📍 {booking.destination}</p>
+                                    <h3 className="text-lg font-bold text-white">{tripName}</h3>
+                                    <p className="text-grey-400 text-sm">📍 {destination}</p>
                                   </div>
                                   <motion.span
                                     initial={{ scale: 0 }}
@@ -483,10 +489,10 @@ function Profile() {
 
                                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4 text-sm">
                                   {[
-                                    { label: 'Check-in', value: booking.startDate },
-                                    { label: 'Check-out', value: booking.endDate },
-                                    { label: 'Travelers', value: booking.travelers },
-                                    { label: 'Price', value: `₹${booking.price.toLocaleString()}` }
+                                    { label: 'Check-in', value: new Date(booking.startDate).toLocaleDateString() },
+                                    { label: 'Check-out', value: new Date(booking.endDate).toLocaleDateString() }, // endDate is calculated or from trip? Backend booking doesn't have endDate, uses trip duration.
+                                    { label: 'Travelers', value: booking.numTravelers || booking.travelers || 1 },
+                                    { label: 'Price', value: `₹${(booking.totalPrice || booking.price || 0).toLocaleString()}` }
                                   ].map((item, i) => (
                                     <div key={i}>
                                       <p className="text-grey-500 text-xs">{item.label}</p>
@@ -503,7 +509,7 @@ function Profile() {
                                       </p>
                                     ) : (
                                       <p className="text-sm text-grey-400">
-                                        Completed on {booking.endDate}
+                                        {booking.status === 'completed' ? 'Trip Completed' : 'Past Booking'}
                                       </p>
                                     )}
                                   </div>

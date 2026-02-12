@@ -12,7 +12,7 @@ function TripDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const [trip, setTrip] = useState(null);
+  const [rawTrip, setRawTrip] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState('overview');
@@ -191,10 +191,10 @@ function TripDetail() {
         setLoading(true);
         setError(null);
         const tripData = await tripService.getTripById(id);
-        setTrip(tripData);
+        setRawTrip(tripData);
       } catch (err) {
         console.warn('Backend unavailable, using mock data:', err);
-        setTrip(mockTrips[id]);
+        setRawTrip(mockTrips[id]);
         if (!mockTrips[id]) setError('Trip not found');
       } finally {
         setLoading(false);
@@ -202,6 +202,35 @@ function TripDetail() {
     };
     if (id) fetchTripData();
   }, [id]);
+
+  // Helper to safely parse array fields
+  const parseList = (data) => {
+    if (!data) return [];
+    if (Array.isArray(data)) return data;
+    if (typeof data === 'string') {
+      try {
+        // Try JSON parse first
+        const parsed = JSON.parse(data);
+        if (Array.isArray(parsed)) return parsed;
+      } catch (e) {
+        // If not JSON, try splitting by comma if it looks like a CSV list
+        // But for itinerary (objects), splitting won't work well.
+        // For highlights (strings), it might.
+        return data.split(',').map(item => item.trim());
+      }
+    }
+    return [];
+  };
+
+  // Safe trip object with parsed fields
+  const trip = rawTrip ? {
+    ...rawTrip,
+    highlights: parseList(rawTrip.highlights),
+    itinerary: parseList(rawTrip.itinerary),
+    inclusions: parseList(rawTrip.inclusions),
+    exclusions: parseList(rawTrip.exclusions),
+    tripReviews: rawTrip.tripReviews || []
+  } : null;
 
   if (loading) return <LoadingSpinner />;
 

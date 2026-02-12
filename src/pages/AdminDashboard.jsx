@@ -8,6 +8,8 @@ import {
   FiDollarSign, FiLogOut, FiSearch, FiFilter, FiX, FiCheck, FiAlertCircle,
   FiDownload, FiMail, FiPhone, FiMapPin, FiTag, FiPercent, FiGift
 } from 'react-icons/fi';
+import tripService from '../services/tripService';
+import bookingService from '../services/bookingService';
 
 function AdminDashboard() {
   const navigate = useNavigate();
@@ -17,102 +19,56 @@ function AdminDashboard() {
   const [showModal, setShowModal] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
 
+  const [isLoading, setIsLoading] = useState(true);
+
   // ========== TRIPS DATA ==========
-  const [trips, setTrips] = useState([
-    {
-      id: 1,
-      name: 'Winter Spiti Valley',
-      destination: 'Spiti Valley',
-      price: 21150,
-      duration: 8,
-      startDate: '2025-01-15',
-      status: 'active',
-      bookings: 12,
-      totalSeats: 16,
-      revenue: 253800,
-      difficulty: 'Moderate'
-    },
-    {
-      id: 2,
-      name: 'Leh Ladakh Adventure',
-      destination: 'Ladakh',
-      price: 34650,
-      duration: 7,
-      startDate: '2025-02-20',
-      status: 'active',
-      bookings: 8,
-      totalSeats: 14,
-      revenue: 277200,
-      difficulty: 'Hard'
+  const [trips, setTrips] = useState([]);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      setIsLoading(true);
+      const [tripsData, bookingsData] = await Promise.all([
+        tripService.getAllTrips(),
+        bookingService.getAllBookings()
+      ]);
+
+      // Normalize Trips Data
+      const normalizedTrips = tripsData.map(trip => ({
+        ...trip,
+        status: trip.active ? 'active' : 'inactive'
+      }));
+      setTrips(normalizedTrips);
+
+      // Normalize Bookings Data
+      const normalizedBookings = bookingsData.map(booking => ({
+        ...booking,
+        id: booking.id,
+        bookingId: booking.id?.toString() || '',
+        userName: booking.user?.fullName || 'Unknown User',
+        userEmail: booking.user?.email || '',
+        userPhone: booking.user?.phone || '',
+        tripName: booking.trip?.name || 'Unknown Trip',
+        tripId: booking.trip?.id,
+        amount: booking.totalPrice,
+        date: booking.bookingDate,
+        status: booking.status ? booking.status.toLowerCase() : 'pending',
+        travelers: booking.numTravelers
+      }));
+      setBookings(normalizedBookings);
+
+    } catch (error) {
+      console.error('Error fetching dashboard data:', error);
+    } finally {
+      setIsLoading(false);
     }
-  ]);
+  };
 
   // ========== BOOKINGS DATA ==========
-  const [bookings, setBookings] = useState([
-    {
-      id: 1,
-      bookingId: 'BK001',
-      userName: 'Rahul Sharma',
-      userEmail: 'rahul@example.com',
-      userPhone: '+91 98765 43210',
-      tripName: 'Winter Spiti Valley',
-      tripId: 1,
-      numberOfTravelers: 2,
-      bookingDate: '2024-12-01',
-      tripDate: '2025-01-15',
-      status: 'confirmed',
-      amount: 42300,
-      paidAmount: 42300,
-      paymentMethod: 'full',
-      promoCode: 'FIRST10',
-      discount: 4700,
-      specialRequirements: 'Vegetarian meals',
-      emergencyContact: '+91 98765 00000',
-      emergencyName: 'Priya Sharma'
-    },
-    {
-      id: 2,
-      bookingId: 'BK002',
-      userName: 'Priya Mehta',
-      userEmail: 'priya@example.com',
-      userPhone: '+91 98765 43211',
-      tripName: 'Leh Ladakh Adventure',
-      tripId: 2,
-      numberOfTravelers: 1,
-      bookingDate: '2024-11-20',
-      tripDate: '2025-02-20',
-      status: 'pending',
-      amount: 34650,
-      paidAmount: 17325,
-      paymentMethod: 'partial',
-      promoCode: null,
-      discount: 0,
-      specialRequirements: null,
-      emergencyContact: '+91 98765 00001',
-      emergencyName: 'Amit Mehta'
-    },
-    {
-      id: 3,
-      bookingId: 'BK003',
-      userName: 'Amit Patel',
-      userEmail: 'amit@example.com',
-      userPhone: '+91 98765 43212',
-      tripName: 'Kerala Backpacking',
-      tripId: 3,
-      numberOfTravelers: 3,
-      bookingDate: '2024-10-15',
-      tripDate: '2024-11-10',
-      status: 'completed',
-      amount: 49950,
-      paidAmount: 49950,
-      paymentMethod: 'full',
-      promoCode: 'SAVE2000',
-      discount: 2000,
-      specialRequirements: 'Need wheelchair access',
-      emergencyContact: '+91 98765 00002',
-      emergencyName: 'Neha Patel'
-    }
-  ]);
+  const [bookings, setBookings] = useState([]);
 
   // ========== OFFERS/PROMO CODES DATA ==========
   const [offers, setOffers] = useState([
@@ -199,6 +155,90 @@ function AdminDashboard() {
   const confirmedBookings = bookings.filter(b => b.status === 'confirmed').length;
   const pendingBookings = bookings.filter(b => b.status === 'pending').length;
   const totalOffers = offers.filter(o => o.active).length;
+
+  // ========== TRIP HANDLERS ==========
+  const [tripForm, setTripForm] = useState({
+    name: '', destination: '', price: '', duration: '', startDate: '',
+    status: 'active', totalSeats: '', difficulty: 'Moderate',
+    description: '', image: '', highlights: '', itinerary: '', inclusions: '', exclusions: ''
+  });
+
+  const handleEditTrip = (trip) => {
+    setTripForm({
+      ...trip,
+      startDate: trip.startDate ? trip.startDate.split('T')[0] : '',
+      bookings: undefined // Don't send bookings back
+    });
+    setSelectedItem(trip);
+    setShowModal('editTrip');
+  };
+
+  const handleDeleteTrip = async (tripId) => {
+    if (window.confirm('Are you sure you want to delete this trip?')) {
+      try {
+        await tripService.deleteTrip(tripId);
+        setTrips(trips.filter(t => t.id !== tripId));
+      } catch (error) {
+        console.error('Failed to delete trip', error);
+        alert('Failed to delete trip');
+      }
+    }
+  };
+
+  const handleSaveTrip = async (e) => {
+    e.preventDefault();
+    try {
+      const payload = {
+        ...tripForm,
+        startDate: new Date(tripForm.startDate).toISOString(),
+        endDate: new Date(new Date(tripForm.startDate).setDate(new Date(tripForm.startDate).getDate() + parseInt(tripForm.duration))).toISOString(),
+        price: parseFloat(tripForm.price),
+        duration: parseInt(tripForm.duration),
+        totalSeats: parseInt(tripForm.totalSeats),
+        availableSeats: parseInt(tripForm.totalSeats), // Reset available seats on create/update logic simplification
+        active: tripForm.status === 'active', // Map string status back to boolean
+        bookings: [] // Ensure bookings are not overwritten with invalid data
+      };
+
+      // Remove status string from payload as backend expects 'active' boolean
+      delete payload.status;
+
+      if (selectedItem) {
+        // Update
+        const response = await tripService.updateTrip(selectedItem.id, payload);
+        // Normalize response before updating state
+        const updatedTrip = { ...response.data, status: response.data.active ? 'active' : 'inactive' };
+        setTrips(trips.map(t => t.id === selectedItem.id ? updatedTrip : t));
+      } else {
+        // Create
+        const response = await tripService.createTrip(payload);
+        // Normalize response
+        const newTrip = { ...response.data, status: response.data.active ? 'active' : 'inactive' };
+        setTrips([...trips, newTrip]);
+      }
+      setShowModal(null);
+      setSelectedItem(null);
+      // Reset form
+      setTripForm({
+        name: '', destination: '', price: '', duration: '', startDate: '',
+        status: 'active', totalSeats: '', difficulty: 'Moderate',
+        description: '', image: ''
+      });
+    } catch (error) {
+      console.error('Failed to save trip', error);
+      alert('Failed to save trip');
+    }
+  };
+
+  const openAddTripModal = () => {
+    setSelectedItem(null);
+    setTripForm({
+      name: '', destination: '', price: '', duration: '', startDate: '',
+      status: 'active', totalSeats: '', difficulty: 'Moderate',
+      description: '', image: ''
+    });
+    setShowModal('addTrip');
+  };
 
   // ========== BOOKING HANDLERS ==========
   const handleViewBooking = (booking) => {
@@ -317,9 +357,11 @@ function AdminDashboard() {
 
   // Filter bookings
   const filteredBookings = bookings.filter(booking => {
-    const matchesSearch = booking.userName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      booking.bookingId.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      booking.tripName.toLowerCase().includes(searchTerm.toLowerCase());
+    const term = searchTerm.toLowerCase();
+    const matchesSearch =
+      String(booking.userName || '').toLowerCase().includes(term) ||
+      String(booking.bookingId || '').toLowerCase().includes(term) ||
+      String(booking.tripName || '').toLowerCase().includes(term);
     const matchesStatus = filterStatus === 'all' || booking.status === filterStatus;
     return matchesSearch && matchesStatus;
   });
@@ -375,8 +417,8 @@ function AdminDashboard() {
                 whileHover={{ y: -2 }}
                 onClick={() => setActiveTab(tab.id)}
                 className={`pb-4 font-bold capitalize whitespace-nowrap flex items-center gap-2 transition ${activeTab === tab.id
-                    ? 'text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-teal-400 border-b-2 border-cyan-500'
-                    : 'text-grey-400 hover:text-grey-300'
+                  ? 'text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-teal-400 border-b-2 border-cyan-500'
+                  : 'text-grey-400 hover:text-grey-300'
                   }`}
               >
                 <Icon size={18} /> {tab.label}
@@ -502,20 +544,20 @@ function AdminDashboard() {
                           transition={{ delay: idx * 0.05 }}
                           className="hover:bg-white/5 transition-all"
                         >
-                          <td className="px-6 py-4 text-sm font-bold text-cyan-400">{booking.bookingId}</td>
+                          <td className="px-6 py-4 text-sm font-bold text-cyan-400">{booking.bookingId || '-'}</td>
                           <td className="px-6 py-4">
-                            <p className="text-sm font-bold text-white">{booking.userName}</p>
+                            <p className="text-sm font-bold text-white">{booking.userName || 'Unknown'}</p>
                             <p className="text-xs text-grey-400">{booking.userEmail}</p>
                           </td>
-                          <td className="px-6 py-4 text-sm text-grey-300">{booking.tripName}</td>
-                          <td className="px-6 py-4 text-sm text-white font-semibold">{booking.numberOfTravelers}</td>
-                          <td className="px-6 py-4 text-sm text-grey-400">{booking.bookingDate}</td>
-                          <td className="px-6 py-4 text-sm font-bold text-teal-400">₹{booking.amount.toLocaleString()}</td>
+                          <td className="px-6 py-4 text-sm text-grey-300">{booking.tripName || 'N/A'}</td>
+                          <td className="px-6 py-4 text-sm text-white font-semibold">{booking.numberOfTravelers || 0}</td>
+                          <td className="px-6 py-4 text-sm text-grey-400">{booking.bookingDate ? new Date(booking.bookingDate).toLocaleDateString() : '-'}</td>
+                          <td className="px-6 py-4 text-sm font-bold text-teal-400">₹{(booking.amount || 0).toLocaleString()}</td>
                           <td className="px-6 py-4">
                             <select
-                              value={booking.status}
+                              value={booking.status || 'pending'}
                               onChange={(e) => handleUpdateBookingStatus(booking.id, e.target.value)}
-                              className={`text-xs font-bold px-3 py-1 rounded-full backdrop-blur-lg bg-gradient-to-r ${getStatusColor(booking.status)} border cursor-pointer`}
+                              className={`text-xs font-bold px-3 py-1 rounded-full backdrop-blur-lg bg-gradient-to-r ${getStatusColor(booking.status || 'pending')} border cursor-pointer`}
                             >
                               <option value="pending">Pending</option>
                               <option value="confirmed">Confirmed</option>
@@ -893,8 +935,184 @@ function AdminDashboard() {
             </motion.div>
           )}
 
+          {activeTab === 'trips' && (
+            <motion.div
+              key="trips"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="space-y-6"
+            >
+              <div className="flex justify-between items-center">
+                <h2 className="text-3xl font-bold text-white">Manage Trips</h2>
+                <Button onClick={openAddTripModal}>
+                  <FiPlus className="inline mr-2" size={18} />
+                  Add New Trip
+                </Button>
+              </div>
+
+              {/* Trips List */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {trips.map((trip, idx) => (
+                  <motion.div
+                    key={trip.id}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: idx * 0.1 }}
+                  >
+                    <Card className="h-full flex flex-col backdrop-blur-xl bg-teal-900/60 border border-white/10 hover:border-cyan-500/50 transition-all overflow-hidden group">
+                      <div className="relative h-48 overflow-hidden">
+                        <img
+                          src={trip.image || 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2070&auto=format&fit=crop'}
+                          alt={trip.name}
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
+                        <div className="absolute bottom-4 left-4 right-4 flex justify-between items-end">
+                          <div>
+                            <h3 className="text-xl font-bold text-white mb-1">{trip.name}</h3>
+                            <div className="flex items-center gap-2 text-xs text-grey-300">
+                              <span className="flex items-center gap-1"><FiMapPin /> {trip.destination}</span>
+                              <span className="flex items-center gap-1"><FiCalendar /> {trip.duration} Days</span>
+                            </div>
+                          </div>
+                          <span className={`text-xs font-bold px-2 py-1 rounded-full backdrop-blur-lg ${trip.status === 'active' ? 'bg-green-500/20 text-green-300' : 'bg-red-500/20 text-red-300'
+                            }`}>
+                            {trip.status}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="p-4 flex-1 flex flex-col">
+                        <div className="grid grid-cols-2 gap-4 mb-4 text-sm">
+                          <div>
+                            <p className="text-grey-400">Price</p>
+                            <p className="text-white font-bold">₹{(trip.price || 0).toLocaleString()}</p>
+                          </div>
+                          <div>
+                            <p className="text-grey-400">Date</p>
+                            <p className="text-white font-bold">{trip.startDate ? new Date(trip.startDate).toLocaleDateString() : 'N/A'}</p>
+                          </div>
+                          <div>
+                            <p className="text-grey-400">Bookings</p>
+                            <p className="text-white font-bold">{trip.bookings ? trip.bookings.length : 0} / {trip.totalSeats || 0}</p>
+                          </div>
+                          <div>
+                            <p className="text-grey-400">Revenue</p>
+                            <p className="text-teal-400 font-bold">₹{((trip.bookings ? trip.bookings.length : 0) * (trip.price || 0)).toLocaleString()}</p>
+                          </div>
+                        </div>
+
+                        <div className="mt-auto flex gap-2 pt-4 border-t border-white/10">
+                          <Button size="sm" variant="secondary" fullWidth onClick={() => handleEditTrip(trip)}>
+                            <FiEdit2 className="mr-2" /> Edit
+                          </Button>
+                          <Button size="sm" className="bg-red-500/10 text-red-400 border-red-500/30 hover:bg-red-500/20" onClick={() => handleDeleteTrip(trip.id)}>
+                            <FiTrash2 />
+                          </Button>
+                        </div>
+                      </div>
+                    </Card>
+                  </motion.div>
+                ))}
+              </div>
+
+              {/* Add/Edit Trip Modal */}
+              <AnimatePresence>
+                {(showModal === 'addTrip' || showModal === 'editTrip') && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+                    onClick={() => setShowModal(null)}
+                  >
+                    <motion.div
+                      initial={{ scale: 0.9, y: 20 }}
+                      animate={{ scale: 1, y: 0 }}
+                      exit={{ scale: 0.9, y: 20 }}
+                      onClick={(e) => e.stopPropagation()}
+                      className="backdrop-blur-xl bg-teal-900/95 border border-white/10 rounded-2xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl"
+                    >
+                      <h2 className="text-3xl font-bold text-white mb-6">
+                        {showModal === 'addTrip' ? 'Add New Trip' : 'Edit Trip'}
+                      </h2>
+
+                      <form onSubmit={handleSaveTrip} className="space-y-4">
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-grey-400 text-sm mb-1">Trip Name</label>
+                            <input required type="text" value={tripForm.name} onChange={e => setTripForm({ ...tripForm, name: e.target.value })}
+                              className="w-full bg-black/40 border border-white/10 rounded-lg p-3 text-white focus:border-cyan-500 outline-none" />
+                          </div>
+                          <div>
+                            <label className="block text-grey-400 text-sm mb-1">Destination</label>
+                            <input required type="text" value={tripForm.destination} onChange={e => setTripForm({ ...tripForm, destination: e.target.value })}
+                              className="w-full bg-black/40 border border-white/10 rounded-lg p-3 text-white focus:border-cyan-500 outline-none" />
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-3 gap-4">
+                          <div>
+                            <label className="block text-grey-400 text-sm mb-1">Price (₹)</label>
+                            <input required type="number" value={tripForm.price} onChange={e => setTripForm({ ...tripForm, price: e.target.value })}
+                              className="w-full bg-black/40 border border-white/10 rounded-lg p-3 text-white focus:border-cyan-500 outline-none" />
+                          </div>
+                          <div>
+                            <label className="block text-grey-400 text-sm mb-1">Duration (Days)</label>
+                            <input required type="number" value={tripForm.duration} onChange={e => setTripForm({ ...tripForm, duration: e.target.value })}
+                              className="w-full bg-black/40 border border-white/10 rounded-lg p-3 text-white focus:border-cyan-500 outline-none" />
+                          </div>
+                          <div>
+                            <label className="block text-grey-400 text-sm mb-1">Total Seats</label>
+                            <input required type="number" value={tripForm.totalSeats} onChange={e => setTripForm({ ...tripForm, totalSeats: e.target.value })}
+                              className="w-full bg-black/40 border border-white/10 rounded-lg p-3 text-white focus:border-cyan-500 outline-none" />
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-grey-400 text-sm mb-1">Start Date</label>
+                            <input required type="date" value={tripForm.startDate} onChange={e => setTripForm({ ...tripForm, startDate: e.target.value })}
+                              className="w-full bg-black/40 border border-white/10 rounded-lg p-3 text-white focus:border-cyan-500 outline-none" />
+                          </div>
+                          <div>
+                            <label className="block text-grey-400 text-sm mb-1">Difficulty</label>
+                            <select value={tripForm.difficulty} onChange={e => setTripForm({ ...tripForm, difficulty: e.target.value })}
+                              className="w-full bg-black/40 border border-white/10 rounded-lg p-3 text-white focus:border-cyan-500 outline-none">
+                              <option value="Easy">Easy</option>
+                              <option value="Moderate">Moderate</option>
+                              <option value="Hard">Hard</option>
+                            </select>
+                          </div>
+                        </div>
+
+                        <div>
+                          <label className="block text-grey-400 text-sm mb-1">Image URL</label>
+                          <input type="text" value={tripForm.image} onChange={e => setTripForm({ ...tripForm, image: e.target.value })}
+                            className="w-full bg-black/40 border border-white/10 rounded-lg p-3 text-white focus:border-cyan-500 outline-none" placeholder="https://..." />
+                        </div>
+
+                        <div>
+                          <label className="block text-grey-400 text-sm mb-1">Description</label>
+                          <textarea rows="3" value={tripForm.description} onChange={e => setTripForm({ ...tripForm, description: e.target.value })}
+                            className="w-full bg-black/40 border border-white/10 rounded-lg p-3 text-white focus:border-cyan-500 outline-none"></textarea>
+                        </div>
+
+                        <div className="flex gap-4 pt-4">
+                          <Button type="button" variant="secondary" fullWidth onClick={() => setShowModal(null)}>Cancel</Button>
+                          <Button type="submit" fullWidth>Save Trip</Button>
+                        </div>
+                      </form>
+                    </motion.div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+          )}
+
           {/* Placeholders for other tabs */}
-          {(activeTab === 'trips' || activeTab === 'users') && (
+          {(activeTab === 'users') && (
             <motion.div
               key="placeholder"
               initial={{ opacity: 0, y: 20 }}

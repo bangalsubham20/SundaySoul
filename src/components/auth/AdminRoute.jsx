@@ -19,29 +19,18 @@ function AdminRoute({ children, requiredRole = 'admin' }) {
     return <Navigate to="/admin/login" state={{ from: location }} replace />;
   }
 
-  // Find admin account
-  const adminAccount = adminAccounts.find(acc => acc.email === user.email);
-
-  // Check if user is an admin
-  if (!adminAccount) {
-    return <AccessDenied type="denied" />;
-  }
-
   // Check role-based access
-  if (requiredRole && requiredRole !== 'any') {
-    const hasRequiredRole =
-      adminAccount.role === requiredRole ||
-      adminAccount.role === ADMIN_ROLES.SUPER_ADMIN;
+  // Backend returns role as 'ADMIN' or 'USER'
+  const hasRequiredRole = user.role === 'ADMIN';
 
-    if (!hasRequiredRole) {
-      return (
-        <AccessDenied
-          type="insufficient"
-          role={adminAccount.role}
-          requiredRole={requiredRole}
-        />
-      );
-    }
+  if (!hasRequiredRole) {
+    return (
+      <AccessDenied
+        type="insufficient"
+        role={user.role}
+        requiredRole="ADMIN"
+      />
+    );
   }
 
   return children;

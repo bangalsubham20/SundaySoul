@@ -32,9 +32,7 @@ function Navbar() {
   };
 
   // Check if user is admin
-  const isAdmin = user?.email === 'admin@sundaysoul.com' ||
-    user?.email === 'superadmin@sundaysoul.com' ||
-    user?.email === 'moderator@sundaysoul.com';
+  const isAdmin = user?.role === 'ADMIN';
 
   const isAdminPage = location.pathname.startsWith('/admin');
 
