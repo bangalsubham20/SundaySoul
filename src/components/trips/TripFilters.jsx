@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Button from '../common/Button';
 import { FiFilter, FiX, FiChevronDown } from 'react-icons/fi';
 
+import { TRIP_DIFFICULTIES, TRIP_DURATIONS, TRIP_DESTINATIONS, TRIP_SEASONS, TRIP_GROUP_SIZES } from '../../constants/tripOptions';
+
 function TripFilters({ onFilterChange, onReset, isOpen, onClose }) {
   const [expandedSection, setExpandedSection] = useState('price');
 
@@ -16,12 +18,12 @@ function TripFilters({ onFilterChange, onReset, isOpen, onClose }) {
     groupSize: [],
   });
 
-  // ... (keep constants)
-  const difficulties = ['Easy', 'Moderate', 'Hard', 'Extreme'];
-  const durations = ['3-5 days', '5-7 days', '7-10 days', '10+ days'];
-  const destinations = ['Himalayas', 'Goa', 'Northeast', 'Kerala', 'Rajasthan', 'Ladakh'];
-  const seasons = ['Winter', 'Spring', 'Summer', 'Monsoon', 'Fall'];
-  const groupSizes = ['Solo', 'Couple', 'Small Group (3-5)', 'Large Group (6+)'];
+  // Use constants
+  const difficulties = TRIP_DIFFICULTIES;
+  const durations = TRIP_DURATIONS;
+  const destinations = TRIP_DESTINATIONS;
+  const seasons = TRIP_SEASONS;
+  const groupSizes = TRIP_GROUP_SIZES;
 
   const handlePriceChange = (e) => {
     const newPrice = [...filters.priceRange];

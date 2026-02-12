@@ -22,25 +22,32 @@ function TripSearch({ onSearch, placeholder = "Search trips..." }) {
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className="w-full"
+      className="w-full relative group"
     >
+      {/* Glow Effect */}
       <div
-        className={`relative rounded-xl overflow-hidden transition-all duration-300 border ${isFocused ? 'shadow-lg shadow-cyan-500/20 border-cyan-500/50' : 'shadow-md border-white/10'
+        className={`absolute -inset-0.5 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-2xl opacity-0 transition duration-500 blur ${isFocused ? 'opacity-30' : 'group-hover:opacity-20'}`}
+      />
+
+      <div
+        className={`relative rounded-2xl overflow-hidden transition-all duration-300 border ${isFocused ? 'bg-teal-900/80 border-cyan-500/50 shadow-lg shadow-cyan-500/10' : 'bg-teal-900/60 border-white/10 hover:bg-teal-900/70 hover:border-white/20'
           }`}
         style={{
-          background: 'rgba(19, 78, 74, 0.6)', // teal-900/60
-          backdropFilter: 'blur(12px)'
+          backdropFilter: 'blur(16px)'
         }}
       >
-        <div className="flex items-center px-4 py-3">
+        <div className="flex items-center px-5 py-4">
           <motion.div
-            animate={{ rotate: isFocused ? 0 : 0 }}
+            animate={{
+              scale: isFocused ? 1.1 : 1,
+              rotate: isFocused ? -10 : 0
+            }}
             transition={{ duration: 0.2 }}
           >
             <FiSearch
-              className={`transition-colors ${isFocused ? 'text-cyan-400' : 'text-grey-400'
+              className={`transition-colors ${isFocused ? 'text-cyan-400' : 'text-grey-400 group-hover:text-cyan-200'
                 }`}
-              size={20}
+              size={22}
             />
           </motion.div>
 
@@ -53,20 +60,22 @@ function TripSearch({ onSearch, placeholder = "Search trips..." }) {
             onBlur={() => setIsFocused(false)}
             onKeyDown={e => { if (e.key === 'Escape') handleClear(); }}
             placeholder={placeholder}
-            className="flex-1 ml-3 outline-none text-white placeholder-grey-500 text-base bg-transparent font-medium"
+            className="flex-1 ml-4 outline-none text-white placeholder-grey-500 text-lg bg-transparent font-medium tracking-wide"
             autoComplete="off"
           />
 
           <AnimatePresence>
             {searchTerm && (
               <motion.button
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                exit={{ scale: 0 }}
+                initial={{ scale: 0, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0, opacity: 0 }}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
                 onClick={handleClear}
-                className="text-grey-400 hover:text-white transition ml-2"
+                className="bg-white/10 hover:bg-white/20 text-grey-300 rounded-full p-1.5 transition-colors ml-2"
               >
-                <FiX size={20} />
+                <FiX size={16} />
               </motion.button>
             )}
           </AnimatePresence>

@@ -2,20 +2,12 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiChevronDown, FiCheck } from 'react-icons/fi';
 
+import { SORT_OPTIONS } from '../../constants/tripOptions';
+
 function TripSort({ sortBy, onSortChange }) {
   const [isOpen, setIsOpen] = useState(false);
 
-  const sortOptions = [
-    { value: 'recommended', label: '⭐ Recommended', description: 'Best for you' },
-    { value: 'priceLowToHigh', label: '💰 Price: Low to High', description: 'Budget-friendly' },
-    { value: 'priceHighToLow', label: '💰 Price: High to Low', description: 'Premium trips' },
-    { value: 'ratingHighToLow', label: '🌟 Rating: High to Low', description: 'Top-rated' },
-    { value: 'ratingLowToHigh', label: '⭐ Rating: Low to High', description: 'New & rising' },
-    { value: 'durationShortToLong', label: '⏱️ Duration: Short to Long', description: 'Quick getaway' },
-    { value: 'durationLongToShort', label: '⏱️ Duration: Long to Short', description: 'Extended trips' },
-    { value: 'nameAZ', label: '🔤 Name: A-Z', description: 'Alphabetical' },
-    { value: 'nameZA', label: '🔤 Name: Z-A', description: 'Reverse order' },
-  ];
+  const sortOptions = SORT_OPTIONS;
 
   const currentSort = sortOptions.find(opt => opt.value === sortBy);
 
