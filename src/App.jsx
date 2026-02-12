@@ -13,6 +13,7 @@ import './App.css';
 const Home = lazy(() => import('./pages/Home'));
 const Trips = lazy(() => import('./pages/Trips'));
 const TripDetail = lazy(() => import('./pages/TripDetail'));
+const About = lazy(() => import('./pages/About'));
 const Login = lazy(() => import('./pages/Login'));
 const Register = lazy(() => import('./pages/Register'));
 const Community = lazy(() => import('./pages/Community'));
@@ -47,6 +48,7 @@ function App() {
 
                 {/* Home */}
                 <Route path="/" element={<Home />} />
+                <Route path="/about" element={<About />} />
 
                 {/* Trips */}
                 <Route path="/trips" element={<Trips />} />
