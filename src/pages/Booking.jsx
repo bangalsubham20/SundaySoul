@@ -77,29 +77,7 @@ function Booking() {
   const [appliedOffer, setAppliedOffer] = useState(null);
   const [discountAmount, setDiscountAmount] = useState(0);
 
-  // Mock trip data
-  const mockTrips = {
-    1: {
-      id: 1,
-      name: 'Winter Spiti Valley',
-      destination: 'Spiti Valley',
-      price: 21150,
-      duration: 8,
-      startDate: '2025-01-15',
-      availableSeats: 4,
-      image: 'https://images.pexels.com/photos/31307356/pexels-photo-31307356.jpeg?auto=compress&cs=tinysrgb&w=600'
-    },
-    2: {
-      id: 2,
-      name: 'Leh Ladakh Adventure',
-      destination: 'Ladakh',
-      price: 34650,
-      duration: 7,
-      startDate: '2025-02-20',
-      availableSeats: 6,
-      image: 'https://images.pexels.com/photos/34555164/pexels-photo-34555164.jpeg?auto=compress&cs=tinysrgb&w=600'
-    }
-  };
+
 
   useEffect(() => {
     const fetchTrip = async () => {
@@ -108,8 +86,8 @@ function Booking() {
         const tripData = await tripService.getTripById(tripId);
         setTrip(tripData);
       } catch (err) {
-        console.warn('Using mock data:', err);
-        setTrip(mockTrips[tripId]);
+        console.error('Error fetching trip:', err);
+        setError('Failed to load trip details');
       } finally {
         setLoading(false);
       }
@@ -219,24 +197,39 @@ function Booking() {
       setProcessing(true);
 
       const pricing = calculateTotal();
+
+      // Construct payload matching BookingRequest.java
       const bookingPayload = {
         tripId: trip.id,
-        userId: user.id,
-        ...bookingData,
-        pricing,
-        appliedOffer: appliedOffer?.code || null,
-        bookingDate: new Date().toISOString(),
-        status: 'pending'
+        numTravelers: bookingData.numberOfTravelers,
+        totalPrice: pricing.total,
+        paymentMethod: bookingData.paymentMethod,
+        travelers: [
+          {
+            fullName: bookingData.fullName,
+            email: bookingData.email,
+            phone: bookingData.phone,
+            age: parseInt(bookingData.age) || 0,
+            gender: bookingData.gender,
+            // Combine name and number for backend's single field
+            emergencyContact: `${bookingData.emergencyName} (${bookingData.emergencyContact})`,
+            dietaryRestrictions: bookingData.dietaryRestrictions || null
+          }
+        ]
       };
+
+      console.log('Sending booking payload:', bookingPayload);
 
       // Submit to backend
       const response = await bookingService.createBooking(bookingPayload);
 
       // Redirect to confirmation
-      navigate(`/booking-confirmation/${response.bookingId || tripId}`);
+      navigate(`/booking-confirmation/${response.id || response.bookingId || tripId}`);
     } catch (err) {
       console.error('Booking error:', err);
-      setError('Booking failed. Please try again.');
+      // Extract error message from backend response if available
+      const errMsg = err.response?.data?.message || err.message || 'Booking failed. Please try again.';
+      setError(errMsg);
     } finally {
       setProcessing(false);
     }
@@ -280,8 +273,8 @@ function Booking() {
                     className={`flex flex-col items-center ${isActive ? 'scale-110' : ''}`}
                   >
                     <div className={`w-16 h-16 rounded-full flex items-center justify-center border-2 transition-all ${isCompleted ? 'bg-cyan-500 border-cyan-500 text-teal-900'
-                        : isActive ? 'bg-teal-500 border-teal-500 text-white'
-                          : 'bg-black/20 border-white/10 text-grey-500'
+                      : isActive ? 'bg-teal-500 border-teal-500 text-white'
+                        : 'bg-black/20 border-white/10 text-grey-500'
                       }`}>
                       {isCompleted ? <FiCheck size={24} /> : <Icon size={24} />}
                     </div>
@@ -606,8 +599,8 @@ function Booking() {
                           <label
                             key={method.value}
                             className={`block p-4 border rounded-lg cursor-pointer transition ${bookingData.paymentMethod === method.value
-                                ? 'border-cyan-500 bg-cyan-500/10'
-                                : 'border-white/10 bg-black/20 hover:border-white/20'
+                              ? 'border-cyan-500 bg-cyan-500/10'
+                              : 'border-white/10 bg-black/20 hover:border-white/20'
                               }`}
                           >
                             <div className="flex items-center gap-3">

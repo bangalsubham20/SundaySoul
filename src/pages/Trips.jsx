@@ -8,51 +8,7 @@ import tripService from '../services/tripService';
 import TripCard from '../components/trips/TripCard';
 import { TRIP_DESTINATIONS } from '../constants/tripOptions';
 
-// --- Mock Data Fallback ---
-const mockTrips = [
-  {
-    id: 1,
-    name: 'Winter Spiti Valley',
-    destination: 'Spiti Valley',
-    price: 21150,
-    duration: '8 days',
-    rating: 4.8,
-    reviews: 245,
-    difficulty: 'Moderate',
-    groupSize: 'Small Group',
-    description: 'Experience the frozen beauty of Spiti Valley with stunning monasteries.',
-    image: 'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?q=80&w=2070',
-    tags: ['monastery', 'winter']
-  },
-  {
-    id: 2,
-    name: 'Safari & Wildlife Adventure',
-    destination: 'Kenya',
-    price: 145000,
-    duration: '7 Days',
-    rating: 4.9,
-    reviews: 120,
-    difficulty: 'Easy',
-    groupSize: '6 Friends',
-    description: 'Embark on a once-in-a-lifetime safari adventure in the heart of Kenyas iconic Maasai Mara. Witness breathtaking wildlife.',
-    image: 'https://images.unsplash.com/photo-1516426122078-c23e76319801?q=80&w=2068',
-    tags: ['safari', 'wildlife']
-  },
-  {
-    id: 3,
-    name: 'Paradise in Bali',
-    destination: 'Bali',
-    price: 85000,
-    duration: '6 days',
-    rating: 4.9,
-    reviews: 312,
-    difficulty: 'Easy',
-    groupSize: 'Couple',
-    description: 'Boutique villa accommodation, airport transfers, daily yoga classes.',
-    image: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?q=80&w=2038',
-    tags: ['beach', 'yoga']
-  }
-];
+
 
 function Trips() {
   const navigate = useNavigate();
@@ -71,7 +27,8 @@ function Trips() {
         const trips = await tripService.getAllTrips();
         setAllTrips(trips);
       } catch (err) {
-        setAllTrips(mockTrips);
+        console.error('Error fetching trips:', err);
+        setAllTrips([]);
       } finally {
         setTripsLoading(false);
       }

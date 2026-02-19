@@ -28,65 +28,7 @@ function Profile() {
     avatar: user?.avatar || 'https://i.pravatar.cc/150?img=1'
   });
 
-  const mockBookings = [
-    {
-      id: 1,
-      tripName: 'Winter Spiti Valley',
-      destination: 'Spiti Valley',
-      startDate: '2025-01-15',
-      endDate: '2025-01-22',
-      status: 'confirmed',
-      price: 21150,
-      travelers: 2,
-      bookingDate: '2024-12-01',
-      image: 'https://images.pexels.com/photos/31307356/pexels-photo-31307356/free-photo-of-spectacular-view-of-key-monastery-in-winter.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'
-    },
-    {
-      id: 2,
-      tripName: 'Leh Ladakh Adventure',
-      destination: 'Ladakh',
-      startDate: '2025-02-20',
-      endDate: '2025-02-26',
-      status: 'pending',
-      price: 34650,
-      travelers: 1,
-      bookingDate: '2024-11-20',
-      image: 'https://images.pexels.com/photos/34555164/pexels-photo-34555164/free-photo-of-adventurer-resting-with-motorcycle-by-scenic-lake.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'
-    },
-    {
-      id: 3,
-      tripName: 'Kerala Backpacking',
-      destination: 'Kerala',
-      startDate: '2025-03-10',
-      endDate: '2025-03-16',
-      status: 'completed',
-      price: 16650,
-      travelers: 3,
-      bookingDate: '2024-10-15',
-      image: 'https://images.pexels.com/photos/12144055/pexels-photo-12144055.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'
-    }
-  ];
 
-  const mockReviews = [
-    {
-      id: 1,
-      tripName: 'Kerala Backpacking',
-      rating: 5,
-      title: 'Absolutely Amazing!',
-      text: 'Had the best time of my life. The team was incredible, food was delicious, and the itinerary was perfectly planned.',
-      date: '2024-11-30',
-      helpful: 45
-    },
-    {
-      id: 2,
-      tripName: 'Kashmir Great Lakes Trek',
-      rating: 4,
-      title: 'Great Adventure',
-      text: 'Beautiful trek with amazing views. One day had bad weather but the team handled it well.',
-      date: '2024-09-15',
-      helpful: 28
-    }
-  ];
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -108,22 +50,22 @@ function Profile() {
             const bookings = await bookingService.getUserBookings();
             setUserBookings(bookings);
           } catch (err) {
-            setUserBookings(mockBookings);
+            setUserBookings([]);
           }
 
           try {
             const reviews = await reviewService.getUserReviews();
             setUserReviews(reviews);
           } catch (err) {
-            setUserReviews(mockReviews);
+            setUserReviews([]);
           }
         } else {
           setError('Please log in to view your profile');
         }
       } catch (err) {
         console.error('Error fetching user data:', err);
-        setUserBookings(mockBookings);
-        setUserReviews(mockReviews);
+        setUserBookings([]);
+        setUserReviews([]);
       } finally {
         setLoading(false);
       }
