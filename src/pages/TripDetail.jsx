@@ -7,6 +7,7 @@ import Button from '../components/common/Button';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import Card from '../components/common/Card';
 import tripService from '../services/tripService';
+import MapComponent from '../components/common/MapComponent';
 
 function TripDetail() {
   const { id } = useParams();
@@ -285,6 +286,18 @@ function TripDetail() {
                             </motion.div>
                           ))}
                         </div>
+                      </div>
+                    )}
+
+                    {/* Map Section */}
+                    {trip.latitude && trip.longitude && (
+                      <div className="mt-8">
+                        <h3 className="text-xl font-display font-bold mb-6 text-white">Trip Location</h3>
+                        <MapComponent
+                          lat={trip.latitude}
+                          lng={trip.longitude}
+                          popupText={trip.destination}
+                        />
                       </div>
                     )}
                   </motion.div>

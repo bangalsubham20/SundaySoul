@@ -25,7 +25,9 @@ function Footer() {
   const quickLinks = [
     { label: 'Expeditions', path: '/trips' },
     { label: 'Community', path: '/community' },
-    { label: 'About', path: '/about' }
+    { label: 'About', path: '/about' },
+    { label: 'Contact', path: '/contact' },
+    { label: 'FAQ', path: '/faq' }
   ];
 
   return (
@@ -98,6 +100,10 @@ function Footer() {
 
             <div className="text-xs text-grey-500 font-mono">
               <span>© {currentYear} SundaySoul</span>
+              <span className="mx-2">•</span>
+              <Link to="/terms" className="hover:text-cyan-400 transition-colors">Terms</Link>
+              <span className="mx-2">•</span>
+              <Link to="/privacy" className="hover:text-cyan-400 transition-colors">Privacy</Link>
             </div>
           </div>
 

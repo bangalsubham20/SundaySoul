@@ -23,6 +23,10 @@ const Profile = lazy(() => import('./pages/Profile'));
 const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
 const AdminLogin = lazy(() => import('./pages/AdminLogin'));
 const NotFound = lazy(() => import('./pages/NotFound'));
+const Contact = lazy(() => import('./pages/Contact'));
+const Terms = lazy(() => import('./pages/Terms'));
+const Privacy = lazy(() => import('./pages/Privacy'));
+const FAQ = lazy(() => import('./pages/FAQ'));
 
 // Loading fallback component
 const LoadingFallback = () => (
@@ -49,6 +53,10 @@ function App() {
                 {/* Home */}
                 <Route path="/" element={<Home />} />
                 <Route path="/about" element={<About />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/terms" element={<Terms />} />
+                <Route path="/privacy" element={<Privacy />} />
+                <Route path="/faq" element={<FAQ />} />
 
                 {/* Trips */}
                 <Route path="/trips" element={<Trips />} />
