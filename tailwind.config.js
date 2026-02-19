@@ -45,9 +45,9 @@ export default {
         },
       },
       fontFamily: {
-        sans: ['"Lobster Two"', 'cursive', ...defaultTheme.fontFamily.sans],
-        display: ['"Permanent Marker"', 'cursive', ...defaultTheme.fontFamily.sans],
-        body: ['"Inter"', 'sans-serif', ...defaultTheme.fontFamily.sans],
+        sans: ['"Plus Jakarta Sans"', 'sans-serif', ...defaultTheme.fontFamily.sans],
+        display: ['"Outfit"', 'sans-serif', ...defaultTheme.fontFamily.sans],
+        body: ['"Plus Jakarta Sans"', 'sans-serif', ...defaultTheme.fontFamily.sans],
       },
       animation: {
         'fade-in': 'fadeIn 0.5s ease-out',
