@@ -15,35 +15,42 @@ const BookingOverview = ({ bookings }) => {
         { name: 'Completed', value: 20, color: '#06b6d4' },
     ];
 
-    // Filter out zero values
     const activeData = data.filter(d => d.value > 0);
+    const totalBookings = activeData.reduce((sum, item) => sum + item.value, 0);
 
     return (
-        <div className="bg-teal-900/40 backdrop-blur-xl border border-white/10 p-6 rounded-2xl h-[400px]">
+        <div className="bg-teal-900/40 backdrop-blur-xl border border-white/10 p-6 rounded-2xl h-[400px] shadow-xl relative">
             <h3 className="text-xl font-bold text-white mb-6">Booking Status</h3>
-            <div className="h-[300px] w-full">
-                <ResponsiveContainer width="100%" height="100%">
+            <div className="h-[300px] w-full min-w-[300px] relative">
+                <ResponsiveContainer width="99%" height="100%">
                     <PieChart>
                         <Pie
                             data={activeData}
                             cx="50%"
                             cy="50%"
-                            innerRadius={60}
-                            outerRadius={100}
+                            innerRadius={80}
+                            outerRadius={110}
                             paddingAngle={5}
                             dataKey="value"
+                            stroke="none"
                         >
                             {activeData.map((entry, index) => (
-                                <Cell key={`cell-${index}`} fill={entry.color} stroke="none" />
+                                <Cell key={`cell-${index}`} fill={entry.color} />
                             ))}
                         </Pie>
                         <Tooltip
-                            contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '8px' }}
+                            contentStyle={{ backgroundColor: '#134e4a', borderColor: '#ffffff20', borderRadius: '12px', backdropFilter: 'blur(10px)' }}
                             itemStyle={{ color: '#fff' }}
                         />
                         <Legend verticalAlign="bottom" height={36} iconType="circle" />
                     </PieChart>
                 </ResponsiveContainer>
+
+                {/* Center Text */}
+                <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none pb-8">
+                    <span className="text-4xl font-black text-white">{totalBookings}</span>
+                    <span className="text-xs text-grey-400 uppercase tracking-widest">Total</span>
+                </div>
             </div>
         </div>
     );
