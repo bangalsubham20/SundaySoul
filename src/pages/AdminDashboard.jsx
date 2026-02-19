@@ -476,7 +476,7 @@ function AdminDashboard() {
   }
 
   return (
-    <div className="flex min-h-screen bg-[#020617] font-body text-white selection:bg-cyan-500 selection:text-teal-900 overflow-hidden">
+    <div className="flex min-h-screen bg-[#020617] font-body text-white selection:bg-cyan-500 selection:text-teal-900">
       {/* Background Gradients */}
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-b from-teal-900/20 to-transparent" />
@@ -496,7 +496,7 @@ function AdminDashboard() {
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} onLogout={handleLogout} />
 
       {/* Main Content */}
-      <div className="flex-1 ml-64 p-8 overflow-y-auto h-screen relative z-10">
+      <div className="flex-1 ml-64 p-8 relative z-10">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeTab}
