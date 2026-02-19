@@ -10,6 +10,7 @@ import {
 } from 'react-icons/fi';
 import tripService from '../services/tripService';
 import bookingService from '../services/bookingService';
+import userService from '../services/userService';
 
 function AdminDashboard() {
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ function AdminDashboard() {
 
   // ========== TRIPS DATA ==========
   const [trips, setTrips] = useState([]);
+  const [users, setUsers] = useState([]);
 
   useEffect(() => {
     fetchData();
@@ -31,9 +33,10 @@ function AdminDashboard() {
   const fetchData = async () => {
     try {
       setIsLoading(true);
-      const [tripsData, bookingsData] = await Promise.all([
+      const [tripsData, bookingsData, usersData] = await Promise.all([
         tripService.getAllTrips(),
-        bookingService.getAllBookings()
+        bookingService.getAllBookings(),
+        userService.getAllUsers()
       ]);
 
       // Normalize Trips Data
@@ -59,6 +62,9 @@ function AdminDashboard() {
         travelers: booking.numTravelers
       }));
       setBookings(normalizedBookings);
+
+      // Set Users Data
+      setUsers(usersData || []);
 
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
@@ -1115,20 +1121,53 @@ function AdminDashboard() {
           )}
 
           {/* Placeholders for other tabs */}
-          {(activeTab === 'users') && (
+          {activeTab === 'users' && (
             <motion.div
-              key="placeholder"
+              key="users"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="flex flex-col items-center justify-center py-20 text-center"
+              className="space-y-6"
             >
-              <div className="w-24 h-24 bg-teal-900/40 rounded-full flex items-center justify-center mb-6">
-                <FiAlertCircle size={48} className="text-cyan-400" />
-              </div>
-              <h2 className="text-2xl font-bold text-white mb-2">Coming Soon</h2>
-              <p className="text-grey-400 mb-8">This module is currently under development.</p>
-              <Button onClick={() => setActiveTab('dashboard')}>Back to Dashboard</Button>
+              <h2 className="text-3xl font-bold text-white mb-6">Registered Users</h2>
+              <Card className="overflow-hidden backdrop-blur-xl bg-teal-900/60 border border-white/10">
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead className="bg-black/20 border-b border-white/10">
+                      <tr>
+                        {['ID', 'Name', 'Email', 'Phone', 'Role', 'Joined Date'].map(header => (
+                          <th key={header} className="px-6 py-4 text-left text-sm font-bold text-grey-300">{header}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-white/10">
+                      {users.map((user, idx) => (
+                        <motion.tr
+                          key={user.id}
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: idx * 0.05 }}
+                          className="hover:bg-white/5 transition-all"
+                        >
+                          <td className="px-6 py-4 text-sm font-bold text-cyan-400">#{user.id}</td>
+                          <td className="px-6 py-4 text-sm font-bold text-white flex items-center gap-3">
+                            <img src={user.avatar || 'https://via.placeholder.com/40'} alt={user.name} className="w-8 h-8 rounded-full" />
+                            {user.name}
+                          </td>
+                          <td className="px-6 py-4 text-sm text-grey-300">{user.email}</td>
+                          <td className="px-6 py-4 text-sm text-grey-300">{user.phone}</td>
+                          <td className="px-6 py-4">
+                            <span className={`px-2 py-1 text-xs font-bold rounded-full ${user.role === 'ADMIN' ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30' : 'bg-blue-500/20 text-blue-300 border border-blue-500/30'}`}>
+                              {user.role}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 text-sm text-grey-400">{new Date(user.createdAt).toLocaleDateString()}</td>
+                        </motion.tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </Card>
             </motion.div>
           )}
         </AnimatePresence>
