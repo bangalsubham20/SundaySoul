@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import {
-    FiBarChart2, FiCalendar, FiMapPin, FiUsers, FiGift, FiLogOut, FiSettings, FiUser
+    FiBarChart2, FiCalendar, FiMapPin, FiUsers, FiGift, FiLogOut, FiSettings, FiUser, FiHome
 } from 'react-icons/fi';
 
 const Sidebar = ({ activeTab, setActiveTab, onLogout }) => {
@@ -56,6 +56,14 @@ const Sidebar = ({ activeTab, setActiveTab, onLogout }) => {
             </nav>
 
             <div className="p-4 border-t border-white/10 space-y-2 bg-black/20">
+                <button
+                    onClick={() => window.location.href = '/'}
+                    className="w-full flex items-center gap-3 px-4 py-3 mb-2 rounded-xl text-cyan-400 hover:text-cyan-300 hover:bg-cyan-500/10 transition-colors border border-transparent hover:border-cyan-500/20 group"
+                >
+                    <FiHome size={20} className="group-hover:scale-110 transition-transform" />
+                    <span className="font-medium text-sm">Back to Home</span>
+                </button>
+
                 <div className="flex items-center gap-3 px-4 py-3 mb-2 rounded-xl bg-white/5 border border-white/5">
                     <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-cyan-500 to-teal-500 flex items-center justify-center text-xs font-bold text-white shadow-lg">
                         {user.fullName?.charAt(0) || <FiUser />}

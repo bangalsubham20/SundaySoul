@@ -2,12 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiUser, FiMail, FiPhone, FiUsers, FiCalendar, FiCreditCard, FiCheck, FiX, FiAlertCircle, FiShield } from 'react-icons/fi';
+import { toast } from 'react-hot-toast';
 import { useAuth } from '../hooks/useAuth';
 import Button from '../components/common/Button';
 import Card from '../components/common/Card';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import tripService from '../services/tripService';
 import bookingService from '../services/bookingService';
+
+import offerService from '../services/offerService';
 
 function Booking() {
   const { tripId } = useParams();
@@ -44,55 +47,34 @@ function Booking() {
     agreeCancellation: false
   });
 
-  const [offers, setOffers] = useState([
-    {
-      id: 1,
-      code: 'FIRST10',
-      discount: 10,
-      type: 'percentage',
-      description: 'Get 10% off on your first booking',
-      active: true,
-      minAmount: 10000
-    },
-    {
-      id: 2,
-      code: 'EARLY15',
-      discount: 15,
-      type: 'percentage',
-      description: '15% off for early bird bookings',
-      active: true,
-      minAmount: 20000
-    },
-    {
-      id: 3,
-      code: 'SAVE2000',
-      discount: 2000,
-      type: 'fixed',
-      description: 'Flat ₹2000 discount',
-      active: true,
-      minAmount: 15000
-    }
-  ]);
-
+  const [offers, setOffers] = useState([]);
   const [appliedOffer, setAppliedOffer] = useState(null);
   const [discountAmount, setDiscountAmount] = useState(0);
 
-
-
   useEffect(() => {
-    const fetchTrip = async () => {
+    const fetchTripAndOffers = async () => {
       try {
         setLoading(true);
-        const tripData = await tripService.getTripById(tripId);
+        const [tripData, offersData] = await Promise.all([
+          tripService.getTripById(tripId),
+          offerService.getAllOffers()
+        ]);
         setTrip(tripData);
+        // Filter only active offers that are valid for today
+        const activeOffers = offersData.filter(o =>
+          o.active &&
+          (!o.validUntil || new Date(o.validUntil) >= new Date()) &&
+          (!o.usageLimit || o.usedCount < o.usageLimit)
+        );
+        setOffers(activeOffers);
       } catch (err) {
-        console.error('Error fetching trip:', err);
+        console.error('Error fetching data:', err);
         setError('Failed to load trip details');
       } finally {
         setLoading(false);
       }
     };
-    fetchTrip();
+    fetchTripAndOffers();
   }, [tripId]);
 
   const handleInputChange = (e) => {
@@ -103,30 +85,38 @@ function Booking() {
     }));
   };
 
-  const applyPromoCode = () => {
-    const offer = offers.find(
-      o => o.code.toUpperCase() === bookingData.promoCode.toUpperCase() && o.active
-    );
-
-    if (!offer) {
-      setError('Invalid promo code');
+  const applyPromoCode = async () => {
+    if (!bookingData.promoCode) {
+      setError('Please enter a promo code');
       return;
     }
 
-    const subtotal = trip.price * bookingData.numberOfTravelers;
+    try {
+      setError(null);
+      // Validate with backend
+      const offer = await offerService.validateOffer(bookingData.promoCode);
 
-    if (subtotal < offer.minAmount) {
-      setError(`Minimum booking amount ₹${offer.minAmount} required for this offer`);
-      return;
+      const subtotal = trip.price * bookingData.numberOfTravelers;
+
+      if (subtotal < offer.minAmount) {
+        setError(`Minimum booking amount ₹${offer.minAmount} required for this offer`);
+        return;
+      }
+
+      const discount = offer.type === 'PERCENTAGE'
+        ? (subtotal * offer.discount) / 100
+        : offer.discount;
+
+      setAppliedOffer(offer);
+      setDiscountAmount(discount);
+      toast.success(`Coupon ${offer.code} applied!`);
+
+    } catch (err) {
+      console.error("Coupon validation error:", err);
+      setError(err.message || 'Invalid or expired promo code');
+      setAppliedOffer(null);
+      setDiscountAmount(0);
     }
-
-    const discount = offer.type === 'percentage'
-      ? (subtotal * offer.discount) / 100
-      : offer.discount;
-
-    setAppliedOffer(offer);
-    setDiscountAmount(discount);
-    setError(null);
   };
 
   const removePromoCode = () => {
@@ -574,9 +564,30 @@ function Booking() {
                               <Button
                                 size="sm"
                                 variant="outline"
-                                onClick={() => {
+                                onClick={async () => {
+                                  // Update state first
                                   setBookingData(prev => ({ ...prev, promoCode: offer.code }));
-                                  applyPromoCode();
+                                  // Then trigger validation with the code directly
+                                  try {
+                                    const validOffer = await offerService.validateOffer(offer.code);
+                                    const subtotal = trip.price * bookingData.numberOfTravelers;
+
+                                    if (subtotal < validOffer.minAmount) {
+                                      setError(`Minimum booking amount ₹${validOffer.minAmount} required`);
+                                      return;
+                                    }
+
+                                    const discount = validOffer.type === 'PERCENTAGE'
+                                      ? (subtotal * validOffer.discount) / 100
+                                      : validOffer.discount;
+
+                                    setAppliedOffer(validOffer);
+                                    setDiscountAmount(discount);
+                                    toast.success(`Coupon ${validOffer.code} applied!`);
+                                    setError(null);
+                                  } catch (err) {
+                                    toast.error(err.message || 'Failed to apply coupon');
+                                  }
                                 }}
                                 disabled={appliedOffer?.code === offer.code}
                               >

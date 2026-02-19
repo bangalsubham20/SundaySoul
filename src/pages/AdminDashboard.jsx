@@ -3,8 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Toaster, toast } from 'react-hot-toast';
 import {
-  FiEdit2, FiTrash2, FiPlus, FiEye, FiSearch, FiFilter, FiDownload, FiCheck, FiX, FiUsers, FiDollarSign, FiClock, FiCalendar, FiMapPin, FiGift
+  FiEdit2, FiTrash2, FiPlus, FiEye, FiSearch, FiFilter, FiDownload, FiCheck, FiX, FiUsers, FiDollarSign, FiClock, FiCalendar, FiMapPin, FiGift, FiHome
 } from 'react-icons/fi';
+import Lenis from 'lenis';
 
 // Services
 import tripService from '../services/tripService';
@@ -23,6 +24,31 @@ import Card from '../components/common/Card';
 
 function AdminDashboard() {
   const navigate = useNavigate();
+
+  // Smooth Scroll
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      direction: 'vertical',
+      gestureDirection: 'vertical',
+      smooth: true,
+      mouseMultiplier: 1,
+      smoothTouch: false,
+      touchMultiplier: 2,
+    });
+
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+
+    requestAnimationFrame(raf);
+
+    return () => {
+      lenis.destroy();
+    };
+  }, []);
   const [activeTab, setActiveTab] = useState('dashboard');
   const [isLoading, setIsLoading] = useState(true);
 
@@ -105,7 +131,7 @@ function AdminDashboard() {
     navigate('/login');
   };
 
-  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const user = JSON.parse(localStorage.getItem('user') || '{ }');
 
   // --- Render Helpers ---
   // ... (renderDashboard is unchanged unless we jump to renderUsers)
@@ -470,7 +496,7 @@ function AdminDashboard() {
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} onLogout={handleLogout} />
 
       {/* Main Content */}
-      <div className="flex-1 ml-64 p-8 overflow-y-auto h-screen relative z-10 scrollbar-hide">
+      <div className="flex-1 ml-64 p-8 overflow-y-auto h-screen relative z-10">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeTab}
@@ -486,7 +512,10 @@ function AdminDashboard() {
             {activeTab === 'offers' && renderOffers()}
           </motion.div>
         </AnimatePresence>
+      </div>
 
+      {/* Modals */}
+      <AnimatePresence>
         {/* Create Offer Modal */}
         {showModal === 'createOffer' && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
@@ -599,8 +628,9 @@ function AdminDashboard() {
             </motion.div>
           </div>
         )}
-      </div>
-    </div>
+      </AnimatePresence>
+
+    </div >
   );
 }
 
