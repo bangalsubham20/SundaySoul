@@ -1,12 +1,14 @@
 <div align="center">
 
-  <!-- Animated Floating Logo & Badges -->
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=1,11,21,31&height=220&section=header&text=SundaySoul&fontSize=70&fontColor=ffffff&fontAlignY=42&desc=Elevated%20Travel%20%26%20Expedition%20Web%20Platform&descSize=20&descAlignY=62&descColor=f59e0b" width="100%" alt="SundaySoul Banner" />
-
-  <!-- Animated Typing SVG -->
-  <a href="https://git.io/typing-svg">
-    <img src="https://readme-typing-svg.demolab.com?font=Outfit&weight=700&size=24&duration=3000&pause=1000&color=F59E0B&center=true&vCenter=true&width=700&lines=🏔️+Elevate+Your+Adventures+%26+Expeditions;✨+Immersive+Dark+Glassmorphic+Architecture;🗺️+Interactive+Leaflet+Trail+Maps+%26+Waypoints;⚡+Powered+by+React+18%2C+Vite+%26+Framer+Motion;💳+Integrated+Razorpay+Checkout+%26+Admin+Analytics" alt="Typing SVG" />
+  <!-- Aesthetic Panoramic Hero Showcase Banner -->
+  <a href="https://github.com/bangalsubham20/SundaySoul">
+    <img src="./assets/banner.jpg" width="100%" alt="SundaySoul — Elevated Travel & Expedition Web Platform" style="border-radius: 16px; box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7); max-width: 1000px;" />
   </a>
+
+  <br /><br />
+
+  <!-- Animated Interactive Feature & Status HUD -->
+  <img src="./assets/animated-badge.svg" width="100%" alt="SundaySoul Live Interactive Capabilities" style="max-width: 1000px;" />
 
   <br />
 

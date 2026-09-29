@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 90" width="100%" height="90" fill="none">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0b1120" stop-opacity="0.95"/>
+      <stop offset="50%" stop-color="#111827" stop-opacity="0.98"/>
+      <stop offset="100%" stop-color="#0b1120" stop-opacity="0.95"/>
+    </linearGradient>
+    <linearGradient id="borderGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.2"/>
+      <stop offset="25%" stop-color="#f59e0b" stop-opacity="0.8"/>
+      <stop offset="50%" stop-color="#06b6d4" stop-opacity="0.9"/>
+      <stop offset="75%" stop-color="#8b5cf6" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0.2"/>
+    </linearGradient>
+    <style>
+      @keyframes shimmer {
+        0% { stroke-dashoffset: 2000; }
+        100% { stroke-dashoffset: 0; }
+      }
+      @keyframes pulseDot {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.35; transform: scale(0.85); }
+      }
+      @keyframes cycleText1 {
+        0%, 30% { opacity: 1; transform: translateY(0); }
+        35%, 95% { opacity: 0; transform: translateY(-10px); }
+        100% { opacity: 1; transform: translateY(0); }
+      }
+      @keyframes cycleText2 {
+        0%, 30% { opacity: 0; transform: translateY(10px); }
+        35%, 65% { opacity: 1; transform: translateY(0); }
+        70%, 100% { opacity: 0; transform: translateY(-10px); }
+      }
+      @keyframes cycleText3 {
+        0%, 65% { opacity: 0; transform: translateY(10px); }
+        70%, 95% { opacity: 1; transform: translateY(0); }
+        100% { opacity: 0; transform: translateY(-10px); }
+      }
+      .shimmer-border {
+        stroke-dasharray: 400 600;
+        animation: shimmer 12s linear infinite;
+      }
+      .pulsing-dot {
+        transform-origin: 52px 45px;
+        animation: pulseDot 2s ease-in-out infinite;
+      }
+      .anim-t1 { animation: cycleText1 9s ease-in-out infinite; }
+      .anim-t2 { animation: cycleText2 9s ease-in-out infinite; }
+      .anim-t3 { animation: cycleText3 9s ease-in-out infinite; }
+      .font-sans {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      }
+    </style>
+  </defs>
+
+  <!-- Glass Card Background -->
+  <rect x="2" y="2" width="996" height="86" rx="16" fill="url(#bgGrad)" />
+  <rect x="2" y="2" width="996" height="86" rx="16" stroke="url(#borderGrad)" stroke-width="2" class="shimmer-border" />
+
+  <!-- Live Pulse Status Indicator -->
+  <g class="pulsing-dot">
+    <circle cx="48" cy="45" r="9" fill="#10b981" fill-opacity="0.3" />
+    <circle cx="48" cy="45" r="4.5" fill="#10b981" />
+  </g>
+  <text x="66" y="49" fill="#10b981" class="font-sans" font-size="11" font-weight="700" letter-spacing="1.2">ONLINE</text>
+  
+  <line x1="130" y1="28" x2="130" y2="62" stroke="#1e293b" stroke-width="2" />
+
+  <!-- Animated Rotating Feature Headlines -->
+  <g class="font-sans">
+    <g class="anim-t1">
+      <text x="150" y="42" fill="#f8fafc" font-size="15" font-weight="700">🏔️ High-Altitude Trekking GIS &amp; Leaflet Trails</text>
+      <text x="150" y="61" fill="#94a3b8" font-size="12">Interactive topographic waypoints • Elevation graphs • Real-time expedition routing</text>
+    </g>
+    <g class="anim-t2">
+      <text x="150" y="42" fill="#f8fafc" font-size="15" font-weight="700">💎 Dark Glassmorphic 60 FPS Visual Symphony</text>
+      <text x="150" y="61" fill="#94a3b8" font-size="12">Lenis smooth inertial scroll • Framer Motion physics • Luminous gradient cards</text>
+    </g>
+    <g class="anim-t3">
+      <text x="150" y="42" fill="#f8fafc" font-size="15" font-weight="700">⚡ Full-Stack Booking Engine &amp; Executive Admin</text>
+      <text x="150" y="61" fill="#94a3b8" font-size="12">Multi-step checkout wizard • Razorpay integrated • Spring Boot 3 JWT Security</text>
+    </g>
+  </g>
+
+  <!-- Right Side Stat Pills -->
+  <g transform="translate(735, 27)">
+    <rect width="112" height="34" rx="8" fill="#1e293b" fill-opacity="0.8" stroke="#3b82f6" stroke-opacity="0.5" stroke-width="1"/>
+    <text x="56" y="22" fill="#93c5fd" class="font-sans" font-size="11" font-weight="600" text-anchor="middle">⚡ REACT 18 + VITE</text>
+  </g>
+  <g transform="translate(857, 27)">
+    <rect width="128" height="34" rx="8" fill="#1e293b" fill-opacity="0.8" stroke="#f59e0b" stroke-opacity="0.5" stroke-width="1"/>
+    <text x="64" y="22" fill="#fcd34d" class="font-sans" font-size="11" font-weight="600" text-anchor="middle">🏔️ EXPEDITIONS</text>
+  </g>
+</svg>
